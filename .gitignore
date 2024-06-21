@@ -92,7 +92,7 @@ local.properties
 target/
 
 # Ignore all files in resources/uploadFiles
-/resources/uploadFiles/*
+src/main/webapp/resources/uploadFiles/*
 
 ### Eclipse Patch ###
 # Spring Boot Tooling
