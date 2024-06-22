@@ -10,7 +10,7 @@
 <body>
 	<header>
         <div class="logo">
-            <a href="${pageContext.request.contextPath}"><img src="resources/img/SeoulSoul_logo.png" alt="SOUL Logo"></a>
+            <a href="${pageContext.request.contextPath}"><img src="${pageContext.request.contextPath}/resources/img/SeoulSoul_logo.png" alt="SOUL Logo"></a>
         </div>
         <nav>
             <ul>
