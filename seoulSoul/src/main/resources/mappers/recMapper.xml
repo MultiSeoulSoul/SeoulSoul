@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.seoulsoul.rec.model.dao.RecDAO">
+    <insert id="insertRecommendation" parameterType="com.multi.seoulsoul.rec.model.dto.RecDTO">
+        INSERT INTO REC_BOARD (title, content, created_date, views)
+        VALUES (#{title}, #{content}, NOW(), #{views})
+    </insert>
+</mapper>
