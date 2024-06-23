@@ -47,12 +47,12 @@
                 
                 <!-- 제목 -->    
                 <div class="form-group">
-                    <input type="text" id="title" name="title" placeholder="제목" required>
+                    <input type="text" id="title" name="title" placeholder="" required>
                 </div>
                 
                 <!-- 내용 -->
                 <div class="form-group">
-                    <textarea id="content" name="content" placeholder="내용" rows="10" required></textarea>
+                    <textarea id="content" name="content" placeholder="" rows="10" required></textarea>
                 </div>
                 
                 <!-- 파일 업로드를 위한 input -->
@@ -62,7 +62,7 @@
                 
                 <!-- 하단 버튼 -->
                 <div class="form-group" align ="right">
-                	<button type="submit" class="submit-button">작성하기</button>
+                	<button type="button" class="edit-button">수정하기</button>
                     <a href="csMain"><button type="button" id="back-button">돌아가기</button></a>
                 </div>
             </form>

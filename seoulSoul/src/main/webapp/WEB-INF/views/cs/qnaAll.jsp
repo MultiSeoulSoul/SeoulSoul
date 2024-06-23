@@ -35,6 +35,9 @@ th, td {
 th {
     background-color: #f2f2f2;
 }
+th.title {
+    width: 40%;
+}
 </style>
 
 </head>
@@ -59,27 +62,29 @@ th {
 				<table>
 					<thead>
 		   	         	<tr>
-		       	        	<th class="no">번호</th>
+		       	        	<th class="question_no">번호</th>
 		       	        	<th class="category">카테고리</th>
 		           	    	<th class="title">제목</th>
 		               		<th class="writer">작성자</th>
+		               		<th class="views">조회수</th>
 		               		<th class="created_date">작성일</th>
 		               		<th class="is_answered">답변여부</th>
 		            	</tr>
 	         	 	</thead>
 	         	 	
 			   		<tbody>
-				      	<c:forEach items="${list}" var="one">
-				      	<tr>
-				        	<td class="no">${one.rownum}</td> 
-				        	<td class="category">${one.category}</td> 
-						   	<td class="title"><a href="qnaOne?id=${one.no}">${one.title}</a></td>
-				        	<td class="writer">${one.writer}</td>
-				        	<td class="created_date">${one.created_date}</td>
-				        	<td class="is_answered">${one.is_answered ? "답변 완료" : "답변 대기"}</td>
-				      	</tr>
-				      	</c:forEach>
-			   		</tbody>
+                        <c:forEach items="${questions}" var="qna">
+                        <tr>
+                            <td class="question_no">${qna.questionNo}</td> 
+                            <td class="category">${qna.categoryCode}</td> 
+                            <td class="title"><a href="qnaOne?id=${qna.questionNo}">${qna.title}</a></td>
+                            <td class="writer">${qna.writer}</td>
+                            <td class="views">${qna.views}</td>
+                            <td class="created_date">${qna.createdDate}</td>
+                            <td class="is_answered">${qna.isAnswered ? "답변 완료" : "답변 대기"}</td>
+                        </tr>
+                        </c:forEach>
+                    </tbody>
 				</table>
 				<br>
 				

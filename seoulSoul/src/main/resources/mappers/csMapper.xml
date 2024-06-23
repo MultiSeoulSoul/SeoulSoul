@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="csMapper">
+	
+	<!-- 문의글 전체 조회: 1. 전체 문의글 수 -->
+    <select id="getTotalQuestions" resultType="int">
+        SELECT COUNT(*) FROM CS_QUESTION
+    </select>
+    <!-- 문의글 전체 조회: 2. 페이징 처리된 문의글 -->
+    <select id="getQuestionsByPage" resultType="csQuestionDTO">
+        SELECT 
+        	q.question_no, 
+        	q.category_code, 
+        	q.title, 
+        	q.content, 
+        	q.writer, 
+        	q.created_date, 
+        	q.views, 
+        	c.category_name
+        FROM CS_QUESTION q
+        LEFT JOIN CS_CATEGORY c ON q.category_code = c.category_code
+        ORDER BY q.created_date DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    
+    <!-- 문의글 상세 조회: 1. 문의글 상세 가져오기 -->
+    <select id="selectQuestionById" parameterType="int" resultType="csQuestionDTO">
+        SELECT 
+        	q.question_no, 
+        	q.title, 
+        	q.writer, 
+        	q.views, 
+        	q.created_date, 
+        	q.content, 
+        	q.category_code,
+        	c.category_name
+        FROM CS_QUESTION q
+        JOIN CS_CATEGORY c ON q.category_code = c.category_code
+        WHERE q.question_no = #{questionNo}
+    </select>
+    <!-- 문의글 상세 조회: 2. 첨부파일 가져오기 -->
+    <select id="selectFilesByQuestionId" parameterType="int" resultType="csQuestionFileDTO">
+        SELECT file_no, question_no, original_file_name, stored_file_name, file_path
+        FROM CS_QUESTION_FILES
+        WHERE question_no = #{questionNo}
+    </select>
+    <!-- 문의글 상세 조회: 3. 답변 가져오기 -->
+    <select id="selectAnswersByQuestionId" parameterType="int" resultType="csAnswerDTO">
+        SELECT answer_no, question_no, content, writer, created_date
+        FROM CS_ANSWER
+        WHERE question_no = #{questionNo}
+    </select>
+    <!-- 문의글 상세 조회: 4. 조회수 증가시키기 -->
+    <update id="increaseViewCount" parameterType="int">
+	    UPDATE CS_QUESTION
+	    SET views = views + 1
+	    WHERE question_no = #{questionNo}
+	</update>
+    
+    <!-- 문의글 삭제 -->
+    <delete id="deleteQuestion" parameterType="int">
+		DELETE FROM CS_QUESTION WHERE question_no = #{questionNo}
+	</delete>
+	
+	<!-- 문의글 쓰기: 1. 카테고리 -->
+    <select id="getCategories" resultType="csCategoryDTO">
+        SELECT category_code, category_name FROM CS_CATEGORY
+    </select>  
+	<!-- 문의글 쓰기: 2. 문의글 -->
+    <insert id="insertQuestion">
+        INSERT INTO CS_QUESTION (category_code, title, content, writer)
+        VALUES (#{category_code}, #{title}, #{content}, #{writer})
+    </insert>    
+ 	<!-- 문의글 쓰기: 3. 첨부파일 -->   
+	<insert id="insertFile">
+	    INSERT INTO CS_QUESTION_FILES (question_no, original_file_name, stored_file_name, file_path)
+	    VALUES (#{questionNo}, #{originalFileName}, #{storedFileName}, #{filePath})
+	</insert>
+	
+    <!-- 문의글 수정 -->
+    
+    
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

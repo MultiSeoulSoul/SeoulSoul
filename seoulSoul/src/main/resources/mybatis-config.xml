@@ -3,13 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-<!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 
-     별명을 지어서 사용 -->
-     
-   <settings>
-		<setting name="jdbcTypeForNull" value="NULL"/>
-        <setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 조회결과 snake_case -> camelCase 변환 -->
+
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 조회결과 snake_case -> camelCase 변환 -->
 	</settings>
+
+	<typeAliases>
+		<!-- CS DTO -->
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsAnswerDTO" alias="csAnswerDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsCategoryDTO" alias="csCategoryDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsQuestionDTO" alias="csQuestionDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO" alias="csQuestionFileDTO"></typeAlias>
+	</typeAliases>
 	
-   
+	<mappers>
+		<!-- CS Mapper -->
+		<mapper resource="mappers/csMapper.xml" />
+	</mappers>
+	
 </configuration>
