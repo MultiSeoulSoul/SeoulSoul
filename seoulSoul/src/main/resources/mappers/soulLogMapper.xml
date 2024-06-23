@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soulLogMapper">
+
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" id="soulLogResultMap">
+			
+		<!-- DB PK 컬럼 -->
+		<id property="soulLogNo" column="soul_log_no"/>
+		
+		<!-- DB 일반 컬럼 -->
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="views" column="views"/>
+		<result property="createdDate" column="created_date"/>
+		<result property="modifiedDate" column="modified_date"/>
+		
+		<!-- 1 대 1 관계 -->
+		<association property="location" resultMap="locationResultMap"/>
+		<association property="category" resultMap="categoryResultMap"/>
+		<association property="writer" resultMap="writerResultMap"/>
+		
+		<!-- 1 대 다 관계 -->
+		<collection property="files" resultMap="filesResultMap"/>
+		<collection property="likes" resultMap="likesResultMap"/>
+		<collection property="replies" resultMap="repliesResultMap"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.LocationDTO" id="locationResultMap">
+
+		<id property="locationCode" column="location_code"/>
+		<result property="locationName" column="location_name"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.CategoryDTO" id="categoryResultMap">
+
+		<id property="categoryCode" column="category_code"/>
+		<result property="categoryName" column="category_name"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.WriterDTO" id="writerResultMap">
+
+		<id property="userNo" column="user_no"/>
+		<result property="nickname" column="nickname"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.FilesDTO" id="filesResultMap">
+		
+		<id property="fileNo" column="file_no"/>
+		<result property="soulLogNo" column="file_soul_log_no"/>
+		<result property="originalName" column="original_name"/>
+		<result property="savedName" column="saved_name"/>
+		    
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.LikesDTO" id="likesResultMap">
+		
+		<id property="userNo" column="like_user_no"/>
+		<id property="soulLogNo" column="like_soul_log_no"/>
+		<result property="likesCount" column="likes_count"/>
+		<result property="likedDate" column="liked_date"/>
+		    
+	</resultMap>
+	
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO" id="repliesResultMap">
+		
+		<id property="replyNo" column="reply_no"/>
+		<result property="soulLogNo" column="reply_soul_log_no"/>
+		<result property="content" column="reply_content"/>
+		<result property="repliesCount" column="replies_count"/>
+		<result property="createdDate" column="reply_created_date"/>
+		<result property="modifiedDate" column="reply_modified_date"/>
+		
+		<association property="writer" resultMap="replyWriterResultMap"/>
+		    
+	</resultMap>
+	
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.ReplyWriterDTO" id="replyWriterResultMap">
+
+		<id property="userNo" column="reply_user_no"/>
+		<result property="nickname" column="reply_nickname"/>
+		
+	</resultMap>
+
+
+	<select id="selectSoulLogList" resultMap="soulLogResultMap" parameterType="com.multi.seoulsoul.soulLog.model.dto.PageDTO">
+		SELECT
+			A.soul_log_no, 
+			A.title, 
+			A.views, 
+			B.location_name, 
+			C.category_name, 
+			(SELECT COUNT(*) FROM SL_LIKE D WHERE D.soul_log_no = A.soul_log_no) AS likes_count, 
+			(SELECT COUNT(*) FROM SL_REPLY E WHERE E.soul_log_no = A.soul_log_no) AS replies_count, 
+			(SELECT F.saved_name 
+         	FROM SL_FILES F 
+         	WHERE F.soul_log_no = A.soul_log_no 
+         	ORDER BY F.file_no 
+         	LIMIT 1) AS saved_name 
+			FROM SL_BOARD A 
+			LEFT JOIN LOCATION B ON A.location_code = B.location_code 
+			LEFT JOIN SL_CATEGORY C ON A.category_code = C.category_code 
+			ORDER BY A.soul_log_no DESC 
+   			LIMIT #{startIndex}, #{pageCount}
+	</select>
+
+	
+
+</mapper>

@@ -10,6 +10,11 @@
 		<setting name="jdbcTypeForNull" value="NULL"/>
         <setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 조회결과 snake_case -> camelCase 변환 -->
 	</settings>
-	
-   
+
+
+
+	<mappers>
+		<mapper resource="mappers/soulLogMapper.xml" />
+   	</mappers>
+   	
 </configuration>
