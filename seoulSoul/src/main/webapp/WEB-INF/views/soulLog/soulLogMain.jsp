@@ -108,6 +108,13 @@
 		</div> <!-- seach-bar div -->
 	</form>
 	
+	<br>
+
+	<div align="right">
+		<a href="soulLogInsertForm">
+			<button style="width: 110px; height: 35px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">소울로그 작성</button>
+		</a>
+	</div>
 	
 	<div class="card-grid" style="padding-left: 0px; padding-right: 0px;">
 		<c:forEach items="${soulLogList}" var="one">
@@ -133,8 +140,8 @@
     	int pages = (int) request.getAttribute("pages");
     	for(int p = 1; p <= pages; p++) {
     	%>
-    	<button class="pages"><%=p%></button>
-    	<%
+    	<button class="pages" style="width: 30px; height: 30px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;"><%=p%></button>
+    	<% 
     	}
     	%>
     </div>

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.soulLog.model.dao.SoulLogDAO;
+import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
@@ -40,6 +42,21 @@ public class SoulLogServiceImpl implements SoulLogService {
 		
 		return soulLogDAO.selectSoulLogList(sqlSession, pageDTO);
 		
+	}
+
+
+	@Override
+	public List<LocationDTO> selectLocationList() throws Exception {
+		
+		return soulLogDAO.selectLocationList(sqlSession);
+		
+	}
+
+
+	@Override
+	public List<CategoryDTO> selectCategoryList() throws Exception {
+		
+		return soulLogDAO.selectCategoryList(sqlSession);
 	}
 	
 	

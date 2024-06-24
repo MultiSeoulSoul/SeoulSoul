@@ -113,6 +113,24 @@
 			ORDER BY A.soul_log_no DESC 
    			LIMIT #{startIndex}, #{pageCount}
 	</select>
+	
+	
+	<select id="selectLocationList" resultMap="locationResultMap">
+		SELECT
+			A.location_code, 
+			A.location_name
+		FROM LOCATION A
+		ORDER BY A.location_code ASC
+	</select>
+	
+	
+	<select id="selectCategoryList" resultMap="categoryResultMap">
+		SELECT
+			A.category_code, 
+			A.category_name
+		FROM SL_CATEGORY A
+		ORDER BY A.category_code ASC
+	</select>
 
 	
 
