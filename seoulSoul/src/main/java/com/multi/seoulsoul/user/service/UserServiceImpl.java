@@ -25,20 +25,42 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO loginUser(UserDTO u) throws Exception {
-		System.out.println("로그인 서비스impl 도착");
-		
-		UserDTO loginUser = userDAO.loginUser(sqlSession, u);
-
-		System.out.println("로그인 mapper 반환 완료");
-		if (loginUser == null) {
-			throw new Exception("로그인 정보가 없습니다");
-		}
-		if (!bCryptPasswordEncoder.matches(u.getUserPw(), loginUser.getUserPw())) {
-			throw new Exception("비밀번호가 일치하지 않습니다");
-		}
-
-		return loginUser;
+	public boolean isUserIdAvailable(String userId) {
+		return !userDAO.findByUserId(sqlSession, userId);
 	}
+	
+	@Override
+	public boolean isUserNicknameAvailable(String nickname) {
+		return !userDAO.findByUserNickname(sqlSession, nickname);
+	}
+
+	@Override
+	public void joinUser(UserDTO u) throws Exception {
+		System.out.println("암호화전 : " + u.getUserPw());
+		String encpw = bCryptPasswordEncoder.encode(u.getUserPw());
+		System.out.println("암호화후 : " + encpw);
+		
+		u.setUserPw(encpw);
+		int result = userDAO.joinUser(sqlSession, u);
+		if(result == 0) {
+			throw new Exception("회원가입에 실패 하였습니다");
+		}	
+	}
+
+//	@Override
+//	public UserDTO loginUser(UserDTO u) throws Exception {
+//		
+//		UserDTO loginUser = userDAO.loginUser(sqlSession, u);
+//		
+//		if(loginUser == null) {
+//			throw new Exception("로그인 정보가 없습니다"); 
+//		}
+//		if(!bCryptPasswordEncoder.matches(u.getUserPw(), loginUser.getUserPw())) {
+//            System.out.println("비밀번호가 일치하지 않습니다");
+//			throw new Exception("비밀번호가 일치하지 않습니다.");
+//        }
+//		return loginUser;
+//	}
+
 
 }

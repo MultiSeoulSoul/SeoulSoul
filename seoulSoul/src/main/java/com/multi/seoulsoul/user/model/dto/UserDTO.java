@@ -1,5 +1,6 @@
 package com.multi.seoulsoul.user.model.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class UserDTO {
@@ -10,22 +11,11 @@ public class UserDTO {
     private String phone;
     private String email;
     private char blacklistStatus;
-    private LocalDateTime createdDate;
+    private Timestamp createdDate;
     
     public UserDTO() {
 	}
 
-    public UserDTO(int userNo, String userId, String userPw, String nickname, String phone, String email, char blacklistStatus, LocalDateTime createdDate) {
-        this.userNo = userNo;
-        this.userId = userId;
-        this.userPw = userPw;
-        this.nickname = nickname;
-        this.phone = phone;
-        this.email = email;
-        this.blacklistStatus = blacklistStatus;
-        this.createdDate = createdDate;
-    }
-    
 	public int getUserNo() {
 		return userNo;
 	}
@@ -82,11 +72,11 @@ public class UserDTO {
 		this.blacklistStatus = blacklistStatus;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
 
@@ -95,6 +85,19 @@ public class UserDTO {
 		return "UserDTO [userNo=" + userNo + ", userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname
 				+ ", phone=" + phone + ", email=" + email + ", blacklistStatus=" + blacklistStatus + ", createdDate="
 				+ createdDate + "]";
+	}
+
+	public UserDTO(int userNo, String userId, String userPw, String nickname, String phone, String email,
+			char blacklistStatus, Timestamp createdDate) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userPw = userPw;
+		this.nickname = nickname;
+		this.phone = phone;
+		this.email = email;
+		this.blacklistStatus = blacklistStatus;
+		this.createdDate = createdDate;
 	}
     
 }

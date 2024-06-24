@@ -8,9 +8,20 @@ import com.multi.seoulsoul.user.model.dto.UserDTO;
 @Repository
 public class UserDAO {
 
-	public UserDTO loginUser(SqlSessionTemplate sqlSession, UserDTO u) {
-		System.out.println("로그인 DAO 도착");
-		return sqlSession.selectOne("userMapper.loginUser", u);
+	// 아이디 중복 확인 메서드
+	public boolean findByUserId(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("userMapper.findByUserId", userId);
 	}
 
+	public boolean findByUserNickname(SqlSessionTemplate sqlSession, String nickname) {
+		return sqlSession.selectOne("userMapper.findByNickname", nickname);
+	}
+
+	public int joinUser(SqlSessionTemplate sqlSession, UserDTO u) {
+		return sqlSession.insert("userMapper.joinUser", u);
+	}
+
+//	public UserDTO loginUser(SqlSessionTemplate sqlSession, UserDTO u) {
+//		return sqlSession.selectOne("userMapper.loginUser", u);
+//	}
 }

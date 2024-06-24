@@ -16,14 +16,16 @@
             <ul>
                 <li><a href="${pageContext.request.contextPath}/soulLog/soulLogMain">소울로그</a></li>
                 <li><a href="${pageContext.request.contextPath}/rec/recMain">추천</a></li>
-                
                 <li><a href="${pageContext.request.contextPath}/event/eventMain">이벤트</a></li>
-                
                 <li><a href="${pageContext.request.contextPath}/cs/csMain">고객센터</a></li>
             </ul>
         </nav>
         <div class="user-menu">
-            <a href="${pageContext.request.contextPath}/user/userMain"><span>홍길동님</span></a> | <a href="#">로그아웃</a>
+            <a href="${pageContext.request.contextPath}/user/userMain"><span>홍길동님</span></a> | 
+            <form method="post" action="${pageContext.request.contextPath}/user/logout">
+	            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	            <input type="submit" value="로그아웃" />
+            </form>
         </div>
     </header>
 </body>

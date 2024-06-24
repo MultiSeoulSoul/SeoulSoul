@@ -2,29 +2,50 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-	<bean id="BCryptPasswordEncoder" name="BCryptPasswordEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
-	</bean>
-	
-	
+	<bean id="BCryptPasswordEncoder" name="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
     <security:http auto-config="true">
-        <security:intercept-url pattern="/admin/*" access="ROLE_ADMIN" />
-        <security:form-login login-page="/login" default-target-url="/welcome"
-                    authentication-failure-url="/login?error" />
-        <security:logout logout-success-url="/login?logout" />
+	    <security:intercept-url pattern="/login.jsp" access="permitAll" />
+	    <security:intercept-url pattern="/index.jsp" access="permitAll" />
+    	<security:intercept-url pattern="/main.jsp" access="isAuthenticated()" />
+        <security:intercept-url pattern="/soulLog/**" access="isAuthenticated()" />
+        <security:intercept-url pattern="/rec/**" access="isAuthenticated()" />
+        <security:intercept-url pattern="/event/**" access="isAuthenticated()" />
+        <security:intercept-url pattern="/cs/**" access="isAuthenticated()" />
+        <security:intercept-url pattern="/user/**" access="hasRole('ADMIN')" />
+        <security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
+        
+        <security:form-login
+            login-page="/login.jsp"
+            login-processing-url="/user/login"
+        	default-target-url="/main"
+			username-parameter="userId"
+            password-parameter="userPw"
+            authentication-failure-url="/login.jsp?error=true" />
+            
+        <security:logout
+			logout-url="/user/logout"
+        	logout-success-url="/login.jsp"
+        	delete-cookies="JSESSIONID" />
     </security:http>
 
     <security:authentication-manager>
         <security:authentication-provider>
-            <security:user-service>
-                <security:user name="user" password="password" authorities="ROLE_USER" />
-                <security:user name="admin" password="admin" authorities="ROLE_ADMIN" />
-            </security:user-service>
+            <security:jdbc-user-service 
+                data-source-ref="dataSource" 
+                users-by-username-query=
+                	"SELECT user_id, user_pw, 1 enabled FROM users WHERE user_id = ?"
+                authorities-by-username-query=
+                	"SELECT u.user_id, ua.authority_name
+					FROM USERS u
+					JOIN USER_ROLE ur ON u.user_no = ur.user_no
+					JOIN USER_AUTHORITY ua ON ur.authority_code = ua.authority_code
+					WHERE u.user_id = ?" />
+            <security:password-encoder ref="BCryptPasswordEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
 

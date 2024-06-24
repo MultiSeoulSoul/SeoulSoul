@@ -2,9 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userMapper">
 
-	<select id="loginUser" parameterType="userDTO" resultType="userDTO">
-		select * from users 
-		where user_id = #{userId}
+	<!-- UserDTO의 resultMap 정의 -->
+    <resultMap id="userResultMap" type="com.multi.seoulsoul.user.model.dto.UserDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="userPw" column="user_pw"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="blacklistStatus" column="blacklist_status"/>
+        <result property="createdDate" column="created_date"/>
+    </resultMap>
+
+    <!-- UserAuthorityDTO의 resultMap 정의 -->
+    <resultMap id="userAuthorityResultMap" type="com.multi.seoulsoul.user.model.dto.UserAuthorityDTO">
+        <id property="authorityCode" column="authority_code"/>
+        <result property="authorityName" column="authority_name"/>
+        <result property="authorityDesc" column="authority_desc"/>
+    </resultMap>
+
+    <!-- UserRoleDTO의 resultMap 정의 -->
+    <resultMap id="userRoleResultMap" type="com.multi.seoulsoul.user.model.dto.UserRoleDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="authorityCode" column="authority_code"/>
+    </resultMap>
+
+	<!-- 아이디 중복 체크 -->
+	<select id="findByUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE user_id = #{userId}
 	</select>
 	
+	<!-- 닉네임 중복 체크 -->
+	<select id="findByNickname" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE nickname = #{nickname}
+	</select>
+
+	<!-- 회원가입 -->
+	<insert id="joinUser" parameterType="userDTO" useGeneratedKeys="true" keyProperty="userNo">
+	    INSERT INTO users (user_id, user_pw, nickname, phone, email)
+	    VALUES (#{userId}, #{userPw}, #{nickname}, #{phone}, #{email})
+	</insert>
+
+
+	<!-- 로그인 -->
+	<select id="loginUser" parameterType="userDTO" resultType="userDTO">
+		SELECT *
+		FROM users
+		WHERE user_id = #{userId}
+	</select>
+
 </mapper>
