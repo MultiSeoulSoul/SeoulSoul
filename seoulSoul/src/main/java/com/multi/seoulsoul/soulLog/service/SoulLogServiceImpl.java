@@ -26,6 +26,14 @@ public class SoulLogServiceImpl implements SoulLogService {
 		this.soulLogDAO = soulLogDAO; 
 	}
 
+	
+	@Override
+	public int selectSoulLogCount() throws Exception {
+		
+		return soulLogDAO.selectSoulLogCount(sqlSession);
+		
+	}
+	
 
 	@Override
 	public List<SoulLogDTO> selectSoulLogList(PageDTO pageDTO) throws Exception {
@@ -33,7 +41,6 @@ public class SoulLogServiceImpl implements SoulLogService {
 		return soulLogDAO.selectSoulLogList(sqlSession, pageDTO);
 		
 	}
-	
 	
 	
 	

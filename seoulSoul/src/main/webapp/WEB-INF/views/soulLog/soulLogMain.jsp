@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <title>Insert title here</title>
 
 	<script>
@@ -36,6 +37,46 @@
             
             searchSoulLog.action = actionURL;
         }
+	</script>
+	
+	<script type="text/javascript">
+		$(function() {
+			
+			
+			$('.pages').click(function() {
+				$.ajax({
+					url : "soulLogList",
+					data : {
+						page : $(this).text()
+					},
+					success : function(result) { //결과가 담겨진 table부분코드
+						$('.card-grid').html(result)
+					},
+					error : function() {
+						alert('게시글 조회 실패')
+					}
+				}) //ajax
+			})
+			
+			
+			
+			$('.card-grid').on('click', 'div.card', function() {
+				// 현재 div.card 내의 input 태그의 value 속성 가져오기
+				var url = $(this).find('input').attr('value');
+				// url이 존재하면 해당 URL로 이동
+				if (url) {
+					window.location.href = url;
+				}
+			});
+			
+			
+			
+	        $(document).ready(function(){
+	            $(".card").css("cursor", "pointer");
+	        });
+			
+	        
+		})
 	</script>
 
 </head>
@@ -73,7 +114,7 @@
 			<div class="card">
 	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}">
 	            <div class="card-content">
-	                <h3>${one.title}</h3>
+	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}"></h3>
 	                <span style="margin-right:10px">${one.location.locationName}</span><span>|</span><span style="margin-left:10px">${one.category.categoryName}</span>
 	                <br>
 	                <br>
@@ -84,6 +125,19 @@
         	</div>
 		</c:forEach>
     </div> <!-- card-grid div -->
+    
+    <br>
+    
+    <div class="pagination">
+    	<%
+    	int pages = (int) request.getAttribute("pages");
+    	for(int p = 1; p <= pages; p++) {
+    	%>
+    	<button class="pages"><%=p%></button>
+    	<%
+    	}
+    	%>
+    </div>
 	
 	
 </div> <!-- content div -->

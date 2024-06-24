@@ -87,6 +87,11 @@
 		
 	</resultMap>
 
+	
+	<select id="selectSoulLogCount" resultType="Integer">
+		SELECT COUNT(*) soulLogCount FROM SL_BOARD
+	</select>
+	
 
 	<select id="selectSoulLogList" resultMap="soulLogResultMap" parameterType="com.multi.seoulsoul.soulLog.model.dto.PageDTO">
 		SELECT

@@ -11,10 +11,18 @@ import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 @Repository
 public class SoulLogDAO {
 	
+	public int selectSoulLogCount(SqlSessionTemplate sqlSession) {
+		
+		return sqlSession.selectOne("soulLogMapper.selectSoulLogCount");
+		
+	}
+	
 	public List<SoulLogDTO> selectSoulLogList(SqlSessionTemplate sqlSession, PageDTO pageDTO) {
 		
 		return sqlSession.selectList("soulLogMapper.selectSoulLogList", pageDTO);
 	
 	}
+
+	
 
 }
