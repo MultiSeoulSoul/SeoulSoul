@@ -1,13 +1,13 @@
 package com.multi.seoulsoul.soulLog.model.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class LikesDTO {
 	
 	private int userNo;
 	private int soulLogNo;
 	private int likesCount;
-	private Date likedDate;
+	private Timestamp likedDate;
 	
 	
 	public int getUserNo() {
@@ -28,10 +28,10 @@ public class LikesDTO {
 	public void setLikesCount(int likesCount) {
 		this.likesCount = likesCount;
 	}
-	public Date getLikedDate() {
+	public Timestamp getLikedDate() {
 		return likedDate;
 	}
-	public void setLikedDate(Date likedDate) {
+	public void setLikedDate(Timestamp likedDate) {
 		this.likedDate = likedDate;
 	}
 	

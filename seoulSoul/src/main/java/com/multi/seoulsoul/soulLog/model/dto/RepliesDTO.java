@@ -1,6 +1,6 @@
 package com.multi.seoulsoul.soulLog.model.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class RepliesDTO {
 	
@@ -9,8 +9,8 @@ public class RepliesDTO {
 	private String content;
 	private WriterDTO writer;
 	private int repliesCount;
-	private Date createdDate;
-	private Date modifiedDate;
+	private Timestamp createdDate;
+	private Timestamp modifiedDate;
 	
 	
 	public int getReplyNo() {
@@ -43,16 +43,16 @@ public class RepliesDTO {
 	public void setRepliesCount(int repliesCount) {
 		this.repliesCount = repliesCount;
 	}
-	public Date getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
-	public Date getModifiedDate() {
+	public Timestamp getModifiedDate() {
 		return modifiedDate;
 	}
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(Timestamp modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 	
