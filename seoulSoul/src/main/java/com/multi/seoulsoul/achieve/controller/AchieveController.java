@@ -59,7 +59,7 @@ public class AchieveController {
 			System.out.println("업적 생성 실패.");
 		}
 		
-		return "/achieve/adminMain";
+		return "redirect:/admin/adminMain";
 	}
 	
 	@RequestMapping("/delete")
@@ -81,7 +81,7 @@ public class AchieveController {
 			System.out.println("업적 생성 실패.");
 		}
 		
-		return "/achieve/adminMain";
+		return "redirect:/admin/adminMain";
 	}
 
 }
