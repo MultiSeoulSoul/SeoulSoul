@@ -38,4 +38,18 @@ public class AchieveDAO {
 		return sqlSession.selectList("achieveMapper.selectAchieveCate");
 	}
 
+	public int deleteAchieveLoca(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		System.out.println("deleteAchieveLoca AchieveDAO 도착.");
+		
+		return sqlSession.delete("achieveMapper.deleteAchieveLoca", achNo);
+	}
+
+	public int deleteAchieveCate(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		System.out.println("deleteAchieveCate AchieveDAO 도착.");
+		
+		return sqlSession.delete("achieveMapper.deleteAchieveCate", achNo);
+	}
+
 }

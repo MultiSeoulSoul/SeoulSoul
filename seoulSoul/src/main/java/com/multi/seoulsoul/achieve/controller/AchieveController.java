@@ -61,5 +61,27 @@ public class AchieveController {
 		
 		return "/achieve/adminMain";
 	}
+	
+	@RequestMapping("/delete")
+	public String achieveDelete(AchieveDTO achieveDTO) {
+		System.out.println("Request >> achieveDelete.");
+		System.out.println("Request >> " + achieveDTO);
+		
+		int result = 0;
+		
+		if (achieveDTO.getLocationCode() != 0) {
+			result = achieveService.deleteAchieveLoca(achieveDTO.getAchNo());
+		} else {
+			result = achieveService.deleteAchieveCate(achieveDTO.getAchNo());
+		}
+		
+		if (result > 0) {
+			System.out.println("업적 생성 성공.");
+		} else {
+			System.out.println("업적 생성 실패.");
+		}
+		
+		return "/achieve/adminMain";
+	}
 
 }

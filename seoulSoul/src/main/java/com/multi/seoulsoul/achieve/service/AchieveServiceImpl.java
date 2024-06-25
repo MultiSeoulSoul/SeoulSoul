@@ -65,4 +65,28 @@ public class AchieveServiceImpl implements AchieveService {
 		return achieveCateList;
 	}
 
+	@Override
+	public int deleteAchieveLoca(int achNo) {
+		// TODO Auto-generated method stub
+		System.out.println("deleteAchieveLoca AchieveServiceImpl 도착.");
+		
+		int result = achieveDAO.deleteAchieveLoca(sqlSession, achNo);
+		
+		System.out.println("result >> " + result);
+		
+		return result;
+	}
+
+	@Override
+	public int deleteAchieveCate(int achNo) {
+		// TODO Auto-generated method stub
+		System.out.println("deleteAchieveCate AchieveServiceImpl 도착.");
+		
+		int result = achieveDAO.deleteAchieveCate(sqlSession, achNo);
+		
+		System.out.println("result >> " + result);
+		
+		return result;
+	}
+
 }

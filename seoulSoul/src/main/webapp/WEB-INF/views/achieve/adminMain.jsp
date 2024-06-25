@@ -42,13 +42,21 @@
             <c:forEach items="${achieveLocaList}" var="bag">
 				No.${bag.achNo} | 자치구 : ${bag.locationCode} | 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
 				<a href="#"><button>수정</button></a>
-				<a href="#"><button>삭제</button></a>
+				<form action="${pageContext.request.contextPath}/admin/delete" method="get">
+		            <input type="hidden" name="achNo" value="${bag.achNo}">
+		            <input type="hidden" name="locationCode" value="${bag.locationCode}">
+		            <button type="submit">삭제</button>
+		        </form>
 				<hr>
 			</c:forEach>
 			<c:forEach items="${achieveCateList}" var="bag">
 				No.${bag.achNo} | 카테고리 : ${bag.categoryCode} | 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
 				<a href="#"><button>수정</button></a>
-				<a href="#"><button>삭제</button></a>
+				<form action="${pageContext.request.contextPath}/admin/delete" method="get">
+		            <input type="hidden" name="achNo" value="${bag.achNo}">
+		            <input type="hidden" name="categoryCode" value="${bag.categoryCode}">
+		            <button type="submit">삭제</button>
+		        </form>
 				<hr>
 			</c:forEach>
             <a href="${pageContext.request.contextPath}/admin/achieveInsertForm"><button>업적 생성</button></a>

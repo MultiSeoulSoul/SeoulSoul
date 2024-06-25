@@ -14,4 +14,8 @@ public interface AchieveService {
 	
 	List<AchieveDTO> achieveCateList();
 
+	int deleteAchieveLoca(int achNo);
+	
+	int deleteAchieveCate(int achNo);
+
 }

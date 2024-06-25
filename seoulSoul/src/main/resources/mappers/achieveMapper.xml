@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="achieveMapper">
-
+	
 	<insert id="insertAchieveLoca" parameterType="achieveDTO">
 		insert into ACH_LOCA
 		values (null, #{locationCode}, #{maxCount}, #{title}, null, null)
@@ -20,5 +20,13 @@
 	<select id="selectAchieveCate" resultType="achieveDTO">
 		select * from ACH_CATE
 	</select>
+	
+	<delete id="deleteAchieveLoca" parameterType="int">
+		delete from ACH_LOCA where ach_no = #{achNo}
+	</delete>
+	
+	<delete id="deleteAchieveCate" parameterType="int">
+		delete from ACH_CATE where ach_no = #{achNo}
+	</delete>
 	
 </mapper>
