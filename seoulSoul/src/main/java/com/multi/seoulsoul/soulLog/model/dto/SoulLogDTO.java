@@ -14,6 +14,9 @@ public class SoulLogDTO {
 	private int views;
 	private Timestamp createdDate;
 	private Timestamp modifiedDate;
+	private int likesCount;
+	private int repliesCount;
+	private int viewerLike;
 	private List<FilesDTO> files;
 	private List<LikesDTO> likes;
 	private List<RepliesDTO> replies;
@@ -73,6 +76,24 @@ public class SoulLogDTO {
 	public void setModifiedDate(Timestamp modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+	public int getLikesCount() {
+		return likesCount;
+	}
+	public void setLikesCount(int likesCount) {
+		this.likesCount = likesCount;
+	}
+	public int getRepliesCount() {
+		return repliesCount;
+	}
+	public void setRepliesCount(int repliesCount) {
+		this.repliesCount = repliesCount;
+	}
+	public int getViewerLike() {
+		return viewerLike;
+	}
+	public void setViewerLike(int viewerLike) {
+		this.viewerLike = viewerLike;
+	}
 	public List<FilesDTO> getFiles() {
 		return files;
 	}
@@ -97,8 +118,9 @@ public class SoulLogDTO {
 	public String toString() {
 		return "SoulLogDTO [soulLogNo=" + soulLogNo + ", location=" + location + ", category=" + category + ", title="
 				+ title + ", content=" + content + ", writer=" + writer + ", views=" + views + ", createdDate="
-				+ createdDate + ", modifiedDate=" + modifiedDate + ", files=" + files + ", likes=" + likes
-				+ ", replies=" + replies + "]";
+				+ createdDate + ", modifiedDate=" + modifiedDate + ", likesCount=" + likesCount + ", repliesCount="
+				+ repliesCount + ", viewerLike=" + viewerLike + ", files=" + files + ", likes=" + likes + ", replies="
+				+ replies + "]";
 	}
 	
 }

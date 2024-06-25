@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
+import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
@@ -47,6 +48,18 @@ public class SoulLogDAO {
 	public int insertSoulLogFile(SqlSessionTemplate sqlSession, FilesDTO filesDTO) {
 		
 		return sqlSession.insert("soulLogMapper.insertSoulLogFile", filesDTO);
+		
+	}
+
+	public SoulLogDTO soulLogDetail(SqlSessionTemplate sqlSession, DetailRequestDTO detailRequestDTO) {
+		
+		return sqlSession.selectOne("soulLogMapper.soulLogDetail", detailRequestDTO);
+		
+	}
+
+	public int addViews(SqlSessionTemplate sqlSession, int soulLogNo) {
+		
+		return sqlSession.update("soulLogMapper.addViews", soulLogNo);
 		
 	}
 

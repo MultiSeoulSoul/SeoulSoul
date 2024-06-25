@@ -49,7 +49,7 @@
 					data : {
 						page : $(this).text()
 					},
-					success : function(result) { //결과가 담겨진 table부분코드
+					success : function(result) {
 						$('.card-grid').html(result)
 					},
 					error : function() {
@@ -78,6 +78,43 @@
 	        
 		})
 	</script>
+	
+	<script type="text/javascript">
+	
+	$(document).ready(function() {			
+		
+		$.ajax({
+			url: "${pageContext.servletContext.contextPath}/soulLog/locationList",
+						
+			success: function(data) {
+				var locationSelect = $('select[name="locationCode"]');
+				// 받아온 데이터로 <select> 내용채우기
+				data.forEach(function(location) {
+					locationSelect.append($('<option></option>').attr('value', location.locationCode).text(location.locationName));
+				});
+			},
+			error: function() {
+				alert('자치구 목록을 불러오는 데 실패했습니다.');
+			}
+		})
+		
+		$.ajax({
+			url: "${pageContext.servletContext.contextPath}/soulLog/categoryList",
+						
+			success: function(data) {
+				var categorySelect = $('select[name="categoryCode"]');
+				// 받아온 데이터로 <select> 내용채우기
+				data.forEach(function(category) {
+					categorySelect.append($('<option></option>').attr('value', category.categoryCode).text(category.categoryName));
+				});
+			},
+			error: function() {
+				alert('카테고리 목록을 불러오는 데 실패했습니다.');
+			}
+		})
+					
+	})
+</script>
 
 </head>
 <body>
@@ -89,18 +126,12 @@
 	<form id="searchSoulLog" onsubmit="updateParameters()">
 		<div class="search-bar" style="height: 50px; background: white">
 			<span style="margin-left:20px">자치구</span>
-			<select id="location" onchange="updateParameters()" style="width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
+			<select name="locationCode" onchange="updateParameters()" style="width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
 				<option value="0">전체</option>
-				<option value="101">강남구</option>
-	        	<option value="102">강동구</option>
-	        	<option value="103">강북구</option>
 	    	</select>
 	    	<span style="margin-left:30px">카테고리</span>
-			<select id="category" onchange="updateParameters()" style="width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
-				<option value="0">전체</option>
-				<option value="100">영화</option>
-	        	<option value="200">연극</option>
-	        	<option value="300">뮤지컬</option>
+			<select name="categoryCode" onchange="updateParameters()" style="width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
+	    		<option value="0">전체</option>
 	    	</select>
 	    	<span style="margin-left:30px">검색어</span>
 	    	<input type="text" id="searchInput" placeholder=" 검색어 입력..." oninput="updateParameters()" style="width: 500px; height: 26px; background-color: #f0f0f0; border: 1px solid #c0c0c0;"/>
@@ -121,13 +152,13 @@
 			<div class="card">
 	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}">
 	            <div class="card-content">
-	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}"></h3>
+	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}&loginUserNo=2"></h3>
 	                <span style="margin-right:10px">${one.location.locationName}</span><span>|</span><span style="margin-left:10px">${one.category.categoryName}</span>
 	                <br>
 	                <br>
-	                <span style="margin-right:10px">&#128153; &nbsp;${one.likes[0].likesCount}</span>
+	                <span style="margin-right:10px">&#128153; &nbsp;${one.likesCount}</span>
 	                <span style="margin-right:10px">&#128064; &nbsp;${one.views}</span>
-	                <span>&#128172; &nbsp;${one.replies[0].repliesCount}</span>
+	                <span>&#128172; &nbsp;${one.repliesCount}</span>
 	            </div>
         	</div>
 		</c:forEach>

@@ -7,8 +7,7 @@ public class RepliesDTO {
 	private int replyNo;
 	private int soulLogNo;
 	private String content;
-	private WriterDTO writer;
-	private int repliesCount;
+	private ReplyWriterDTO writer;
 	private Timestamp createdDate;
 	private Timestamp modifiedDate;
 	
@@ -31,17 +30,11 @@ public class RepliesDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public WriterDTO getWriter() {
+	public ReplyWriterDTO getWriter() {
 		return writer;
 	}
-	public void setWriter(WriterDTO writer) {
+	public void setWriter(ReplyWriterDTO writer) {
 		this.writer = writer;
-	}
-	public int getRepliesCount() {
-		return repliesCount;
-	}
-	public void setRepliesCount(int repliesCount) {
-		this.repliesCount = repliesCount;
 	}
 	public Timestamp getCreatedDate() {
 		return createdDate;
@@ -60,8 +53,7 @@ public class RepliesDTO {
 	@Override
 	public String toString() {
 		return "RepliesDTO [replyNo=" + replyNo + ", soulLogNo=" + soulLogNo + ", content=" + content + ", writer="
-				+ writer + ", repliesCount=" + repliesCount + ", createdDate=" + createdDate + ", modifiedDate="
-				+ modifiedDate + "]";
+				+ writer + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 	
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.soulLog.model.dao.SoulLogDAO;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
+import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
@@ -90,6 +91,22 @@ public class SoulLogServiceImpl implements SoulLogService {
 		}
 		
         return result;
+		
+	}
+
+
+	@Override
+	public SoulLogDTO soulLogDetail(DetailRequestDTO detailRequestDTO) throws Exception {
+		
+		return soulLogDAO.soulLogDetail(sqlSession, detailRequestDTO);
+	
+	}
+
+
+	@Override
+	public void addViews(int soulLogNo) throws Exception {
+		
+		soulLogDAO.addViews(sqlSession, soulLogNo);
 		
 	}
 	

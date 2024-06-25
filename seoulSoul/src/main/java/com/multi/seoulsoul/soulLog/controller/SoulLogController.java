@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
+import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
@@ -242,6 +243,38 @@ public class SoulLogController {
 			
 		}
 		
+		
+	}
+	
+	
+	// 소울로그 상세 조회
+	@RequestMapping("/soulLogDetail")
+	public String soulLogDetail(DetailRequestDTO detailRequestDTO, Model model) {
+		
+		System.out.println("조회할 소울로그 No는 >>>> " + detailRequestDTO.getSoulLogNo());
+		System.out.println("로그인한 유저 No는 >>>> " + detailRequestDTO.getLoginUserNo());
+		
+		try {
+			
+			soulLogService.addViews(detailRequestDTO.getSoulLogNo());
+			
+			SoulLogDTO soulLogDetail = soulLogService.soulLogDetail(detailRequestDTO);
+			
+			System.out.println("가져온 로그 데이터 >>>> " + soulLogDetail);
+			
+			model.addAttribute("soulLogDetail", soulLogDetail);
+			
+			return "soulLog/soulLogDetail";
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 작성 실패..");
+			
+			return "common/errorPage";
+			
+		}
 		
 	}
 		

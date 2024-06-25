@@ -6,7 +6,6 @@ public class LikesDTO {
 	
 	private int userNo;
 	private int soulLogNo;
-	private int likesCount;
 	private Timestamp likedDate;
 	
 	
@@ -22,12 +21,6 @@ public class LikesDTO {
 	public void setSoulLogNo(int soulLogNo) {
 		this.soulLogNo = soulLogNo;
 	}
-	public int getLikesCount() {
-		return likesCount;
-	}
-	public void setLikesCount(int likesCount) {
-		this.likesCount = likesCount;
-	}
 	public Timestamp getLikedDate() {
 		return likedDate;
 	}
@@ -38,8 +31,7 @@ public class LikesDTO {
 	
 	@Override
 	public String toString() {
-		return "LikesDTO [userNo=" + userNo + ", soulLogNo=" + soulLogNo + ", likesCount=" + likesCount + ", likedDate="
-				+ likedDate + "]";
+		return "LikesDTO [userNo=" + userNo + ", soulLogNo=" + soulLogNo + ", likedDate=" + likedDate + "]";
 	}
-
+	
 }

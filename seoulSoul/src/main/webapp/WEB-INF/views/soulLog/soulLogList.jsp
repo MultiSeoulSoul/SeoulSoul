@@ -20,9 +20,9 @@
 	        <span style="margin-right:10px">${one.location.locationName}</span><span>|</span><span style="margin-left:10px">${one.category.categoryName}</span>
 	        <br>
 	        <br>
-	        <span style="margin-right:10px">&#128153; &nbsp;${one.likes[0].likesCount}</span>
+	        <span style="margin-right:10px">&#128153; &nbsp;${one.likesCount}</span>
 	        <span style="margin-right:10px">&#128064; &nbsp;${one.views}</span>
-	        <span>&#128172; &nbsp;${one.replies[0].repliesCount}</span>
+	        <span>&#128172; &nbsp;${one.repliesCount}</span>
 	     </div>
     </div>
 </c:forEach>
