@@ -1,14 +1,15 @@
 package com.multi.seoulsoul.achieve.model.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class AchieveDTO {
 	private int achNo;
 	private int locationCode;
-	private int count;
+	private int categoryCode;
+	private int maxCount;
 	private String title;
-	private LocalDateTime createdDate;
-	private LocalDateTime modifiedDate;
+	private Timestamp createdDate;
+	private Timestamp modifiedDate;
 	
 	
 	public int getAchNo() {
@@ -23,11 +24,17 @@ public class AchieveDTO {
 	public void setLocationCode(int locationCode) {
 		this.locationCode = locationCode;
 	}
-	public int getCount() {
-		return count;
+	public int getCategoryCode() {
+		return categoryCode;
 	}
-	public void setCount(int count) {
-		this.count = count;
+	public void setCategoryCode(int categoryCode) {
+		this.categoryCode = categoryCode;
+	}
+	public int getMaxCount() {
+		return maxCount;
+	}
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
 	}
 	public String getTitle() {
 		return title;
@@ -35,25 +42,25 @@ public class AchieveDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public LocalDateTime getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
-	public LocalDateTime getModifiedDate() {
+	public Timestamp getModifiedDate() {
 		return modifiedDate;
 	}
-	public void setModifiedDate(LocalDateTime modifiedDate) {
+	public void setModifiedDate(Timestamp modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	
 	@Override
 	public String toString() {
-		return "AchieveDTO [achNo=" + achNo + ", locationCode=" + locationCode + ", count=" + count
-				+ ", title=" + title + ", createdDate=" + createdDate + ", modifiedDate="
+		return "AchieveDTO [achNo=" + achNo + ", locationCode=" + locationCode + ", categoryCode=" + categoryCode
+				+ ", maxCount=" + maxCount + ", title=" + title + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + "]";
 	}
+	
 	
 	
 }

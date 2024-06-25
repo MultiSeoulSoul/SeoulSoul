@@ -26,7 +26,7 @@
 			</tr>
 			<tr>
 				<td class="t1">달성 필요 횟수 :</td>
-				<td><input name="count"></td>
+				<td><input name="maxCount"></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="t1">

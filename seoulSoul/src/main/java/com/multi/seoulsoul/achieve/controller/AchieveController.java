@@ -1,13 +1,17 @@
 package com.multi.seoulsoul.achieve.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.multi.seoulsoul.achieve.model.dto.AchieveDTO;
 import com.multi.seoulsoul.achieve.service.AchieveService;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -20,7 +24,14 @@ public class AchieveController {
 	}
 	
 	@GetMapping("/adminMain")
-	public String adminMainPage() {
+	public String adminMainPage(Model model) {
+		System.out.println("관리자 메인 페이지 호출 성공.");
+		List<AchieveDTO> achieveLocaList = achieveService.achieveLocaList();
+		List<AchieveDTO> achieveCateList = achieveService.achieveCateList();
+        
+        model.addAttribute("achieveLocaList", achieveLocaList);
+        model.addAttribute("achieveCateList", achieveCateList);
+        
 		return "achieve/adminMain";
 	}
 	
@@ -34,7 +45,13 @@ public class AchieveController {
 		System.out.println("Post >> achieveInsertForm.");
 		System.out.println("Post >> " + achieveDTO);
 		
-		int result = achieveService.insertAchieveLoca(achieveDTO);
+		int result = 0;
+		
+		if (achieveDTO.getLocationCode() != 0) {
+			result = achieveService.insertAchieveLoca(achieveDTO);
+		} else {
+			result = achieveService.insertAchieveCate(achieveDTO);
+		}
 		
 		if (result > 0) {
 			System.out.println("업적 생성 성공.");

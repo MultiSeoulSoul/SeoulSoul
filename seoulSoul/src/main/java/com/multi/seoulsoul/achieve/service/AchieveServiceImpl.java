@@ -1,5 +1,7 @@
 package com.multi.seoulsoul.achieve.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +24,45 @@ public class AchieveServiceImpl implements AchieveService {
 	@Override
 	public int insertAchieveLoca(AchieveDTO achieveDTO) {
 		// TODO Auto-generated method stub
-		System.out.println("AchieveServiceImpl 도착.");
+		System.out.println("insertAchieveLoca AchieveServiceImpl 도착.");
 		
 		int result = achieveDAO.insertAchieveLoca(sqlSession, achieveDTO);
 		
 		System.out.println("result >> " + result);
 		
 		return result;
+	}
+
+	@Override
+	public int insertAchieveCate(AchieveDTO achieveDTO) {
+		// TODO Auto-generated method stub
+		System.out.println("insertAchieveCate AchieveServiceImpl 도착.");
+		
+		int result = achieveDAO.insertAchieveCate(sqlSession, achieveDTO);
+		
+		System.out.println("result >> " + result);
+		
+		return result;
+	}
+
+	@Override
+	public List<AchieveDTO> achieveLocaList() {
+		// TODO Auto-generated method stub
+		System.out.println("achieveLocaList AchieveServiceImpl 도착.");
+
+		List<AchieveDTO> achieveLocaList = achieveDAO.achieveLocaList(sqlSession);
+		
+		return achieveLocaList;
+	}
+	
+	@Override
+	public List<AchieveDTO> achieveCateList() {
+		// TODO Auto-generated method stub
+		System.out.println("achieveCateList AchieveServiceImpl 도착.");
+
+		List<AchieveDTO> achieveCateList = achieveDAO.achieveCateList(sqlSession);
+		
+		return achieveCateList;
 	}
 
 }

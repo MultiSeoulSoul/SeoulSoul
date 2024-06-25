@@ -5,12 +5,20 @@
 
 	<insert id="insertAchieveLoca" parameterType="achieveDTO">
 		insert into ACH_LOCA
-		values (null, #{locationCode}, #{count}, #{title}, null, null)
+		values (null, #{locationCode}, #{maxCount}, #{title}, null, null)
 	</insert>
 	
 	<insert id="insertAchieveCate" parameterType="achieveDTO">
 		insert into ACH_CATE
-		values (null, #{categotyCode}, #{count}, #{title}, null, null)
+		values (null, #{categoryCode}, #{maxCount}, #{title}, null, null)
 	</insert>
+	
+	<select id="selectAchieveLoca" resultType="achieveDTO">
+		select * from ACH_LOCA
+	</select>
+	
+	<select id="selectAchieveCate" resultType="achieveDTO">
+		select * from ACH_CATE
+	</select>
 	
 </mapper>
