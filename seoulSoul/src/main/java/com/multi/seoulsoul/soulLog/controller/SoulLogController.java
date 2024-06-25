@@ -178,7 +178,6 @@ public class SoulLogController {
 			
 			List<FilesDTO> fileList = new ArrayList<>();
 			
-			
 			for(MultipartFile img : imgList) {
 				
 				if (!img.isEmpty()) {
@@ -199,7 +198,7 @@ public class SoulLogController {
 					
 					try {
 						
-							img.transferTo(new File(filePath + "/" + savedName));
+						img.transferTo(new File(filePath + "/" + savedName));
 								
 					} catch (Exception e) {
 								

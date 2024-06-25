@@ -134,9 +134,28 @@
 	
 	
 	<insert id="insertSoulLog" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" useGeneratedKeys="true" keyProperty="soulLogNo">
-		INSERT INTO SL_BOARD 
-		(location_code, category_code, title, writer)
-		values (#{title}, #{content} , #{imgName}, #{writer})
+        INSERT INTO SL_BOARD
+        	(location_code, category_code, title, content, writer) 
+        VALUES
+	        (
+	        #{ location.locationCode }, 
+	        #{ category.categoryCode }, 
+	        #{ title }, 
+	        #{ content }, 
+	        #{ writer.userNo }
+	        )
+	</insert>
+	
+	
+	<insert id="insertSoulLogFile" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilesDTO">
+        INSERT INTO SL_FILES
+        	(soul_log_no, original_name, saved_name) 
+        VALUES
+	        (
+	        #{ soulLogNo }, 
+	        #{ originalName }, 
+	        #{ savedName }
+	        )
 	</insert>
 
 	
