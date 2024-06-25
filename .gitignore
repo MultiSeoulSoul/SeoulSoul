@@ -92,7 +92,10 @@ local.properties
 target/
 
 # Ignore all files in resources/uploadFiles
-src/main/webapp/resources/uploadFiles/*
+src/main/webapp/resources/uploadFiles/
+
+#Ignore the database properties file
+src/main/resources/db.properties
 
 ### Eclipse Patch ###
 # Spring Boot Tooling
