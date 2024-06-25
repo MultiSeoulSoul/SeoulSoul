@@ -134,7 +134,12 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-	
+		<!-- 스프링 트랜잭션 관련 설정 -->
+		<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-tx</artifactId>
+    		<version>${org.springframework-version}</version>
+		</dependency>
 	
 		
 		<!-- SPRING SECURITY -->
@@ -158,7 +163,12 @@
 		    <version>${org.springframework-version}</version>
 		</dependency>
 		
-		
+		<!-- 시큐리티 태그 라이브러리 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>5.3.10.RELEASE</version>
+        </dependency>
 		
 		
 		

@@ -131,6 +131,13 @@
 		FROM SL_CATEGORY A
 		ORDER BY A.category_code ASC
 	</select>
+	
+	
+	<insert id="insertSoulLog" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" useGeneratedKeys="true" keyProperty="soulLogNo">
+		INSERT INTO SL_BOARD 
+		(location_code, category_code, title, writer)
+		values (#{title}, #{content} , #{imgName}, #{writer})
+	</insert>
 
 	
 

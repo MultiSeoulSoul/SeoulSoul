@@ -37,6 +37,12 @@ public class SoulLogDAO {
 		
 	}
 
+	public int insertSoulLog(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		
+		return sqlSession.insert("soulLogMapper.insertSoulLog", soulLogDTO);
+		
+	}
+
 	
 
 }

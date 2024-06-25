@@ -17,5 +17,7 @@ public interface SoulLogService {
 
 	List<CategoryDTO> selectCategoryList() throws Exception;
 
+	int insertSoulLog(SoulLogDTO soulLogDTO) throws Exception;
+
 	
 }

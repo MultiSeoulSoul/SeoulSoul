@@ -208,7 +208,7 @@ public class SoulLogController {
 						// 오류 발생 시 생성한 파일을 삭제한다.
 						new File(filePath + "/" + savedName).delete();
 								
-						model.addAttribute("msg", "게시글 작성 실패..");
+						model.addAttribute("msg", "소울로그 작성 실패..");
 	
 						return "common/errorPage";
 							
@@ -224,7 +224,24 @@ public class SoulLogController {
 					
 		} // img가 있을 때
 		
-		return null;
+		try {
+			
+			soulLogService.insertSoulLog(soulLogDTO);
+			
+			// mapper에서 useGeneratedKeys="true" keyProperty="soulLogNo" 해줬기 때문에 soulLogDTO에 insert한 게시글의 No(PK)가 담겨 있다.
+			int soulLogNo = soulLogDTO.getSoulLogNo();
+			
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 작성 실패..");
+			
+			return "common/errorPage";
+			
+		}
 		
 		
 	}

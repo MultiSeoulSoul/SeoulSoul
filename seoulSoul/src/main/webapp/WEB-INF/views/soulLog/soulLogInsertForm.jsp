@@ -137,6 +137,7 @@
 		if (value.files && value.files[0]) {
 			const reader = new FileReader();
 			reader.onload = function(e) {
+				
 				switch(num){
 					case 1:
 						document.getElementById("img1").src = e.target.result;
@@ -161,7 +162,7 @@
 		}
 	}
 			
-		</script>
+</script>
 
 
 
