@@ -1,9 +1,12 @@
 package com.multi.seoulsoul.user.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
+import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.service.UserService;
 
 @Controller
@@ -42,10 +47,10 @@ public class UserController {
 	}
 	
 	@GetMapping("/main")
-	public void Main() {}
+	public void Main() {
+		
+	}
 
-	
-	
 	@GetMapping("/checkDuplicateId")
     @ResponseBody
     public boolean checkDuplicateId(@RequestParam("userId") String userId) {
@@ -65,22 +70,27 @@ public class UserController {
 		return "/user/login";
 	}
 	
-//	@PostMapping("/login")
-//	public String loginUser(UserDTO u, HttpSession session) {
-//	    try {
-//	    	UserDTO userDTO = userService.loginUser(u);
-//	        session.setAttribute("loginUser", userDTO);
-//	        return "redirect:/";
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return "redirect:/";
-//	    }
-//	}
-//	
-//	@PostMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.invalidate();
-//		return "redirect:/";
-//	}
+	@RequestMapping("/SLBoardPage")
+	@ResponseBody
+	public void selectSLBoardPage(@AuthenticationPrincipal Principal principal, UserPageDTO up, Model model) {
+		String userNo = principal.getName();
+		
+		System.out.println("userNo" + userNo);
+		
+		up.setStartEnd(up.getPage());
+		
+		System.out.println("보내는pageDTO" + up);
+		
+		List<SLBoardDTO> list = userService.selectSLBoardPage(up);
+		
+		System.out.println("받아온list" + list);
+		
+		int count = userService.selectCount();
+		int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+
+		model.addAttribute("list", list);
+		model.addAttribute("count", count);
+		model.addAttribute("pages", pages);
+	}
 
 }

@@ -13,6 +13,8 @@
 
 	<typeAliases>
 		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserDTO" alias="userDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserPageDTO" alias="userPageDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO" alias="slBoardDTO"></typeAlias>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/userMapper.xml" />

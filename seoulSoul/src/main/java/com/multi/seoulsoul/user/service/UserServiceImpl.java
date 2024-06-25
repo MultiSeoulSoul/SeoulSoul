@@ -1,12 +1,16 @@
 package com.multi.seoulsoul.user.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
 import com.multi.seoulsoul.user.model.dao.UserDAO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
+import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,20 +51,13 @@ public class UserServiceImpl implements UserService {
 		}	
 	}
 
-//	@Override
-//	public UserDTO loginUser(UserDTO u) throws Exception {
-//		
-//		UserDTO loginUser = userDAO.loginUser(sqlSession, u);
-//		
-//		if(loginUser == null) {
-//			throw new Exception("로그인 정보가 없습니다"); 
-//		}
-//		if(!bCryptPasswordEncoder.matches(u.getUserPw(), loginUser.getUserPw())) {
-//            System.out.println("비밀번호가 일치하지 않습니다");
-//			throw new Exception("비밀번호가 일치하지 않습니다.");
-//        }
-//		return loginUser;
-//	}
-
-
+	@Override
+	public List<SLBoardDTO> selectSLBoardPage(UserPageDTO up) {
+		return userDAO.selectSLBoardPage(sqlSession, up);
+	}
+	
+	@Override
+	public int selectCount() {
+		return userDAO.selectCount(sqlSession);
+	}
 }
