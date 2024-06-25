@@ -194,6 +194,18 @@
 		SET views = views+1
 		WHERE soul_log_no = #{ soulLogNo }
 	</update>
+	
+	
+	<insert id="insertSoulLogReply" parameterType="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO">
+        INSERT INTO SL_REPLY
+        	(soul_log_no, content, writer) 
+        VALUES
+	        (
+	        #{ soulLogNo }, 
+	        #{ content }, 
+	        #{ writer.userNo }
+	        )
+	</insert>
 
 	
 

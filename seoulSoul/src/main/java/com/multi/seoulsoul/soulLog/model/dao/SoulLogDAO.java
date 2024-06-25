@@ -10,6 +10,7 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
 @Repository
@@ -60,6 +61,12 @@ public class SoulLogDAO {
 	public int addViews(SqlSessionTemplate sqlSession, int soulLogNo) {
 		
 		return sqlSession.update("soulLogMapper.addViews", soulLogNo);
+		
+	}
+
+	public int insertSoulLogReply(SqlSessionTemplate sqlSession, RepliesDTO repliesDTO) {
+		
+		return sqlSession.insert("soulLogMapper.insertSoulLogReply", repliesDTO);
 		
 	}
 

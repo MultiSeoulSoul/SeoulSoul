@@ -6,6 +6,7 @@ import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
 public interface SoulLogService {
@@ -23,5 +24,7 @@ public interface SoulLogService {
 	SoulLogDTO soulLogDetail(DetailRequestDTO detailRequestDTO) throws Exception;
 
 	void addViews(int soulLogNo) throws Exception;
+
+	void insertSoulLogReply(RepliesDTO repliesDTO) throws Exception;
 	
 }

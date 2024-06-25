@@ -13,6 +13,7 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
 @Service
@@ -107,6 +108,15 @@ public class SoulLogServiceImpl implements SoulLogService {
 	public void addViews(int soulLogNo) throws Exception {
 		
 		soulLogDAO.addViews(sqlSession, soulLogNo);
+		
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = {Exception.class})
+	public void insertSoulLogReply(RepliesDTO repliesDTO) throws Exception {
+		
+		soulLogDAO.insertSoulLogReply(sqlSession, repliesDTO);
 		
 	}
 	

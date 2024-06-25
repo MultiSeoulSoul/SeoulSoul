@@ -8,6 +8,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,8 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.ReplyWriterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 import com.multi.seoulsoul.soulLog.model.dto.WriterDTO;
 import com.multi.seoulsoul.soulLog.service.SoulLogService;
@@ -251,6 +255,28 @@ public class SoulLogController {
 	@RequestMapping("/soulLogDetail")
 	public String soulLogDetail(DetailRequestDTO detailRequestDTO, Model model) {
 		
+		/* 만약 맞다면... login된 유저의 userNo를 가져오는 코드
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        int userNo = userDetails.getUserNo();
+        
+		*/
+		
+		/* 만약 시큐리티를 했어도, model.addAttribute("loginUser", loginUser); + @SessionAttributes("loginUser") 를 해서
+		세션에 로그인 유저의 정보를 담았다면 (이 방법이 편할 거 같은데...)
+		soulLogDetail(D d, M m, HttpSession session) {
+			
+			UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
+			int userNo = loginUser.getUserNo();
+			
+			
+			그런 다음 detailRequestDTO.setLoginUserNo(userNo); 하면 깔-끔
+		
+		}
+		
+		 */
+		
 		System.out.println("조회할 소울로그 No는 >>>> " + detailRequestDTO.getSoulLogNo());
 		System.out.println("로그인한 유저 No는 >>>> " + detailRequestDTO.getLoginUserNo());
 		
@@ -275,6 +301,36 @@ public class SoulLogController {
 			return "common/errorPage";
 			
 		}
+		
+	}
+	
+	
+	@PostMapping("/insertSoulLogReply")
+	public String insertSoulLogReply(RepliesDTO repliesDTO, ReplyWriterDTO replyWriterDTO, Model model) {
+		
+		System.out.println("repliesDTO는 >>>>> " + repliesDTO);
+		System.out.println("replyWriterDTO는 >>>>> " + replyWriterDTO);
+		
+		int soulLogNo = repliesDTO.getSoulLogNo();
+		
+		repliesDTO.setWriter(replyWriterDTO);
+		
+		try {
+			
+			soulLogService.insertSoulLogReply(repliesDTO);
+			
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo; // 지금은 loginUserNo를 안 보내지만, 만약 디테일 메서드에서 로그인 유저의 no를 가져올 수 있다면 여기선 로그 no만 보내도 됨.
+			
+		} catch (Exception e) {
+		
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 작성 실패..");
+			
+			return "common/errorPage";
+			
+		}
+		
 		
 	}
 		

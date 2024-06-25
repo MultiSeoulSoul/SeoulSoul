@@ -59,8 +59,8 @@
 			<span style="margin-left:20px">제목</span>
 			<input type="text" id="title" name="title" style="margin-top: 10px; margin-left: 15px; width: 400px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" maxlength="20" required>
 			<span style="margin-left:50px">작성자</span>
-			<input type="text" style="margin-top: 10px; margin-left: 15px; width: 150px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="홍길동" disabled> <!-- 로그인된 유저nickname으로 바꿔야 함 -->
-			<input type="hidden" name="userNo" value="1"> <!-- 로그인 된 유저의 no로 수정해야 함 -->
+			<input type="text" style="margin-top: 10px; margin-left: 15px; width: 150px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="홍길동" disabled> <!-- 로그인된 유저nickname으로 바꿔야 함. 그냥 보여주기 용이라 컨트롤러로 바꿀 필요 없음 -->
+			<input type="hidden" name="userNo" value="1"> <!-- 로그인 된 유저의 no로 수정해야 함. post라 굳이 컨트롤러에서 받는 걸로 안 해도 될지도..-->
 			<span style="margin-left:50px">자치구</span>
 			<select name="locationCode" style="margin-left: 15px; width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
 			</select>

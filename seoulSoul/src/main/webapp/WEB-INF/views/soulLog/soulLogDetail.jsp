@@ -63,11 +63,11 @@
 				<table>
 					<tr>
 						<td style="width: 130px; height: 40px;">
-							홍길동 <!-- 로그인된 유저 nickname으로 바꿔야 함 -->
+							홍길동 <!-- 로그인된 유저 nickname으로 바꿔야 함. 역시 단순 보여주기 용. -->
 						</td>
 						<td>
 							<input type="hidden" name="soulLogNo" value="${soulLogDetail.soulLogNo}">
-							<input type="hidden" name="userNo" value="2"> <!-- 로그인된 유저no로 바꿔야 함 -->
+							<input type="hidden" name="userNo" value="2"> <!-- 로그인된 유저no로 바꿔야 함. post라 컨트롤러에서 안 받아도 될지도.. -->
 							<input id="content" name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 댓글 입력..." maxlength="100" required>
 						</td>
 						<td>
