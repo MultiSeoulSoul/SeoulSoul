@@ -70,6 +70,12 @@ public class SoulLogDAO {
 		
 	}
 
+	public int deleteSoulLog(SqlSessionTemplate sqlSession, int soulLogNo) {
+		
+		return sqlSession.delete("soulLogMapper.deleteSoulLog", soulLogNo);
+		
+	}
+
 	
 
 }

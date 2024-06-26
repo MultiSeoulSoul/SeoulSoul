@@ -26,5 +26,7 @@ public interface SoulLogService {
 	void addViews(int soulLogNo) throws Exception;
 
 	void insertSoulLogReply(RepliesDTO repliesDTO) throws Exception;
+
+	void deleteSoulLog(int soulLogNo) throws Exception;
 	
 }

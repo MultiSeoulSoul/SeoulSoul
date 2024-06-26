@@ -296,7 +296,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 작성 실패..");
+			model.addAttribute("msg", "소울로그 상세 조회 실패..");
 			
 			return "common/errorPage";
 			
@@ -325,7 +325,7 @@ public class SoulLogController {
 		
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 작성 실패..");
+			model.addAttribute("msg", "댓글 작성 실패..");
 			
 			return "common/errorPage";
 			
@@ -333,6 +333,31 @@ public class SoulLogController {
 		
 		
 	}
+	
+	
+	@RequestMapping("/deleteSoulLog")
+	public String deleteSoulLog(int soulLogNo, Model model) {
+		
+		System.out.println("삭제할 로그 no는 >>>>> " + soulLogNo);
+		
+		try {
+			
+			soulLogService.deleteSoulLog(soulLogNo);
+			
+			return "redirect:/soulLog/soulLogMain?page=1";
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 삭제 실패..");
+			
+			return "common/errorPage";
+			
+		}
+		
+	}
+	
 		
 
 	

@@ -206,6 +206,12 @@
 	        #{ writer.userNo }
 	        )
 	</insert>
+	
+	
+	<delete id="deleteSoulLog" parameterType="int">
+		DELETE FROM SL_BOARD
+		WHERE soul_log_no = #{ soulLogNo }
+	</delete>
 
 	
 

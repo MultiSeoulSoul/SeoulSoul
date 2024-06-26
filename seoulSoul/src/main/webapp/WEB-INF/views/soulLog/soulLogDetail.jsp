@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <title>Insert title here</title>
+
+<script>
+	function confirmDelete() {
+	    return confirm("정말로 삭제하시겠습니까?");
+	}
+</script>
+
 </head>
 <body>
 
@@ -27,12 +34,26 @@
 		</div>
 		
 		<br>
+		
+		<div align="right">
+			<a href="reportSoulLog?soulLogDTO=${soulLogDetail}&reporter=1"> <!-- 로그인된 유저의 no, 컨트롤러에서  받는 게 좋음 -->
+				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">로그 신고</button>
+			</a>
+			<a href="updateSoulLog?soulLogDTO=${soulLogDetail}">
+				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">로그 수정</button>
+			</a>
+			<a href="deleteSoulLog?soulLogNo=${soulLogDetail.soulLogNo}" onclick="return confirmDelete();">
+				<button class="btns" style="width: 110px; height: 35px; background: #C42A2A; color: white; border: 1px solid #c0c0c0;">로그 삭제</button>
+			</a>
+		</div>
+		
+		<br>
 	
 		<table>
 			<tr>
 				<c:forEach items="${soulLogDetail.files}" var="one">
 					<td>
-						<div style="width: 240px; height: 240px; margin-right: 18px; background: white">
+						<div style="width: 240px; height: 240px; margin-right: 14px; background: white">
 							<img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.savedName}" width="240px" height="240px">
 						</div>
 					</td>
