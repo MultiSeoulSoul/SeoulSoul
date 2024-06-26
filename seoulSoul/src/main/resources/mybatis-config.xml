@@ -11,7 +11,8 @@
 	</settings>
 	
 	<typeAliases>
-     	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchieveDTO" alias="achieveDTO"></typeAlias>
+     	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" alias="achLocaDTO"></typeAlias>
+     	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" alias="achCateDTO"></typeAlias>
     </typeAliases>
     <mappers>
       	<mapper resource="mappers/achieveMapper.xml" />

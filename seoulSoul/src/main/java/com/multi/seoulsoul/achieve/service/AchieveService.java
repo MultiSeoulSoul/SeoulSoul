@@ -2,17 +2,18 @@ package com.multi.seoulsoul.achieve.service;
 
 import java.util.List;
 
-import com.multi.seoulsoul.achieve.model.dto.AchieveDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 
 public interface AchieveService {
 
-	int insertAchieveLoca(AchieveDTO achieveDTO);
+	int insertAchieveLoca(AchLocaDTO achLocaDTO);
 	
-	int insertAchieveCate(AchieveDTO achieveDTO);
+	int insertAchieveCate(AchCateDTO achCateDTO);
 
-	List<AchieveDTO> achieveLocaList();
+	List<AchLocaDTO> achieveLocaList();
 	
-	List<AchieveDTO> achieveCateList();
+	List<AchCateDTO> achieveCateList();
 
 	int deleteAchieveLoca(int achNo);
 	

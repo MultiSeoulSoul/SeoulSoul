@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.multi.seoulsoul.achieve.model.dto.AchieveDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.service.AchieveService;
 
 
@@ -26,8 +27,8 @@ public class AchieveController {
 	@GetMapping("/adminMain")
 	public String adminMainPage(Model model) {
 		System.out.println("관리자 메인 페이지 호출 성공.");
-		List<AchieveDTO> achieveLocaList = achieveService.achieveLocaList();
-		List<AchieveDTO> achieveCateList = achieveService.achieveCateList();
+		List<AchLocaDTO> achieveLocaList = achieveService.achieveLocaList();
+		List<AchCateDTO> achieveCateList = achieveService.achieveCateList();
         
         model.addAttribute("achieveLocaList", achieveLocaList);
         model.addAttribute("achieveCateList", achieveCateList);
@@ -41,16 +42,16 @@ public class AchieveController {
 	}
 	
 	@PostMapping("/achieveInsertForm")
-	public String achieveInsertForm(AchieveDTO achieveDTO) {
+	public String achieveInsertForm(AchLocaDTO achLocaDTO, AchCateDTO achCateDTO) {
 		System.out.println("Post >> achieveInsertForm.");
-		System.out.println("Post >> " + achieveDTO);
+		System.out.println("Post >> " + achLocaDTO);
 		
 		int result = 0;
 		
-		if (achieveDTO.getLocationCode() != 0) {
-			result = achieveService.insertAchieveLoca(achieveDTO);
+		if (achLocaDTO.getLocationCode() != 0) {
+			result = achieveService.insertAchieveLoca(achLocaDTO);
 		} else {
-			result = achieveService.insertAchieveCate(achieveDTO);
+			result = achieveService.insertAchieveCate(achCateDTO);
 		}
 		
 		if (result > 0) {
@@ -62,23 +63,38 @@ public class AchieveController {
 		return "redirect:/admin/adminMain";
 	}
 	
-	@RequestMapping("/delete")
-	public String achieveDelete(AchieveDTO achieveDTO) {
+	@GetMapping("achieveUpdateForm")
+	public String achieveUpdateForm() {
+		return "achieve/achieveUpdateForm";
+	}
+	
+	@GetMapping("/deleteLoca")
+	public String achieveDeleteLoca(AchLocaDTO achLocaDTO) {
 		System.out.println("Request >> achieveDelete.");
-		System.out.println("Request >> " + achieveDTO);
+		System.out.println("Request >> " + achLocaDTO);
 		
-		int result = 0;
-		
-		if (achieveDTO.getLocationCode() != 0) {
-			result = achieveService.deleteAchieveLoca(achieveDTO.getAchNo());
-		} else {
-			result = achieveService.deleteAchieveCate(achieveDTO.getAchNo());
-		}
+		int result = achieveService.deleteAchieveLoca(achLocaDTO.getAchNo());
 		
 		if (result > 0) {
-			System.out.println("업적 생성 성공.");
+			System.out.println("업적 삭제 성공.");
 		} else {
-			System.out.println("업적 생성 실패.");
+			System.out.println("업적 삭제 실패.");
+		}
+		
+		return "redirect:/admin/adminMain";
+	}
+	
+	@GetMapping("/deleteCate")
+	public String achieveDeleteCate(AchLocaDTO achLocaDTO) {
+		System.out.println("Request >> achieveDelete.");
+		System.out.println("Request >> " + achLocaDTO);
+		
+		int result = achieveService.deleteAchieveLoca(achLocaDTO.getAchNo());
+		
+		if (result > 0) {
+			System.out.println("업적 삭제 성공.");
+		} else {
+			System.out.println("업적 삭제 실패.");
 		}
 		
 		return "redirect:/admin/adminMain";

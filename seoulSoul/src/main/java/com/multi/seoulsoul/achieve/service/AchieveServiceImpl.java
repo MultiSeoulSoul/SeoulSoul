@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
-import com.multi.seoulsoul.achieve.model.dto.AchieveDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 
 @Service
 public class AchieveServiceImpl implements AchieveService {
@@ -22,11 +23,11 @@ public class AchieveServiceImpl implements AchieveService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public int insertAchieveLoca(AchieveDTO achieveDTO) {
+	public int insertAchieveLoca(AchLocaDTO achLocaDTO) {
 		// TODO Auto-generated method stub
 		System.out.println("insertAchieveLoca AchieveServiceImpl 도착.");
 		
-		int result = achieveDAO.insertAchieveLoca(sqlSession, achieveDTO);
+		int result = achieveDAO.insertAchieveLoca(sqlSession, achLocaDTO);
 		
 		System.out.println("result >> " + result);
 		
@@ -34,11 +35,11 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public int insertAchieveCate(AchieveDTO achieveDTO) {
+	public int insertAchieveCate(AchCateDTO achCateDTO) {
 		// TODO Auto-generated method stub
 		System.out.println("insertAchieveCate AchieveServiceImpl 도착.");
 		
-		int result = achieveDAO.insertAchieveCate(sqlSession, achieveDTO);
+		int result = achieveDAO.insertAchieveCate(sqlSession, achCateDTO);
 		
 		System.out.println("result >> " + result);
 		
@@ -46,21 +47,21 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public List<AchieveDTO> achieveLocaList() {
+	public List<AchLocaDTO> achieveLocaList() {
 		// TODO Auto-generated method stub
 		System.out.println("achieveLocaList AchieveServiceImpl 도착.");
 
-		List<AchieveDTO> achieveLocaList = achieveDAO.achieveLocaList(sqlSession);
+		List<AchLocaDTO> achieveLocaList = achieveDAO.achieveLocaList(sqlSession);
 		
 		return achieveLocaList;
 	}
 	
 	@Override
-	public List<AchieveDTO> achieveCateList() {
+	public List<AchCateDTO> achieveCateList() {
 		// TODO Auto-generated method stub
 		System.out.println("achieveCateList AchieveServiceImpl 도착.");
 
-		List<AchieveDTO> achieveCateList = achieveDAO.achieveCateList(sqlSession);
+		List<AchCateDTO> achieveCateList = achieveDAO.achieveCateList(sqlSession);
 		
 		return achieveCateList;
 	}

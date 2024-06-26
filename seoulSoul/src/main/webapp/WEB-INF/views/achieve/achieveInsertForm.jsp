@@ -10,7 +10,7 @@
 <body>
 	<jsp:include page="../common/menubar.jsp"/>
 	
-	<form action="achieveInsertForm" method = "post">
+	<form action="achieveInsertForm" method = "post" enctype="multipart/form-data">
 		<table border="1">
 			<tr>
 				<td class="t1">자치구 :</td>

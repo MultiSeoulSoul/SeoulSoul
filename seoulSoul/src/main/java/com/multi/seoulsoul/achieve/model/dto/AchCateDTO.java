@@ -2,9 +2,9 @@ package com.multi.seoulsoul.achieve.model.dto;
 
 import java.sql.Timestamp;
 
-public class AchLocaDTO {
+public class AchCateDTO {
 	private int achNo;
-	private int locationCode;
+	private int categoryCode;
 	private int maxCount;
 	private String title;
 	private Timestamp createdDate;
@@ -17,11 +17,11 @@ public class AchLocaDTO {
 	public void setAchNo(int achNo) {
 		this.achNo = achNo;
 	}
-	public int getLocationCode() {
-		return locationCode;
+	public int getCategoryCode() {
+		return categoryCode;
 	}
-	public void setLocationCode(int locationCode) {
-		this.locationCode = locationCode;
+	public void setCategoryCode(int categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	public int getMaxCount() {
 		return maxCount;
@@ -49,7 +49,7 @@ public class AchLocaDTO {
 	}
 	@Override
 	public String toString() {
-		return "AchieveDTO [achNo=" + achNo + ", locationCode=" + locationCode
+		return "AchieveDTO [achNo=" + achNo + ", categoryCode=" + categoryCode
 				+ ", maxCount=" + maxCount + ", title=" + title + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + "]";
 	}

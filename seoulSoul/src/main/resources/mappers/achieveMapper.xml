@@ -3,21 +3,21 @@
 
 <mapper namespace="achieveMapper">
 	
-	<insert id="insertAchieveLoca" parameterType="achieveDTO">
+	<insert id="insertAchieveLoca" parameterType="achLocaDTO">
 		insert into ACH_LOCA
 		values (null, #{locationCode}, #{maxCount}, #{title}, null, null)
 	</insert>
 	
-	<insert id="insertAchieveCate" parameterType="achieveDTO">
+	<insert id="insertAchieveCate" parameterType="achCateDTO">
 		insert into ACH_CATE
 		values (null, #{categoryCode}, #{maxCount}, #{title}, null, null)
 	</insert>
 	
-	<select id="selectAchieveLoca" resultType="achieveDTO">
+	<select id="selectAchieveLoca" resultType="achLocaDTO">
 		select * from ACH_LOCA
 	</select>
 	
-	<select id="selectAchieveCate" resultType="achieveDTO">
+	<select id="selectAchieveCate" resultType="achCateDTO">
 		select * from ACH_CATE
 	</select>
 	
