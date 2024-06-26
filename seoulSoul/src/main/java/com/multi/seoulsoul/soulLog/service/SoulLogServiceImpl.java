@@ -128,6 +128,22 @@ public class SoulLogServiceImpl implements SoulLogService {
 		soulLogDAO.deleteSoulLog(sqlSession, soulLogNo);
 		
 	}
+
+
+	@Override
+	@Transactional(rollbackFor = {Exception.class})
+	public void deleteSoulLogReply(int replyNo) throws Exception {
+		
+		soulLogDAO.deleteSoulLogReply(sqlSession, replyNo);
+		
+	}
+
+
+	@Override
+	public SoulLogDTO updateDetail(int soulLogNo) throws Exception {
+		
+		return soulLogDAO.updateDetail(sqlSession, soulLogNo);
+	}
 	
 	
 	

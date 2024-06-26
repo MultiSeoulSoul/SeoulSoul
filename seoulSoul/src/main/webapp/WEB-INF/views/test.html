@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울시 구 지도</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <style>
+        .district {
+            stroke: #fff;
+            stroke-width: 0.5px;
+        }
+        .district:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        const width = 800;
+        const height = 600;
+
+        const svg = d3.select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const projection = d3.geoMercator()
+            .center([126.9895, 37.5651])
+            .scale(100000)
+            .translate([width / 2, height / 2]);
+
+        const path = d3.geoPath().projection(projection);
+
+        // 색상 스케일 정의 (d3.schemeCategory20 대신 d3.schemeSet3 사용)
+        const colorScale = d3.scaleOrdinal(d3.schemeSet3);
+
+        d3.json("https://raw.githubusercontent.com/southkorea/seoul-maps/master/kostat/2013/json/seoul_municipalities_topo_simple.json")
+            .then(function(topology) {
+                const geojson = topojson.feature(topology, topology.objects.seoul_municipalities_geo);
+
+                svg.selectAll("path")
+                    .data(geojson.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("class", "district")
+                    .attr("fill", function(d, i) {
+                        return colorScale(i); // 각 구에 고유한 색상 부여
+                    })
+                    .on("click", function(event, d) {
+                        alert(`선택한 구: ${d.properties.name}`);
+                    });
+
+                // 구 이름 추가
+                svg.selectAll("text")
+                    .data(geojson.features)
+                    .enter()
+                    .append("text")
+                    .attr("transform", function(d) {
+                        return "translate(" + path.centroid(d) + ")";
+                    })
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "10px")
+                    .style("fill", "black")
+                    .text(function(d) {
+                        return d.properties.name;
+                    });
+            });
+    </script>
+</body>
+</html>

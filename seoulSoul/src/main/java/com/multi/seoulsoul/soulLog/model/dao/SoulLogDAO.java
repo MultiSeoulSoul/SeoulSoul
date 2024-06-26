@@ -76,6 +76,18 @@ public class SoulLogDAO {
 		
 	}
 
+	public int deleteSoulLogReply(SqlSessionTemplate sqlSession, int replyNo) {
+		
+		return sqlSession.delete("soulLogMapper.deleteSoulLogReply", replyNo);
+		
+	}
+
+	public SoulLogDTO updateDetail(SqlSessionTemplate sqlSession, int soulLogNo) {
+		
+		return sqlSession.selectOne("soulLogMapper.updateDetail", soulLogNo);
+		
+	}
+
 	
 
 }

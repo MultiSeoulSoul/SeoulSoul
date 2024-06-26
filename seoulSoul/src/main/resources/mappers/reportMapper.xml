@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reportMapper">
+
+	<resultMap type="com.multi.seoulsoul.report.model.dto.ReportDTO" id="reportResultMap">
+			
+		<!-- DB PK 컬럼 -->
+		<id property="reportNo" column="report_no"/>
+		
+		<!-- DB 일반 컬럼 -->
+		<result property="title" column="title"/>
+		<result property="reason" column="reason"/>
+		<result property="createdDate" column="created_date"/>
+		
+		<!-- 1 대 1 관계 -->
+		<association property="reporter" resultMap="reporterResultMap"/>
+		<association property="reportedSoulLog" resultMap="reportedSoulLogResultMap"/>
+		
+		<!-- 1 대 다 관계 -->
+		<collection property="reportReply" resultMap="reportReplyResultMap"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.report.model.dto.ReporterDTO" id="reporterResultMap">
+
+		<id property="userNo" column="reporter_userNo"/>
+		<result property="nickname" column="reporter_nickname"/>
+		
+	</resultMap>
+		
+	<resultMap type="com.multi.seoulsoul.report.model.dto.ReportedSoulLogDTO" id="reportedSoulLogResultMap">
+
+		<id property="soulLogNo" column="reported_soul_log_no"/>
+		<result property="title" column="reported_soul_log_title"/>
+		
+	</resultMap>
+	
+	<resultMap type="com.multi.seoulsoul.report.model.dto.ReportReplyDTO" id="reportReplyResultMap">
+
+		<id property="replyNo" column="reply_no"/>
+		<result property="reportNo" column="reply_report_no"/>
+		<result property="content" column="content"/>
+		<result property="createdDate" column="reply_created_date"/>
+		
+	</resultMap>
+	
+	
+	
+	<select id="selectReportedSoulLog" resultMap="reportedSoulLogResultMap">
+	SELECT
+		soul_log_no AS reported_soul_log_no, 
+		title AS reported_soul_log_title
+	FROM SL_BOARD
+	WHERE soul_log_no = #{soulLogNo}
+	</select>
+	
+	
+	<insert id="insertSoulLogReport" parameterType="com.multi.seoulsoul.report.model.dto.ReportDTO">
+	INSERT INTO SL_REPORT (title, reason, reporter, reported_soul_log)
+	VALUES
+		(
+		#{title}, 
+		#{reason}, 
+		#{reporter.userNo}, 
+		#{reportedSoulLog.soulLogNo}
+		)
+	</insert>
+
+	
+
+</mapper>

@@ -143,16 +143,16 @@
 
 	<div align="right">
 		<a href="soulLogInsertForm">
-			<button style="width: 110px; height: 35px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">소울로그 작성</button>
+			<button style="width: 110px; height: 35px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">소울로그 작성</button>
 		</a>
 	</div>
 	
 	<div class="card-grid" style="padding-left: 0px; padding-right: 0px;">
 		<c:forEach items="${soulLogList}" var="one">
 			<div class="card">
-	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}">
+	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}" style="width: 238px; height: 238px;">
 	            <div class="card-content">
-	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}&loginUserNo=2"></h3> <!-- 로그인된 유저의 no로 바꿔야 함 + 가능하다면 url에 안 뜨게 controller에서 로그인 유저 no를 받도록 수정 -->
+	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}"></h3>
 	                <span style="margin-right:10px">${one.location.locationName}</span><span>|</span><span style="margin-left:10px">${one.category.categoryName}</span>
 	                <br>
 	                <br>

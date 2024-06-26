@@ -235,7 +235,7 @@ public class SoulLogController {
 			// mapper에서 useGeneratedKeys="true" keyProperty="soulLogNo" 해줬기 때문에 soulLogDTO에 insert한 게시글의 No(PK)가 담겨 있다.
 			int soulLogNo = soulLogDTO.getSoulLogNo();
 			
-			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo; // 로그인.. 유저 정보 no도..
 			
 		} catch (Exception e) {
 			
@@ -260,22 +260,19 @@ public class SoulLogController {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         int userNo = userDetails.getUserNo();
-        
-		*/
-		
-		/* 만약 시큐리티를 했어도, model.addAttribute("loginUser", loginUser); + @SessionAttributes("loginUser") 를 해서
-		세션에 로그인 유저의 정보를 담았다면 (이 방법이 편할 거 같은데...)
-		soulLogDetail(D d, M m, HttpSession session) {
-			
-			UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
-			int userNo = loginUser.getUserNo();
 			
 			
 			그런 다음 detailRequestDTO.setLoginUserNo(userNo); 하면 깔-끔
+			
+			+ detailRequestDTO.setLoginUserNo(userNo)
+			
 		
 		}
 		
 		 */
+		
+		detailRequestDTO.setLoginUserNo(2); // 로그인한 유저의 no로 바꿔야 함!!!!!
+		
 		
 		System.out.println("조회할 소울로그 No는 >>>> " + detailRequestDTO.getSoulLogNo());
 		System.out.println("로그인한 유저 No는 >>>> " + detailRequestDTO.getLoginUserNo());
@@ -357,6 +354,62 @@ public class SoulLogController {
 		}
 		
 	}
+	
+	
+	@RequestMapping("/deleteSoulLogReply")
+	public String deleteSoulLogReply(RepliesDTO repliesDTO, Model model) {
+		
+		int replyNo = repliesDTO.getReplyNo();
+		int soulLogNo = repliesDTO.getSoulLogNo();
+		
+		System.out.println("삭제할 댓글 no는 >>>>> " + replyNo);
+		System.out.println("댓글 달린 로그 no는 >>>>> " + soulLogNo);
+		
+		
+		try {
+			
+			soulLogService.deleteSoulLogReply(replyNo);
+			
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "댓글 삭제 실패..");
+			
+			return "common/errorPage";
+			
+		}
+		
+	}
+	
+	
+	// 소울로그 수정 폼으로 이동
+	@RequestMapping("/soulLogUpdateForm")
+	public String soulLogUpdateForm(int soulLogNo, Model model) {
+	
+		try {
+			
+			SoulLogDTO updateDetail = soulLogService.updateDetail(soulLogNo);
+			
+			System.out.println("가져온 로그 데이터 >>>> " + updateDetail);
+			
+			model.addAttribute("updateDetail", updateDetail);
+			
+			return "soulLog/soulLogUpdateForm";
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "업데이트할 로그 정보 조회 실패..");
+			
+			return "common/errorPage";
+			
+		}
+		
+	} 
 	
 		
 

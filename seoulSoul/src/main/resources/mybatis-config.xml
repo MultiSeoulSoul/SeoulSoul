@@ -15,6 +15,7 @@
 
 	<mappers>
 		<mapper resource="mappers/soulLogMapper.xml" />
+		<mapper resource="mappers/reportMapper.xml" />
    	</mappers>
    	
 </configuration>

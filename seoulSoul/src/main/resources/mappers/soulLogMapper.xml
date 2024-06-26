@@ -170,6 +170,7 @@
 			B.location_name, 
 			C.category_name, 
 			E.reply_no, 
+			E.soul_log_no AS reply_soul_log_no, 
 			E.content AS reply_content, 
 			E.writer AS reply_writer, 
 			E.created_date AS reply_created_date, 
@@ -178,6 +179,7 @@
 			(SELECT COUNT(*) FROM SL_LIKE D WHERE D.soul_log_no = A.soul_log_no AND D.user_no = #{ loginUserNo }) AS viewer_like, 
 			(SELECT COUNT(*) FROM SL_REPLY E WHERE E.soul_log_no = A.soul_log_no) AS replies_count, 
 			F.file_no,
+			F.soul_log_no AS file_soul_log_no, 
 			F.original_name,  
 			F.saved_name
 			FROM SL_BOARD A 
@@ -212,6 +214,46 @@
 		DELETE FROM SL_BOARD
 		WHERE soul_log_no = #{ soulLogNo }
 	</delete>
+	
+	
+	<delete id="deleteSoulLogReply" parameterType="int">
+		DELETE FROM SL_REPLY
+		WHERE reply_no = #{ replyNo }
+	</delete>
+	
+	
+	<select id="updateDetail" resultMap="soulLogResultMap" parameterType="int">
+		SELECT
+			A.soul_log_no, 
+			A.location_code, 
+			A.category_code, 
+			A.title, 
+			A.content, 
+			A.writer, 
+			(SELECT nickname FROM USERS G WHERE A.writer = G.user_no) AS nickname, 
+			A.views, 
+			A.created_date,
+			B.location_name, 
+			C.category_name, 
+			E.reply_no, 
+			E.soul_log_no AS reply_soul_log_no, 
+			E.content AS reply_content, 
+			E.writer AS reply_writer, 
+			E.created_date AS reply_created_date, 
+			(SELECT nickname FROM USERS G WHERE E.writer = G.user_no) AS reply_nickname, 
+			(SELECT COUNT(*) FROM SL_LIKE D WHERE D.soul_log_no = A.soul_log_no) AS likes_count, 
+			(SELECT COUNT(*) FROM SL_REPLY E WHERE E.soul_log_no = A.soul_log_no) AS replies_count, 
+			F.file_no,
+			F.soul_log_no AS file_soul_log_no, 
+			F.original_name,  
+			F.saved_name
+			FROM SL_BOARD A 
+			LEFT JOIN LOCATION B ON A.location_code = B.location_code 
+			LEFT JOIN SL_CATEGORY C ON A.category_code = C.category_code 
+			LEFT JOIN SL_REPLY E ON A.soul_log_no = E.soul_log_no
+			LEFT JOIN SL_FILES F ON A.soul_log_no = F.soul_log_no
+			WHERE A.soul_log_no = #{ soulLogNo }
+	</select>
 
 	
 

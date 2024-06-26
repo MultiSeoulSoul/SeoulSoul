@@ -36,14 +36,14 @@
 		<br>
 		
 		<div align="right">
-			<a href="reportSoulLog?soulLogDTO=${soulLogDetail}&reporter=1"> <!-- 로그인된 유저의 no, 컨트롤러에서  받는 게 좋음 -->
-				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">로그 신고</button>
+			<a href="${pageContext.servletContext.contextPath}/report/soulLogReportForm?soulLogNo=${soulLogDetail.soulLogNo}">
+				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 신고</button>
 			</a>
-			<a href="updateSoulLog?soulLogDTO=${soulLogDetail}">
-				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">로그 수정</button>
+			<a href="soulLogUpdateForm?soulLogNo=${soulLogDetail.soulLogNo}">
+				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 수정</button>
 			</a>
 			<a href="deleteSoulLog?soulLogNo=${soulLogDetail.soulLogNo}" onclick="return confirmDelete();">
-				<button class="btns" style="width: 110px; height: 35px; background: #C42A2A; color: white; border: 1px solid #c0c0c0;">로그 삭제</button>
+				<button class="btns" style="width: 110px; height: 35px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 삭제</button>
 			</a>
 		</div>
 		
@@ -92,7 +92,7 @@
 							<input id="content" name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 댓글 입력..." maxlength="100" required>
 						</td>
 						<td>
-							<button type="submit" style="width: 110px; height: 35px; margin-left: 30px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">댓글 작성</button>
+							<button type="submit" style="width: 110px; height: 35px; margin-left: 30px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">댓글 작성</button>
 						</td>
 					</tr>
 				</table>
@@ -105,8 +105,16 @@
 						<td style="width: 130px; height: 40px; border-bottom: 1px solid #ccc;">
 							<span style="width: 40px;">${one.writer.nickname}</span>
 						</td>
-						<td style="width: 1100px; border-bottom: 1px solid #ccc;">
+						<td style="width: 1000px; border-bottom: 1px solid #ccc;">
 							${one.content}
+						</td>
+						<td style="width: 100px; border-bottom: 1px solid #ccc;">
+							<a href="updateSoulLogReply?replyNo=${one.replyNo}">
+								<button class="btns" style="width: 40px; height: 25px; background: #B0B0B0; color: white; border: 1px solid #c0c0c0; cursor: pointer;">수정</button>
+							</a>
+							<a href="deleteSoulLogReply?replyNo=${one.replyNo}&soulLogNo=${one.soulLogNo}" onclick="return confirmDelete();">
+								<button class="btns" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
+							</a>
 						</td>
 					</tr>
 				</c:forEach>
@@ -120,7 +128,7 @@
 		
 		<div align="center">
 			<a href="soulLogMain?page=1">
-				<button class="btns" style="width: 110px; height: 35px; background: #3982BC; color: white; border: 1px solid #c0c0c0;">목록으로</button>
+				<button class="btns" style="width: 110px; height: 35px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">목록으로</button>
 			</a>
 		</div>
 	

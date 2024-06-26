@@ -53,7 +53,7 @@
 
 <div class="content" style="margin: 30px">
 
-	<form action="insertSoulLog" method="post" encType="multipart/form-data">
+	<form action="insertSoulLog" method="post" encType="multipart/form-data" onsubmit="return validateForm()">
 		
 		<div class="insert-group" style="height: 50px; background: white">
 			<span style="margin-left:20px">제목</span>
@@ -76,31 +76,31 @@
 				<td>
 					<div id="imgArea1" style="width: 240px; height: 240px; background: white">
 						<img id="img1" width="240px" height="240px">
-						<input type="file" id="img1" name="imgList" onchange="loadImg(this,1)" required>
+						<input type="file" name="imgList" onchange="loadImg(this,1)">
 					</div>
 				</td>
 				<td>
 					<div id="imgArea2" style="margin-left: 18px; width: 240px; height: 240px; background: white">
 						<img id="img2" width="240px" height="240px">
-						<input type="file" id="img2" name="imgList" onchange="loadImg(this,2)">
+						<input type="file" name="imgList" onchange="loadImg(this,2)">
 					</div>
 				</td>
 				<td>
 					<div id="imgArea3" style="margin-left: 18px; width: 240px; height: 240px; background: white">
 						<img id="img3" width="240px" height="240px">
-						<input type="file" id="img3" name="imgList" onchange="loadImg(this,3)">
+						<input type="file" name="imgList" onchange="loadImg(this,3)">
 					</div>
 				</td>
 				<td>
 					<div id="imgArea4" style="margin-left: 18px; width: 240px; height: 240px; background: white">
 						<img id="img4" width="240px" height="240px">
-						<input type="file" id="img4" name="imgList" onchange="loadImg(this,4)">
+						<input type="file" name="imgList" onchange="loadImg(this,4)">
 					</div>
 				</td>
 				<td>
 					<div id="imgArea5" style="margin-left: 18px; width: 240px; height: 240px; background: white">
 						<img id="img5" width="240px" height="240px">
-						<input type="file" id="img5" name="imgList" onchange="loadImg(this,5)">
+						<input type="file" name="imgList" onchange="loadImg(this,5)">
 					</div>
 				</td>
 			</tr>
@@ -162,6 +162,28 @@
 		}
 	}
 			
+</script>
+<script>
+
+	function validateForm() {
+		const inputs = document.querySelectorAll('input[type="file"]');
+		let fileSelected = false;
+
+		for (let i = 0; i < inputs.length; i++) {
+			if (inputs[i].files.length > 0) {
+				fileSelected = true;
+                break;
+                }
+		}
+
+		if (!fileSelected) {
+			alert('이미지를 최소 1개 이상 업로드해 주세요.');
+			return false; // Prevent form submission
+		}
+
+		return true; // Allow form submission
+	
+	}
 </script>
 
 
