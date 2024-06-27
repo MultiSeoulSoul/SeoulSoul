@@ -56,6 +56,10 @@ public class UserController {
 	@GetMapping("/userUpdateForm")
 	public void userUpdateForm() {
 	}
+	
+	@GetMapping("/userDelete")
+	public void Delete() {
+	}
 
 	@PostMapping("/userUpdate")
 	public String userUpdate(@AuthenticationPrincipal Principal principal, UserDTO u, HttpSession session) {
@@ -89,6 +93,19 @@ public class UserController {
 		return "/user/userUpdateForm";
 	}
 	
+	@PostMapping("/userDelete")
+	public String userDelete(@AuthenticationPrincipal Principal principal) {
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+		
+	    try {
+			userService.userDelete(userDetails.getUserNo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/user/logout";
+	}
 	
 	@GetMapping("/checkDuplicateId")
     @ResponseBody

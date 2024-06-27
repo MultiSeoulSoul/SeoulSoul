@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <style>
 .side-menu {
-        width: 100px;
+        width: 200px;
         background-color: #e0f7fa;
         border-right: 1px solid #ddd;
         padding: 20px;
@@ -44,7 +44,7 @@
 	        <li><a href="#">댓글 보기</a></li>
 	        <li><a href="#">좋아요 보기</a></li>
 	        <li><a href="#">문의내역 보기</a></li>
-	        <li><a href="#">회원 탈퇴</a></li>
+	        <li><a href="${pageContext.request.contextPath}/user/userDelete" style="color: red;">회원 탈퇴</a></li>
 	    </ul>
 	</div>
 </body>

@@ -11,5 +11,6 @@
 </head>
 <body>
 	<jsp:include page="common/menubar.jsp" />
+	<sec:authentication property="principal"/>
 </body>
 </html>

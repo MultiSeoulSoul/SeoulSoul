@@ -81,6 +81,17 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public void userDelete(int userNo) throws Exception {
+		int result = userDAO.userDelete(sqlSession, userNo);
+		
+		if (result > 0) {
+			sqlSession.commit();
+		} else {
+			throw new Exception("회원 탈퇴에 실패 하였습니다");
+		}
+	}
+	
+	@Override
 	public List<SLBoardDTO> selectSLBoardPage(UserPageDTO up) {
 		List<SLBoardDTO> list = userDAO.selectSLBoardPage(sqlSession, up);
 	    return list;
@@ -92,5 +103,4 @@ public class UserServiceImpl implements UserService {
 		System.out.println("list:"+list);
 		return list;
 	}
-
 }

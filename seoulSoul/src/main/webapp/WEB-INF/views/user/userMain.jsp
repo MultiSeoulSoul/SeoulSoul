@@ -91,6 +91,7 @@
     }
     .chart, .board, .achievement {
         background-color: white;
+        justify-content: space-between;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -110,22 +111,6 @@
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;
-    }
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-    }
-    .pagination a {
-        text-decoration: none;
-        color: #5c9eaf;
-        padding: 8px 12px;
-        border: 1px solid #5c9eaf;
-        border-radius: 4px;
-    }
-    .pagination a.active {
-        background-color: #5c9eaf;
-        color: white;
     }
 </style>
 <script>
@@ -243,7 +228,7 @@
 	    pagination.innerHTML = '';
 	    for (let page = 1; page <= pages; page++) {
 	        const pageLink = document.createElement('a');
-	        const url = `/seoulsoul/user/SLBoardPage?page=${page}`;
+	        const url = "/seoulsoul/user/SLBoardPage?page=" + page;
 
 	        console.log('Current Page:', page);
 	        console.log('Generate url:', url);

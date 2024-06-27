@@ -22,4 +22,6 @@ public interface UserService {
 	void userUpdate(UserDTO u) throws Exception;
 
 	void userPwUpdate(UserDTO u) throws Exception;
+
+	void userDelete(int userNo) throws Exception;
 }

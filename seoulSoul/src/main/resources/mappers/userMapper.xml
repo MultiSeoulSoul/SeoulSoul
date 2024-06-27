@@ -64,6 +64,12 @@
 	    WHERE user_no = #{userNo}
 	</update>
 
+	<!-- 회원탈퇴 -->
+	<delete id="userDelete" parameterType="int">
+		DELETE FROM USERS
+		WHERE user_no = #{userNo};
+	</delete>
+
     <!-- 시큐리티 사용 시 쿼리 -->
     <select id="findUserByUsername" parameterType="String" resultType="userDTO">
         SELECT *

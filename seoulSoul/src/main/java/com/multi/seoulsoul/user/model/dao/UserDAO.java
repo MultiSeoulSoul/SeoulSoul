@@ -49,4 +49,8 @@ public class UserDAO {
 	public int userPwUpdate(SqlSessionTemplate sqlSession, UserDTO u) {
 		return sqlSession.update("userMapper.userPwUpdate", u);
 	}
+
+	public int userDelete(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.delete("userMapper.userDelete", userNo);
+	}
 }
