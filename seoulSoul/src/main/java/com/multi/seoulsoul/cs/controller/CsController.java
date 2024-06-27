@@ -310,7 +310,8 @@ public class CsController {
             e.printStackTrace();
             // 문의글 수정 실패 시 예외 처리
         }
-        return "redirect:/cs/qnaAll";
+        
+        return "redirect:/cs/qnaOne?id=" + questionNo;
     }
     //문의글 수정: 3. 첨부파일 삭제
     @PostMapping("deleteFile")
@@ -326,6 +327,17 @@ public class CsController {
             // 파일 삭제 실패 시 예외 처리
         }
 
-        return "redirect:/cs/qnaAll";
+        return "redirect:/cs/qnaOne?id=" + questionNo;
+    }
+    
+    //문의글 답변 작성
+    @PostMapping("/answerInsert")
+    public String insertAnswer(@RequestParam("qnaId") int questionNo,
+                               @RequestParam("content") String content) {
+        
+        int writer = 1; //테스트용: 관리자 writer(user_no)를 하드코딩된 값 1로 설정
+        
+        csService.insertAnswer(questionNo, content, writer);
+        return "redirect:/cs/qnaOne?id=" + questionNo;
     }
 }

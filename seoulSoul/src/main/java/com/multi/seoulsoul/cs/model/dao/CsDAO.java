@@ -69,9 +69,15 @@ public class CsDAO {
     public void updateQuestion(SqlSessionTemplate sqlSession, CsQuestionDTO question) {
         sqlSession.update("csMapper.updateQuestion", question);
     }
-
     public void deleteFile(SqlSessionTemplate sqlSession, int fileNo) {
         sqlSession.delete("csMapper.deleteFile", fileNo);
     }
 
+    //문의글 답변 작성
+    public void insertAnswer(SqlSessionTemplate sqlSession, CsAnswerDTO answer) {
+        sqlSession.insert("csMapper.insertAnswer", answer);
+    }
+    public void updateQuestionToAnswered(SqlSessionTemplate sqlSession, int questionNo) {
+        sqlSession.update("csMapper.updateQuestionToAnswered", questionNo);
+    }
 }

@@ -16,6 +16,7 @@
         	q.writer, 
         	q.created_date, 
         	q.views, 
+        	q.is_answered, 
         	c.category_name,
         	u.nickname
         FROM CS_QUESTION q
@@ -36,6 +37,7 @@
         	q.modified_date, 
         	q.content, 
         	q.category_code,
+        	q.is_answered, 
         	c.category_name,
         	u.nickname
         FROM CS_QUESTION q
@@ -104,5 +106,16 @@
 	    WHERE 
 	        file_no = #{fileNo}
 	</delete>
+    
+    <!-- 문의글 답변 작성 -->
+	<insert id="insertAnswer" parameterType="csAnswerDTO">
+	    INSERT INTO CS_ANSWER (question_no, content, writer)
+	    VALUES (#{questionNo}, #{content}, #{writer})
+	</insert>
+	<update id="updateQuestionToAnswered" parameterType="int">
+        UPDATE CS_QUESTION
+        SET is_answered = 'Y'
+        WHERE question_no = #{questionNo}
+    </update>
     
 </mapper>

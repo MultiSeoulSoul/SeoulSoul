@@ -3,8 +3,6 @@ package com.multi.seoulsoul.cs.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.multi.seoulsoul.cs.model.dto.CsCategoryDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
@@ -30,8 +28,8 @@ public interface CsService {
     
     //문의글 수정
     void updateQuestion(CsQuestionDTO question, List<Map<String, String>> files) throws Exception;
-
     void deleteFile(int fileNo) throws Exception;
 	
-  	
+    //문의글 답변 작성
+    void insertAnswer(int questionNo, String content, int writer);
 }

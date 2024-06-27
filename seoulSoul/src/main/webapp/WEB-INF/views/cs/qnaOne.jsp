@@ -100,36 +100,50 @@ th {
             </div>
             
             <!-- 답변 -->
-             <div class="answer-section">
-                <h3>답변</h3>
-                <c:forEach var="answer" items="${qna.answers}">
-                    <div class="answer">
-                        <p><strong>${answer.writer}</strong> (${answer.createdDate})</p>
-                        <p>${answer.content}</p>
-                    </div>
-                </c:forEach>
-                
-                <!-- (관리자) 답변 작성 폼 -->
-                <div class="form-group">
-                    <form action="answerInsert" method="post">
-                        <input type="hidden" name="qnaId" value="${qna.questionNo}">
-                        <textarea name="content" rows="5" placeholder="답변하기 " required></textarea>
-                        
-                    </form>
+			<c:if test="${not empty qna.answers}">
+                <div class="answer-section">
+                    <h3>답변</h3>
+                    <table class="answer-table">
+                        <thead>
+                            <tr>
+                                <th>답변자</th>
+                                <th>작성일</th>
+                                <th>내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="answer" items="${qna.answers}">
+                                <tr>
+                                    <td>${answer.writer}</td>
+                                    <td>${answer.createdDate}</td>
+                                    <td>${answer.content}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
+            </c:if>     
+            <br>    
                 
-            </div>
-            
+            <!-- (관리자) 답변 작성 폼 -->
+			<c:if test="${empty qna.answers}">
+				<div class="form-group">
+					<form action="${pageContext.request.contextPath}/cs/answerInsert" method="post">
+					<input type="hidden" name="qnaId" value="${qna.questionNo}">
+					<textarea name="content" rows="5" placeholder="답변하기" required></textarea>
+					<button type="submit" class="submit-button">답변 작성</button>
+					</form>
+				</div>
+            </c:if>
             <br>
-            <div class="form-group" align ="right">
-                <!-- (회원) 하단 버튼 -->
+            
+            
+            <!-- (회원) 하단 버튼 -->
+            <div class="form-group" align ="right">             
                 <a href="qnaDelete?id=${qna.questionNo}" onclick="return confirm('정말 삭제하시겠습니까?');"><button type="button" id="delete-button">삭제하기</button></a>
-                <a href="qnaUpdate?id=${qna.questionNo}"><button type="button" id="edit-button">수정하기</button></a>
-                
-                <!-- (관리자) 답변 작성 버튼 -->
-                <button type="submit" class="submit-button">답변 작성</button>
-                
-                <!-- (공통) 돌아가기 버튼 -->
+                <c:if test="${empty qna.answers}">
+                	<a href="qnaUpdate?id=${qna.questionNo}"><button type="button" id="edit-button">수정하기</button></a>
+                </c:if>
                 <a href="qnaAll"><button type="button" id="back-button">돌아가기</button></a>           
             </div>
             

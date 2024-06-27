@@ -38,7 +38,7 @@
                 
                 <!-- 테스트용: 작성자 writer(user_no) -->    
                 <div class="form-group">
-                    <input type="text" id="writer" name="writer" placeholder="6" required>
+                    <input type="text" id="writer" name="writer" placeholder="테스트용: 3" required>
                 </div>
                 
                 <!-- 카테고리 -->

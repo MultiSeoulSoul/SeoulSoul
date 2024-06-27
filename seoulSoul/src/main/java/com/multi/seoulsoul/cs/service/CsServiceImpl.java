@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.cs.model.dao.CsDAO;
+import com.multi.seoulsoul.cs.model.dto.CsAnswerDTO;
 import com.multi.seoulsoul.cs.model.dto.CsCategoryDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
@@ -99,4 +100,16 @@ public class CsServiceImpl implements CsService {
     public void deleteFile(int fileNo) throws Exception {
         csDAO.deleteFile(sqlSession, fileNo);
     }
+    
+    //문의글 답변 작성
+    @Override
+    public void insertAnswer(int questionNo, String content, int writer) {
+        CsAnswerDTO answer = new CsAnswerDTO();
+        answer.setQuestionNo(questionNo);
+        answer.setContent(content);
+        answer.setWriter(writer);
+        csDAO.insertAnswer(sqlSession, answer);
+        csDAO.updateQuestionToAnswered(sqlSession, questionNo);
+    }
+
 }

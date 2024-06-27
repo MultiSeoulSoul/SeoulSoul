@@ -81,7 +81,7 @@ th.title {
                             <td class="writer">${qna.writer}</td>
                             <td class="views">${qna.views}</td>
                             <td class="created_date">${qna.createdDate}</td>
-                            <td class="is_answered">${qna.isAnswered ? "답변 완료" : "답변 대기"}</td>
+                            <td class="is_answered">${qna.isAnswered == 'Y' ? "답변 완료" : "답변 대기"}</td>
                         </tr>
                         </c:forEach>
                     </tbody>
