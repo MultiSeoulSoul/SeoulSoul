@@ -16,9 +16,11 @@
         	q.writer, 
         	q.created_date, 
         	q.views, 
-        	c.category_name
+        	c.category_name,
+        	u.nickname
         FROM CS_QUESTION q
         LEFT JOIN CS_CATEGORY c ON q.category_code = c.category_code
+        LEFT JOIN USERS u ON q.writer = u.user_no
         ORDER BY q.created_date DESC
         LIMIT #{offset}, #{pageSize}
     </select>
@@ -31,11 +33,14 @@
         	q.writer, 
         	q.views, 
         	q.created_date, 
+        	q.modified_date, 
         	q.content, 
         	q.category_code,
-        	c.category_name
+        	c.category_name,
+        	u.nickname
         FROM CS_QUESTION q
-        JOIN CS_CATEGORY c ON q.category_code = c.category_code
+        LEFT JOIN CS_CATEGORY c ON q.category_code = c.category_code
+        LEFT JOIN USERS u ON q.writer = u.user_no
         WHERE q.question_no = #{questionNo}
     </select>
     <!-- 문의글 상세 조회: 2. 첨부파일 가져오기 -->
@@ -63,32 +68,41 @@
 	</delete>
 	
 	<!-- 문의글 쓰기: 1. 카테고리 -->
-    <select id="getCategories" resultType="csCategoryDTO">
-        SELECT category_code, category_name FROM CS_CATEGORY
-    </select>  
-	<!-- 문의글 쓰기: 2. 문의글 -->
-    <insert id="insertQuestion">
-        INSERT INTO CS_QUESTION (category_code, title, content, writer)
-        VALUES (#{category_code}, #{title}, #{content}, #{writer})
-    </insert>    
- 	<!-- 문의글 쓰기: 3. 첨부파일 -->   
-	<insert id="insertFile">
-	    INSERT INTO CS_QUESTION_FILES (question_no, original_file_name, stored_file_name, file_path)
-	    VALUES (#{questionNo}, #{originalFileName}, #{storedFileName}, #{filePath})
-	</insert>
-	
+    <select id="getCategories" resultType="CsCategoryDTO">
+        SELECT 
+            category_code, 
+            category_name 
+        FROM 
+            CS_CATEGORY
+    </select>
+    <!-- 문의글 쓰기: 2. 문의글 -->
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="questionNo">
+        INSERT INTO CS_QUESTION (category_code, title, content, writer) 
+        VALUES (#{categoryCode}, #{title}, #{content}, #{writer})
+    </insert>
+    <!-- 문의글 쓰기: 3. 첨부파일 -->   
+    <insert id="insertFile">
+        INSERT INTO CS_QUESTION_FILES (question_no, original_file_name, stored_file_name, file_path) 
+        VALUES (#{questionNo}, #{originalFileName}, #{storedFileName}, #{filePath})
+    </insert>
+        
     <!-- 문의글 수정 -->
-    
+    <update id="updateQuestion">
+        UPDATE CS_QUESTION 
+        SET 
+            category_code = #{categoryCode}, 
+            title = #{title}, 
+            content = #{content}, 
+            writer = #{writer}, 
+            modified_date = NOW()
+        WHERE 
+            question_no = #{questionNo}
+    </update>
+    <!-- 파일 삭제 -->
+	<delete id="deleteFile">
+	    DELETE FROM CS_QUESTION_FILES
+	    WHERE 
+	        file_no = #{fileNo}
+	</delete>
     
 </mapper>
-
-
-
-
-
-
-
-
-
-
-

@@ -35,6 +35,9 @@ public class CsDAO {
     public List<CsQuestionFileDTO> selectFilesByQuestionId(SqlSessionTemplate sqlSession, int questionNo) {
         return sqlSession.selectList("csMapper.selectFilesByQuestionId", questionNo);
     }
+    public CsQuestionFileDTO selectFileById(SqlSessionTemplate sqlSession, int fileNo) {
+        return sqlSession.selectOne("csMapper.selectFileById", fileNo);
+    }
     //문의글 상세 조회: 3. 답변 가져오기
     public List<CsAnswerDTO> selectAnswersByQuestionId(SqlSessionTemplate sqlSession, int questionNo) {
         return sqlSession.selectList("csMapper.selectAnswersByQuestionId", questionNo);
@@ -43,31 +46,32 @@ public class CsDAO {
     public void increaseViewCount(SqlSessionTemplate sqlSession, int questionNo) {
         sqlSession.update("csMapper.increaseViewCount", questionNo);
     }
-    	
+    
   	//문의글 삭제
-    public int deleteQuestion(SqlSessionTemplate sqlSession, Integer questionNo) {
-		return sqlSession.delete("csMapper.deleteQuestion", questionNo);
+    public void deleteQuestion(SqlSessionTemplate sqlSession, Integer questionNo) {
+		sqlSession.delete("csMapper.deleteQuestion", questionNo);
 	}
 	
-	//문의글 작성: 1. 카테고리
-	public List<CsCategoryDTO> getCategories(SqlSessionTemplate sqlSessionTemplate) {
-		return sqlSessionTemplate.selectList("csMapper.getCategories");
+    //문의글 작성: 1. 카테고리
+    public List<CsCategoryDTO> getCategories(SqlSessionTemplate sqlSession) {
+        return sqlSession.selectList("csMapper.getCategories");
     }
-	//문의글 작성: 2. 문의글
-	public int insertQuestion(SqlSessionTemplate sqlSessionTemplate, CsQuestionDTO question) { //문의글
-		return sqlSessionTemplate.insert("csMapper.insertQuestion", question);
-	}
-	//문의글 작성: 3. 첨부파일
-	public int insertFile(SqlSessionTemplate sqlSession, int questionNo, Map<String, String> file) { //파일첨부
-	    Map<String, Object> param = new HashMap<>();
-	    param.put("questionNo", questionNo);
-	    param.put("originalFileName", file.get("originalFileName"));
-	    param.put("storedFileName", file.get("storedFileName"));
-	    param.put("filePath", file.get("filePath"));
-	    
-	    return sqlSession.insert("csMapper.insertFile", param);
-	}
-	
-  	//문의글 수정
-	
+    //문의글 작성: 2. 문의글
+    public void insertQuestion(SqlSessionTemplate sqlSession, CsQuestionDTO question) {
+        sqlSession.insert("csMapper.insertQuestion", question);
+    }
+    //문의글 작성: 3. 첨부파일
+    public void insertFile(SqlSessionTemplate sqlSession, Map<String, String> file) {
+        sqlSession.insert("csMapper.insertFile", file);
+    }
+
+    //문의글 수정
+    public void updateQuestion(SqlSessionTemplate sqlSession, CsQuestionDTO question) {
+        sqlSession.update("csMapper.updateQuestion", question);
+    }
+
+    public void deleteFile(SqlSessionTemplate sqlSession, int fileNo) {
+        sqlSession.delete("csMapper.deleteFile", fileNo);
+    }
+
 }

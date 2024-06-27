@@ -72,6 +72,12 @@ th {
                         <th>작성일</th>
                         <td>${qna.createdDate}</td>
                     </tr>
+                    <c:if test="${qna.createdDate != qna.modifiedDate}">
+                        <tr>
+                            <th>수정일</th>
+                            <td>${qna.modifiedDate}</td>
+                        </tr>
+                    </c:if>
                     <tr>
                         <th>조회수</th>
                         <td>${qna.views}</td>
@@ -80,23 +86,21 @@ th {
                         <th>내용</th>
                         <td>${qna.content}</td>
                     </tr>
-                    <%-- <c:if test="${not empty qna.files}">
+                    <c:if test="${not empty qna.files}">
                         <tr>
                             <th>첨부 파일</th>
                             <td>
-                                <ul>
-                                    <c:forEach var="file" items="${qna.files}">
-                                        <li><a href="download?file=${file}">${file}</a></li>
-                                    </c:forEach>
-                                </ul>
+                                <c:forEach var="file" items="${qna.files}">
+					                    <li><a href="${pageContext.request.contextPath}/cs/download?fileNo=${file.fileNo}&questionNo=${qna.questionNo}">${file.originalFileName}</a></li>
+					                </c:forEach>
                             </td>
                         </tr>
-                    </c:if> --%>
+                    </c:if>
                 </table>
             </div>
             
             <!-- 답변 -->
-<%--             <div class="answer-section">
+             <div class="answer-section">
                 <h3>답변</h3>
                 <c:forEach var="answer" items="${qna.answers}">
                     <div class="answer">
@@ -114,9 +118,9 @@ th {
                     </form>
                 </div>
                 
-            </div> --%>
+            </div>
             
-            
+            <br>
             <div class="form-group" align ="right">
                 <!-- (회원) 하단 버튼 -->
                 <a href="qnaDelete?id=${qna.questionNo}" onclick="return confirm('정말 삭제하시겠습니까?');"><button type="button" id="delete-button">삭제하기</button></a>
