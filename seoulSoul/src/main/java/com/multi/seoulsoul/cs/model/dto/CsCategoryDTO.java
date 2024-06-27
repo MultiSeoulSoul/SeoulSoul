@@ -5,9 +5,8 @@ public class CsCategoryDTO {
 	private int categoryCode;
     private String categoryName;
 
-    public CsCategoryDTO(int categoryCode, String categoryName) {
-    	this.categoryCode = categoryCode;
-    	this.categoryName = categoryName;
+    public CsCategoryDTO() {
+    	
     }
     
     public int getCategoryCode() {

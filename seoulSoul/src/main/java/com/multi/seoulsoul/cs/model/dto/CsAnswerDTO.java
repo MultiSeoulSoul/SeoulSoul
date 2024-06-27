@@ -1,6 +1,6 @@
 package com.multi.seoulsoul.cs.model.dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class CsAnswerDTO {
 	
@@ -8,14 +8,10 @@ public class CsAnswerDTO {
     private int questionNo;
     private String content;
     private int writer;
-    private Date createdDate;
+    private Timestamp createdDate;
     
-    public CsAnswerDTO(int answerNo, int questionNo, String content, int writer, Date createdDate) {
-    	this.answerNo = answerNo;
-    	this.questionNo = questionNo;
-    	this.content = content;
-    	this.writer = writer;
-    	this.createdDate = createdDate;
+    public CsAnswerDTO() {
+    	
     }
 
     public int getAnswerNo() {
@@ -50,13 +46,13 @@ public class CsAnswerDTO {
         this.writer = writer;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
 
 	@Override
 	public String toString() {

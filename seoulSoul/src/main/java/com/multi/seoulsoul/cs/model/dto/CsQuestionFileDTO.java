@@ -8,12 +8,8 @@ public class CsQuestionFileDTO {
     private String storedFileName;
     private String filePath;
 
-    public CsQuestionFileDTO(int fileNo, int questionNo, String originalFileName, String storedFileName, String filePath) {
-    	this.fileNo = fileNo;
-    	this.questionNo = questionNo;
-    	this.originalFileName = originalFileName;
-    	this.storedFileName = storedFileName;
-    	this.filePath = filePath;
+    public CsQuestionFileDTO() {
+    	
     }
     
     public int getFileNo() {
