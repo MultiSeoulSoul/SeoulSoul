@@ -88,6 +88,30 @@ public class SoulLogDAO {
 		
 	}
 
+	public int updateSoulLog(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+
+		return sqlSession.update("soulLogMapper.updateSoulLog", soulLogDTO);
+		
+	}
+
+	public int updateImage(SqlSessionTemplate sqlSession, FilesDTO file) {
+		
+		return sqlSession.update("soulLogMapper.updateImage", file);
+		
+	}
+
+	public int deleteImage(SqlSessionTemplate sqlSession, int fileNo) {
+
+		return sqlSession.delete("soulLogMapper.deleteImage", fileNo);
+		
+	}
+
+	public int insertImage(SqlSessionTemplate sqlSession, FilesDTO file) {
+
+		return sqlSession.insert("soulLogMapper.insertImage", file);
+		
+	}
+
 	
 
 }

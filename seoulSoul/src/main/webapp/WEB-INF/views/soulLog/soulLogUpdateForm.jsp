@@ -70,6 +70,75 @@
 	})
 </script>
 
+
+<script>
+			
+	function loadImg(value, num) {
+		if (value.files && value.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				
+				switch(num){
+					case 1:
+						document.getElementById("img1").src = e.target.result;
+						break;
+					case 2:
+						document.getElementById("img2").src = e.target.result;
+						break;
+					case 3:
+						document.getElementById("img3").src = e.target.result;
+						break;
+					case 4:
+						document.getElementById("img4").src = e.target.result;
+						break;
+					case 5:
+						document.getElementById("img5").src = e.target.result;
+						break;
+				}
+			}
+			
+			reader.readAsDataURL(value.files[0]);
+			document.getElementById('status' + num).value = '-2';
+			
+		}
+	}
+			
+</script>
+
+
+<script>
+function deleteImage(index) {
+	var imgElement = document.getElementById('img' + index);
+    imgElement.removeAttribute('src');
+    document.getElementById('status' + index).value = '-3';
+    document.getElementById('deleteBtn' + index).style.display = 'none';
+}
+</script>
+
+
+<script>
+function validateForm() {
+	const formElement = document.getElementById('updateSoulLog');
+    const imageTags = formElement.querySelectorAll('img');
+    var imageCount = 0;
+
+    for (var i = 0; i < imageTags.length; i++) {
+        if (imageTags[i].getAttribute('src') !== null && img.getAttribute('src') !== '') {
+            imageCount++;
+        }
+    }
+    
+    if (imageCount == 0) {
+    	alert('소울로그에는 최소 1개의 이미지가 업로드돼야 합니다.');
+        return false;
+    }
+    
+    return true;        
+
+}
+</script>
+
+
 </head>
 <body>
 
@@ -77,9 +146,10 @@
 
 <div class="content" style="margin: 30px">
 
-	<form action="updateSoulLog" method="post" encType="multipart/form-data">
+	<form id="updateSoulLog" action="updateSoulLog" method="post" encType="multipart/form-data" onsubmit="return validateForm()">
 		
 		<div class="insert-group" style="height: 50px; background: white">
+			<input type="hidden" name="soulLogNo" value="${updateDetail.soulLogNo}">
 			<span style="margin-left:20px">제목</span>
 			<input type="text" id="title" name="title" style="margin-top: 10px; margin-left: 15px; width: 400px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" maxlength="20" value="${updateDetail.title}" required>
 			<span style="margin-left:50px">작성자</span>
@@ -115,8 +185,11 @@
 							<div id="imgArea<%= (i+1) %>" style="margin-right:18px; width: 240px; height: 240px; background: white">
 								<img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/<%= savedName %>" id="img<%= (i+1) %>" width="240px" height="240px">
 								<input type="file" id="imgInput<%= (i+1) %>" name="imgList" onchange="loadImg(this,<%= (i+1) %>)">
-								<input type="hidden" name="fileNo" value="<%= fileNo %>">
-								<button>삭제</button>
+								<input type="hidden" id="filedNo<%= (i+1) %>" name="fileNo[]" value="<%= fileNo %>">
+								<input type="hidden" id="status<%= (i+1) %>" name="status[]" value="-1">
+								<div id="deleteBtn<%= (i+1) %>">
+									<button type="button" onclick="deleteImage(<%= (i+1) %>)">삭제</button>
+								</div>
 							</div>
 						</td>
 					<%
@@ -125,12 +198,14 @@
 				
 				for(int i = files.size(); i < 5; i++) {
 				%>
-				<td>
-					<div id="imgArea<%= (i+1) %>" style="margin-right:18px; width: 240px; height: 240px; background: white">
-						<img id="img<%= (i+1) %>" width="240px" height="240px">
-						<input type="file" id="imgInput<%= (i+1) %>" name="imgList" onchange="loadImg(this, <%= (i+1) %>)">
-					</div>
-				</td>
+					<td>
+						<div id="imgArea<%= (i+1) %>" style="margin-right:18px; width: 240px; height: 240px; background: white">
+							<img id="img<%= (i+1) %>" width="240px" height="240px">
+							<input type="file" id="imgInput<%= (i+1) %>" name="imgList" onchange="loadImg(this, <%= (i+1) %>)">
+							<input type="hidden" id="filedNo<%= (i+1) %>" name="fileNo[]" value="0">
+							<input type="hidden" id="status<%= (i+1) %>" name="status[]" value="-1">
+						</div>
+					</td>
 				<%
 				}
 				%>
@@ -161,43 +236,6 @@
 	</form>
 	
 </div> <!-- content div -->
-
-
-
-<script>
-			
-	function loadImg(value, num) {
-		if (value.files && value.files[0]) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				
-				switch(num){
-					case 1:
-						document.getElementById("img1").src = e.target.result;
-						break;
-					case 2:
-						document.getElementById("img2").src = e.target.result;
-						break;
-					case 3:
-						document.getElementById("img3").src = e.target.result;
-						break;
-					case 4:
-						document.getElementById("img4").src = e.target.result;
-						break;
-					case 5:
-						document.getElementById("img5").src = e.target.result;
-						break;
-				}
-			}
-			
-			reader.readAsDataURL(value.files[0]);
-			
-		}
-	}
-			
-</script>
-
-
 
 </body>
 </html>

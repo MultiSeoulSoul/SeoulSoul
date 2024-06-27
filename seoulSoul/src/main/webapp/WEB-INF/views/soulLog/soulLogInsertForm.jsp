@@ -46,6 +46,64 @@
 	})
 </script>
 
+
+<script>
+			
+	function loadImg(value, num) {
+		if (value.files && value.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				
+				switch(num){
+					case 1:
+						document.getElementById("img1").src = e.target.result;
+						break;
+					case 2:
+						document.getElementById("img2").src = e.target.result;
+						break;
+					case 3:
+						document.getElementById("img3").src = e.target.result;
+						break;
+					case 4:
+						document.getElementById("img4").src = e.target.result;
+						break;
+					case 5:
+						document.getElementById("img5").src = e.target.result;
+						break;
+				}
+			}
+			
+			reader.readAsDataURL(value.files[0]);
+			
+		}
+	}
+			
+</script>
+
+
+<script>
+
+	function validateForm() {
+		const inputs = document.querySelectorAll('input[type="file"]');
+		let fileSelected = false;
+
+		for (let i = 0; i < inputs.length; i++) {
+			if (inputs[i].files.length > 0) {
+				fileSelected = true;
+                break;
+                }
+		}
+
+		if (!fileSelected) {
+			alert('이미지를 최소 1개 이상 업로드해 주세요.');
+			return false;
+		}
+
+		return true;
+	
+	}
+</script>
+
 </head>
 <body>
 
@@ -128,65 +186,6 @@
 	</form>
 	
 </div> <!-- content div -->
-
-
-
-<script>
-			
-	function loadImg(value, num) {
-		if (value.files && value.files[0]) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				
-				switch(num){
-					case 1:
-						document.getElementById("img1").src = e.target.result;
-						break;
-					case 2:
-						document.getElementById("img2").src = e.target.result;
-						break;
-					case 3:
-						document.getElementById("img3").src = e.target.result;
-						break;
-					case 4:
-						document.getElementById("img4").src = e.target.result;
-						break;
-					case 5:
-						document.getElementById("img5").src = e.target.result;
-						break;
-				}
-			}
-			
-			reader.readAsDataURL(value.files[0]);
-			
-		}
-	}
-			
-</script>
-<script>
-
-	function validateForm() {
-		const inputs = document.querySelectorAll('input[type="file"]');
-		let fileSelected = false;
-
-		for (let i = 0; i < inputs.length; i++) {
-			if (inputs[i].files.length > 0) {
-				fileSelected = true;
-                break;
-                }
-		}
-
-		if (!fileSelected) {
-			alert('이미지를 최소 1개 이상 업로드해 주세요.');
-			return false; // Prevent form submission
-		}
-
-		return true; // Allow form submission
-	
-	}
-</script>
-
-
 
 </body>
 </html>

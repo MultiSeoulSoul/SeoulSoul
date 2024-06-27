@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
@@ -23,14 +24,22 @@ public interface SoulLogService {
 
 	SoulLogDTO soulLogDetail(DetailRequestDTO detailRequestDTO) throws Exception;
 
-	void addViews(int soulLogNo) throws Exception;
+	int addViews(int soulLogNo) throws Exception;
 
-	void insertSoulLogReply(RepliesDTO repliesDTO) throws Exception;
+	int insertSoulLogReply(RepliesDTO repliesDTO) throws Exception;
 
-	void deleteSoulLog(int soulLogNo) throws Exception;
+	int deleteSoulLog(int soulLogNo) throws Exception;
 
-	void deleteSoulLogReply(int replyNo) throws Exception;
+	int deleteSoulLogReply(int replyNo) throws Exception;
 
 	SoulLogDTO updateDetail(int soulLogNo) throws Exception;
+
+	int updateSoulLog(SoulLogDTO soulLogDTO) throws Exception;
+
+	int updateImage(FilesDTO file) throws Exception;
+
+	int deleteImage(int fileNo) throws Exception;
+
+	int insertImage(FilesDTO file) throws Exception;
 	
 }

@@ -254,6 +254,42 @@
 			LEFT JOIN SL_FILES F ON A.soul_log_no = F.soul_log_no
 			WHERE A.soul_log_no = #{ soulLogNo }
 	</select>
+	
+	
+	<update id="updateSoulLog" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
+		UPDATE SL_BOARD
+		SET title = #{ title }, 
+			location_code = #{ location.locationCode }, 
+			category_code = #{ category.categoryCode }, 
+			content = #{ content }
+		WHERE soul_log_no = #{ soulLogNo }
+	</update>
+	
+	
+	<update id="updateImage" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilesDTO">
+		UPDATE SL_FILES
+		SET original_name = #{ originalName }, 
+			saved_name = #{ savedName }
+		WHERE file_no = #{ fileNo }
+	</update>
+	
+	
+	<delete id="deleteImage" parameterType="int">
+		DELETE FROM SL_FILES
+		WHERE file_no = #{ fileNo }
+	</delete>
+	
+	
+	<insert id="insertImage" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilesDTO">
+		INSERT INTO SL_FILES
+			(soul_log_no, original_name, saved_name)
+		VALUES
+			(
+			#{ soulLogNo }, 
+			#{ originalName }, 
+			#{ savedName }
+			)
+	</insert>
 
 	
 

@@ -2,18 +2,18 @@ package com.multi.seoulsoul.soulLog.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -409,9 +409,164 @@ public class SoulLogController {
 			
 		}
 		
-	} 
+	}
 	
+	
+	@PostMapping("/updateSoulLog")
+	public String updateSoulLog(LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, @RequestParam("status[]") int[] status, @RequestParam("fileNo[]") int[] fileNo, Model model) {
 		
+		int soulLogNo = soulLogDTO.getSoulLogNo();
+		
+		System.out.println("locationDTO는 >>>>> " + locationDTO);
+		System.out.println("categoryDTO는 >>>>> " + categoryDTO);
+		
+		soulLogDTO.setLocation(locationDTO);
+		soulLogDTO.setCategory(categoryDTO);
+		
+		// location, category, 제목, 내용 수정에 대한 데이터들
+		System.out.println("soulLogDTO는 >>>>> " + soulLogDTO);
+		
+		try {
+			
+			soulLogService.updateSoulLog(soulLogDTO);
+			
+			
+		} catch (Exception e1) {
+			
+			e1.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 수정 실패..");
 
+			return "common/errorPage";
+			
+		}
+		
+		
+		// 이미지 수정에 대한 내용
+		System.out.println("status는 >>>>> " + Arrays.toString(status));
+		System.out.println("fileNo는 >>>>> " + Arrays.toString(fileNo));
+		
+		HttpSession session = request.getSession();
+		String root = session.getServletContext().getRealPath("resources");
+		String filePath = root + "/uploadFiles";
+		
+		
+		for(int i = 0; i < 5; i++) {
+			
+			// updateImage
+			if(fileNo[i] != 0 && status[i] == -2) {
+				
+				String originFileName = imgList[i].getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				
+				FilesDTO file = new FilesDTO();
+				file.setOriginalName(originFileName);
+				file.setSavedName(savedName);
+				file.setFileNo(fileNo[i]);
+				
+				try {
+					
+					imgList[i].transferTo(new File(filePath + "/" + savedName));
+							
+				} catch (Exception e) {
+							
+					e.printStackTrace();
+
+					// 오류 발생 시 생성한 파일을 삭제한다.
+					new File(filePath + "/" + savedName).delete();
+							
+					model.addAttribute("msg", "소울로그 수정 실패..");
+
+					return "common/errorPage";
+						
+				}
+				
+				try {
+					
+					soulLogService.updateImage(file);
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+					
+					model.addAttribute("msg", "소울로그 수정 실패..");
+
+					return "common/errorPage";
+					
+				}
+				
+			}
+			// deleteImage
+			else if(fileNo[i] != 0 && status[i] == -3) {
+				
+				try {
+					
+					soulLogService.deleteImage(fileNo[i]);
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+					
+					model.addAttribute("msg", "소울로그 수정 실패..");
+
+					return "common/errorPage";
+					
+				}
+				
+			}
+			// insertImage
+			else if(fileNo[i] == 0 && status[i] == -2) {
+				
+				String originFileName = imgList[i].getOriginalFilename();
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+				
+				FilesDTO file = new FilesDTO();
+				file.setOriginalName(originFileName);
+				file.setSavedName(savedName);
+				file.setSoulLogNo(soulLogNo);
+				
+				try {
+					
+					imgList[i].transferTo(new File(filePath + "/" + savedName));
+							
+				} catch (Exception e) {
+							
+					e.printStackTrace();
+
+					// 오류 발생 시 생성한 파일을 삭제한다.
+					new File(filePath + "/" + savedName).delete();
+							
+					model.addAttribute("msg", "소울로그 수정 실패..");
+
+					return "common/errorPage";
+						
+				}
+				
+				try {
+					
+					soulLogService.insertImage(file);
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+					
+					model.addAttribute("msg", "소울로그 수정 실패..");
+
+					return "common/errorPage";
+					
+				}
+				
+			} // else if end
+			
+		} // for end
+		
+		return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
+		
+	}
+	
+	
+	
 	
 }
