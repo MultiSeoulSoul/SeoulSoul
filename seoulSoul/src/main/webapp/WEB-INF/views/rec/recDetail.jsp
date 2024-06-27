@@ -35,6 +35,7 @@
 </style>
 </head>
 <body>
+ <jsp:include page="../common/menubar.jsp" />
 	<div class="detail-container">
 		<h2>${rec.title}</h2>
 		<p><strong>작성일:</strong> ${rec.createdDate}</p>

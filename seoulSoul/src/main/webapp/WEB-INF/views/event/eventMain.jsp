@@ -125,7 +125,7 @@
                         <div class="event-info">
                             <span>이벤트 기간: <fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" /> ~ <fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd" /></span>
                             <span>등록일: <fmt:formatDate value="${event.createdDate}" pattern="yyyy-MM-dd" /></span>
-                            <span>공연장소: ${event.address}</span>
+                            <span id ="address">장소: ${event.address}</span>
                             <span>조회수: ${event.views}</span>
                         </div>
                     </div>

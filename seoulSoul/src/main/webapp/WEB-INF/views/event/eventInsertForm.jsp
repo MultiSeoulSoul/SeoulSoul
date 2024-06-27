@@ -219,11 +219,7 @@
 					<textarea id="content" name="content" rows="25" required></textarea>
 				</div>
 			</div>
-			<!-- 내용 작성 -->
-			<div class="address">
-				<label for="content">위치 안내</label>
-				<textarea id="content" name="content" rows="25" required></textarea>
-			</div>
+		
 	</div>
 	<button type="submit" class="submit-button" id="b1">등록</button>
 	</form>

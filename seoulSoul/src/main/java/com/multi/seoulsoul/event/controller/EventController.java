@@ -106,4 +106,14 @@ public class EventController {
         }
         return "event/eventDetail";
     }
+    @PostMapping("/insertEvent")
+    public String insertEvent(@RequestParam("title") String title, @RequestParam("address") String address, Model model) {
+        // 데이터베이스에 이벤트 저장 (로직 생략)
+        
+        // 모델에 저장한 데이터 전달
+        model.addAttribute("title", title);
+        model.addAttribute("address", address);
+        
+        return "redirect:/eventDetail";
+    }
 }
