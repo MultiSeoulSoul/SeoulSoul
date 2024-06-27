@@ -19,6 +19,7 @@ div>button, input[type=submit] {
 
 .input-group-append .btn {
     margin: 0;
+    width: 100px;
 }
 </style>
 <title>Insert title here</title>
@@ -27,7 +28,7 @@ div>button, input[type=submit] {
 	<div align="center" class="logo">
 		<a href="${pageContext.request.contextPath}"><img src="${pageContext.request.contextPath}/resources/img/SeoulSoul_logo.png" alt="SOUL Logo"></a>
 	</div>
-	<form action="${pageContext.request.contextPath}/user/join" method="post" id="joinForm">
+	<form action="${pageContext.request.contextPath}/join" method="post" id="joinForm">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<table align="center">
 			<tr>

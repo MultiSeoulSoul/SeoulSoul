@@ -1,4 +1,4 @@
-package com.multi.seoulsoul.soulLog.model.DTO;
+package com.multi.seoulsoul.soulLog.model.dto;
 
 public class SLBoardDTO {
     private int soulLogNo;         // soul_log_no
@@ -11,11 +11,27 @@ public class SLBoardDTO {
     private String createdDate;    // created_date
     private String modifiedDate;   // modified_date
     
+    // 재식 추가
+    private int totalCount;
+    private String locationName;
+    private String categoryName;
+    private int replyCount;
+    
     public SLBoardDTO() {
 	}
 
+	@Override
+	public String toString() {
+		return "SLBoardDTO [soulLogNo=" + soulLogNo + ", locationCode=" + locationCode + ", categoryCode="
+				+ categoryCode + ", title=" + title + ", content=" + content + ", writer=" + writer + ", views=" + views
+				+ ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", totalCount=" + totalCount
+				+ ", locationName=" + locationName + ", categoryName=" + categoryName + ", replyCount=" + replyCount
+				+ "]";
+	}
+
 	public SLBoardDTO(int soulLogNo, int locationCode, int categoryCode, String title, String content, int writer,
-			int views, String createdDate, String modifiedDate) {
+			int views, String createdDate, String modifiedDate, int totalCount, String locationName,
+			String categoryName, int replyCount) {
 		super();
 		this.soulLogNo = soulLogNo;
 		this.locationCode = locationCode;
@@ -26,6 +42,10 @@ public class SLBoardDTO {
 		this.views = views;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
+		this.totalCount = totalCount;
+		this.locationName = locationName;
+		this.categoryName = categoryName;
+		this.replyCount = replyCount;
 	}
 
 	public int getSoulLogNo() {
@@ -100,11 +120,36 @@ public class SLBoardDTO {
 		this.modifiedDate = modifiedDate;
 	}
 
-	@Override
-	public String toString() {
-		return "SLBoardDTO [soulLogNo=" + soulLogNo + ", locationCode=" + locationCode + ", categoryCode="
-				+ categoryCode + ", title=" + title + ", content=" + content + ", writer=" + writer + ", views=" + views
-				+ ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + "]";
+	public int getTotalCount() {
+		return totalCount;
 	}
-    
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+
 }

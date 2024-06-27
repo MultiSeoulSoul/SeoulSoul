@@ -50,18 +50,9 @@ div>button, input[type=submit] {
 		</div>
 	</form>
 	<div align="center">
-		<button class="btn btn-success" onclick="window.location.href='${pageContext.request.contextPath}/user/join'">회원 가입 하기</button>
+		<button class="btn btn-success" onclick="window.location.href='${pageContext.request.contextPath}/join'">회원 가입 하기</button>
 		<br>
 		<button class="btn btn-secondary">아이디 / 비밀번호 찾기</button>
 	</div>
-
-	<!-- <script>
-		$(function() {
-			$("input[name=userId]").focus();
-			$("input[type=submit]").click(function() {
-				$("#loginForm").submit();
-			});
-		})
-	</script> -->
 </body>
 </html>

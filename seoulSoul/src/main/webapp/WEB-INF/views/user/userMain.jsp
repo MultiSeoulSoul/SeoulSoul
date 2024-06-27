@@ -1,14 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>User Main</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-    /* 페이지 레이아웃 설정 */
     body {
         display: flex;
         flex-direction: column;
@@ -22,32 +23,6 @@
         display: flex;
         flex: 1;
         overflow: hidden;
-    }
-    .side-menu {
-        width: 100px;
-        background-color: #e0f7fa; /* 배경 색상 */
-        border-right: 1px solid #ddd; /* 오른쪽 경계 */
-        padding: 20px;
-    }
-    .side-menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .side-menu ul li {
-        margin: 10px 0;
-    }
-    .side-menu ul li a {
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-        display: block;
-        padding: 10px;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-    .side-menu ul li a:hover {
-        background-color: #b2ebf2; /* 호버 시 배경 색상 */
     }
     .content {
         display: flex;
@@ -104,7 +79,7 @@
     }
 
     .board-tabs li a:hover {
-        background-color: #b2ebf2; /* 호버 시 배경 색상 */
+        background-color: #b2ebf2;
     }
     .edit-btn {
         background-color: #5c9eaf;
@@ -154,53 +129,139 @@
     }
 </style>
 <script>
-    function showBoard(boardType, url) {
-        const boardList = document.querySelectorAll('.board-list tbody tr');
-        boardList.forEach((row) => {
-            row.style.display = (row.classList.contains(boardType)) ? '' : 'none';
-        });
+	document.addEventListener('DOMContentLoaded', function() {
+	    showBoard('soul-log', '/seoulsoul/user/SLBoardPage?page=1');
+	});
+	
+	function showBoard(boardType, url) {
+	    fetch(url)
+	        .then(response => response.json())
+	        .then(data => {
+	            const tbody = document.querySelector('.board-list tbody');
+	            tbody.innerHTML = '';
+	            console.log('data:', data);
+	
+	            if (boardType === 'soul-log') {
+	                renderSoulLog(data.slBoard, tbody);
+	            } else if (boardType === 'soul-log-reply') {
+	                renderSoulLogReply(data.slReply, tbody);
+	            }
+	
+	            updateTableHeader(boardType);
+	            
+	            const pages = data.pages || 1;
+	            updatePagination(pages, boardType);
+	        })
+	        .catch(error => {
+	            console.error('Error fetching data:', error);
+	        });
+	}
+	
+	function renderSoulLog(data, tbody) {
+	    data.forEach(item => {
+	        const row = document.createElement('tr');
+	
+	        const soulLogNo = document.createElement('td');
+	        soulLogNo.textContent = item.soulLogNo;
+	        row.appendChild(soulLogNo);
+	
+	        const locationName = document.createElement('td');
+	        locationName.textContent = item.locationName;
+	        row.appendChild(locationName);
+	
+	        const categoryName = document.createElement('td');
+	        categoryName.textContent = item.categoryName;
+	        row.appendChild(categoryName);
+	
+	        const title = document.createElement('td');
+	        title.textContent = item.title;
+	        row.appendChild(title);
+	
+	        const replyCount = document.createElement('td');
+	        replyCount.textContent = item.replyCount;
+	        row.appendChild(replyCount);
+	
+	        const createdDate = document.createElement('td');
+	        createdDate.textContent = item.createdDate;
+	        row.appendChild(createdDate);
+	
+	        const views = document.createElement('td');
+	        views.textContent = item.views;
+	        row.appendChild(views);
+	
+	        tbody.appendChild(row);
+	    });
+	}
+	
+	function renderSoulLogReply(data, tbody) {
+	    data.forEach(item => {
+	        const row = document.createElement('tr');
+	
+	        const replyNo = document.createElement('td');
+	        replyNo.textContent = item.replyNo;
+	        row.appendChild(replyNo);
+	
+	        const soulLogNo = document.createElement('td');
+	        soulLogNo.textContent = item.soulLogNo;
+	        row.appendChild(soulLogNo);
+	
+	        const content = document.createElement('td');
+	        content.textContent = item.content;
+	        row.appendChild(content);
+	
+	        const createdDate = document.createElement('td');
+	        createdDate.textContent = item.createdDate;
+	        row.appendChild(createdDate);
+	
+	        tbody.appendChild(row);
+	    });
+	}
+	
+	function updateTableHeader(boardType) {
+	    const headerRow = document.querySelector('.board-list thead tr');
+	    headerRow.innerHTML = '';  // 기존 헤더를 초기화
+	
+	    let headers = [];
+	    switch (boardType) {
+	        case 'soul-log':
+	            headers = ['소울로그번호', '지역', '카테고리', '제목', '댓글수', '작성시간', '조회수'];
+	            break;
+	        case 'soul-log-reply':
+	            headers = ['댓글번호', '소울로그번호', '내용', '작성시간'];
+	            break;
+	    }
+	
+	    headers.forEach(header => {
+	        const th = document.createElement('th');
+	        th.textContent = header;
+	        headerRow.appendChild(th);
+	    });
+	}
+	
+	function updatePagination(pages, boardType) {
+	    const pagination = document.querySelector('.pagination');
+	    pagination.innerHTML = '';
+	    for (let page = 1; page <= pages; page++) {
+	        const pageLink = document.createElement('a');
+	        const url = `/seoulsoul/user/SLBoardPage?page=${page}`;
 
-        // Ajax 요청으로 게시글 가져오기
-        if (url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.querySelector('.board-list tbody');
-                    tbody.innerHTML = ''; // 기존 내용 제거
-                    data.forEach(item => {
-                        const tr = document.createElement('tr');
-                        tr.classList.add(boardType);
-                        tr.innerHTML = `
-                            <td>${item.soulLogNo}</td>
-                            <td>${item.locationCode}</td>
-                            <td>${item.categoryCode}</td>
-                            <td>${item.title}</td>
-                            <td>${item.content}</td>
-                            <td>${item.createdDate}</td>
-                            <td>${item.views}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                });
-        }
-    }
+	        console.log('Current Page:', page);
+	        console.log('Generate url:', url);
+	        
+	        pageLink.href = 'javascript:void(0);';
+	        pageLink.textContent = page;
+	        pageLink.onclick = () => showBoard(boardType, url);
+	        pagination.appendChild(pageLink);
+	    }
+	}
+
 </script>
+
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/menubar.jsp" />
 <main>
-    <div class="side-menu">
-        <ul>
-            <li><a href="#">회원정보 수정</a></li>
-            <li><a href="#">소울 보기</a></li>
-            <li><a href="#">업적 보기</a></li>
-            <li><a href="#">소울로그 보기</a></li>
-            <li><a href="#">댓글 보기</a></li>
-            <li><a href="#">좋아요 보기</a></li>
-            <li><a href="#">문의내역 보기</a></li>
-            <li><a href="#">회원 탈퇴</a></li>
-        </ul>
-    </div>
+    <jsp:include page="/WEB-INF/views/user/sideMenu.jsp" />
     <div class="content">
         <div class="main-content">
             <div class="profile">
@@ -226,12 +287,13 @@
             </div>
             <div class="board">
                 <ul class="board-tabs">
-                    <li><a href="javascript:void(0);" onclick="showBoard('soul-log', '${pageContext.request.contextPath}/user/SLBoardPage');">소울로그</a></li>
-                    <li><a href="javascript:void(0);" onclick="showBoard('soul-log-comment')">소울로그 댓글</a></li>
-                    <li><a href="javascript:void(0);" onclick="showBoard('event-comment')">이벤트 댓글</a></li>
-                    <li><a href="javascript:void(0);" onclick="showBoard('inquiry')">문의내역</a></li>
+                    <li><a href="javascript:void(0);" onclick="showBoard('soul-log', '${pageContext.request.contextPath}/user/SLBoardPage?page=1');">소울로그</a></li>
+                    <li><a href="javascript:void(0);" onclick="showBoard('soul-log-reply', '${pageContext.request.contextPath}/user/SLReplyPage?page=1');">소울로그 댓글</a></li>
+                    <li><a href="javascript:void(0);" onclick="showBoard('event-reply')">이벤트 댓글</a></li>
                     <li><a href="javascript:void(0);" onclick="showBoard('like')">좋아요</a></li>
                     <li><a href="javascript:void(0);" onclick="showBoard('favorite')">찜</a></li>
+                    <li><a href="javascript:void(0);" onclick="showBoard('cs')">문의내역</a></li>
+                    <li><a href="javascript:void(0);" onclick="showBoard('report')">신고내역</a></li>
                 </ul>
                 <table class="board-list">
                     <thead>
@@ -246,78 +308,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    	<c:forEach items="${list}" var="sl_board">
-	                        <tr class="soul-log">
-	                            <td>${sl_board.soulLogNo}</td>
-	                            <td>${sl_board.locationCode}</td>
-	                            <td>${sl_board.categoryCode}</td>
-	                            <td>${sl_board.title}</td>
-	                            <td>${sl_board.content}</td>
-	                            <td>${sl_board.createdDate}</td>
-	                            <td>${sl_board.views}</td>
-	                        </tr>
-                        </c:forEach>
-                        <tr class="soul-log-comment" style="display:none;">
-                            <td>2</td>
-                            <td>서울</td>
-                            <td>댓글</td>
-                            <td>소울로그 댓글 제목1</td>
-                            <td>5</td>
-                            <td>2023-06-01</td>
-                            <td>50</td>
-                        </tr>
-                        <tr class="event-comment" style="display:none;">
-                            <td>3</td>
-                            <td>서울</td>
-                            <td>이벤트</td>
-                            <td>이벤트 댓글 제목1</td>
-                            <td>3</td>
-                            <td>2023-06-01</td>
-                            <td>30</td>
-                        </tr>
-                        <tr class="inquiry" style="display:none;">
-                            <td>4</td>
-                            <td>서울</td>
-                            <td>문의</td>
-                            <td>문의 제목1</td>
-                            <td>1</td>
-                            <td>2023-06-01</td>
-                            <td>10</td>
-                        </tr>
-                        <tr class="like" style="display:none;">
-                            <td>5</td>
-                            <td>서울</td>
-                            <td>좋아요</td>
-                            <td>좋아요 제목1</td>
-                            <td>20</td>
-                            <td>2023-06-01</td>
-                            <td>200</td>
-                        </tr>
-                        <tr class="favorite" style="display:none;">
-                            <td>6</td>
-                            <td>서울</td>
-                            <td>찜</td>
-                            <td>찜 제목1</td>
-                            <td>2</td>
-                            <td>2023-06-01</td>
-                            <td>20</td>
-                        </tr>
                     </tbody>
                 </table>
-                <div class="pagination">
-	               	<%int slPage = 1;
-	               	  slPage = Integer.parseInt(request.getParameter("page"));
-	               	  if (slPage == 1) {%>
-                    	<a href="SLBoardPage?page=<%=slPage-1%>">이전</a>
-                    <%} else {%>
-                    	<a href="SLBoardPage?page=<%=slPage-1%>">이전</a> <!-- disabled 알아보기 -->
-                    <%}%>
-                    <%int slPages = (int) request.getAttribute("pages");
-                      for (int i = 1; i <= slPages; i++) {%>
-                   		<a href="SLBoardPage?page=<%=i%>"><%=i%></a>
-                    <%}%>
-                    	<a href="SLBoardPage?page=<%=slPage + 1%>">다음</a> <!-- disabled 추가하기 -->
-                </div>
+				<div class="pagination">
+				</div>
             </div>
             <div class="achievement">
                 <h3>{achievement_title}</h3>

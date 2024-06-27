@@ -10,7 +10,7 @@ public class UserPageDTO {
 		start = 1 + (page - 1) * 10;
 		end = page * 10;
 	}
-	
+
 	public int getUserNo() {
 		return userNo;
 	}

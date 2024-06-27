@@ -1,53 +1,61 @@
 package com.multi.seoulsoul.user.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.util.List;
 
-import javax.sql.DataSource;
-
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.multi.seoulsoul.user.model.dao.UserDAO;
 import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
+import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-	private final DataSource dataSource;
+	private UserDAO userDAO;
 
-	public CustomUserDetailsService(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public CustomUserDetailsService() {
 	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		try (Connection connection = dataSource.getConnection()) {
-			String query = "SELECT user_no, user_id, user_pw, nickname, phone, email, blacklist_status, created_date FROM USERS WHERE user_id = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, username);
-			ResultSet rs = statement.executeQuery();
-
-			if (rs.next()) {
-				int userNo = rs.getInt("user_no");
-				String userId = rs.getString("user_id");
-				String password = rs.getString("user_pw");
-				String nickname = rs.getString("nickname");
-				String phone = rs.getString("phone");
-				String email = rs.getString("email");
-				char blacklistStatus = rs.getString("blacklist_status").charAt(0);
-				Timestamp createdDate = rs.getTimestamp("created_date");
-
-				return new CustomUserDetails(userNo, userId, password, nickname, phone, email, blacklistStatus,
-						createdDate);
-			} else {
-				throw new UsernameNotFoundException("User not found");
-			}
-		} catch (Exception e) {
-			throw new UsernameNotFoundException("Database error", e);
-		}
+	
+	@Autowired
+	public CustomUserDetailsService(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
+  
+    @Autowired
+    private SqlSessionTemplate sqlSession;
+    
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        // 사용자 정보 조회
+    	System.out.println("CustomUserDetailsService userId " + userId);
+    	
+        UserDTO userDTO = userDAO.findUserByUsername(sqlSession, userId);
+        
+        System.out.println("CustomUserDetailsService userDTO " + userDTO);
+    	
+        if (userDTO == null) {
+            throw new UsernameNotFoundException("User not found with username: " + userId);
+        }
+
+        // 권한 정보 조회
+        List<String> authorities = userDAO.findAuthoritiesByUserNo(sqlSession, userDTO.getUserNo());
+
+        System.out.println("CustomUserDetailsService authorities " + authorities);
+        return new CustomUserDetails(
+            userDTO.getUserNo(),
+            userDTO.getUserId(),
+            userDTO.getUserPw(),
+            userDTO.getNickname(),
+            userDTO.getPhone(),
+            userDTO.getEmail(),
+            userDTO.getBlacklistStatus(),
+            userDTO.getCreatedDate(),
+            authorities
+        );
+    }
 }

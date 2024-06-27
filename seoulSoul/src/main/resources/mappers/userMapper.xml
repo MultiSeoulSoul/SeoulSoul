@@ -46,29 +46,77 @@
 	    INSERT INTO users (user_id, user_pw, nickname, phone, email)
 	    VALUES (#{userId}, #{userPw}, #{nickname}, #{phone}, #{email})
 	</insert>
+	
+	<!-- 회원정보 변경 -->
+	<update id="userUpdate" parameterType="userDTO">
+		UPDATE USERS
+		SET
+			nickname = #{nickname},
+			phone = #{phone},
+			email = #{email}
+	    WHERE user_no = #{userNo}
+	</update>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="userPwUpdate" parameterType="userDTO">
+		UPDATE USERS
+		SET user_pw = #{userPw}
+	    WHERE user_no = #{userNo}
+	</update>
 
-	<!-- 로그인 -->
-	<!-- <select id="loginUser" parameterType="userDTO" resultType="userDTO">
-		SELECT *
-		FROM users
-		WHERE user_id = #{userId}
-	</select> -->
-
-
-	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
+    <!-- 시큐리티 사용 시 쿼리 -->
+    <select id="findUserByUsername" parameterType="String" resultType="userDTO">
         SELECT *
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+    <select id="findAuthoritiesByUserNo" parameterType="int" resultType="String">
+        SELECT ua.authority_name
+        FROM USER_ROLE ur
+        JOIN USER_AUTHORITY ua ON ur.authority_code = ua.authority_code
+        WHERE ur.user_no = #{userNo}
+    </select>
+    
+    
+	<!-- 임시 소울로그 조회 -->
+	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
+        SELECT 
+            b2.soul_log_no,
+            l.location_name,
+            c.category_name,
+            b2.title,
+            (SELECT COUNT(*) FROM SL_REPLY r WHERE r.soul_log_no = b2.soul_log_no) AS replyCount,
+            b2.created_date,
+            b2.views,
+            b2.total_count
         FROM (
-            SELECT ROW_NUMBER() OVER (ORDER BY b.soul_log_no DESC) AS rownum, 
-                   b.*
+            SELECT 
+                b.*,
+                COUNT(*) OVER() AS total_count,
+                ROW_NUMBER() OVER (ORDER BY b.soul_log_no DESC) AS rownum
             FROM SL_BOARD b
             WHERE b.writer = #{userNo}
-        ) b2 
+        ) b2
+        JOIN LOCATION l ON b2.location_code = l.location_code
+        JOIN SL_CATEGORY c ON b2.category_code = c.category_code
         WHERE b2.rownum BETWEEN #{start} AND #{end}
     </select>
     
-   	<select id="selectCount" resultType="Integer">
-        SELECT COUNT(*) count 
-        FROM SL_BOARD
+    
+    <!-- 임시 소울로그댓글 조회 -->
+	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="slReplyDTO">
+        SELECT
+	        b2.count,
+	        b2.*
+	    FROM (
+	        SELECT 
+	            b.*,
+	            COUNT(*) OVER() AS count,
+	            ROW_NUMBER() OVER (ORDER BY b.reply_no DESC) AS rownum
+	        FROM SL_REPLY b
+	        WHERE b.writer = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
     </select>
 
 </mapper>

@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
+import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 
@@ -25,11 +26,27 @@ public class UserDAO {
 		return sqlSession.insert("userMapper.joinUser", u);
 	}
 
+	public UserDTO findUserByUsername(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("userMapper.findUserByUsername", userId);
+	}
+
+	public List<String> findAuthoritiesByUserNo(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectList("userMapper.findAuthoritiesByUserNo", userNo);
+	}
+
 	public List<SLBoardDTO> selectSLBoardPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
 		return sqlSession.selectList("userMapper.selectSLBoardPage", up);
 	}
-	
-	public int selectCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("userMapper.selectCount");
+
+	public List<SLReplyDTO> selectSLReplyPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectSLReplyPage", up);
+	}
+
+	public int userUpdate(SqlSessionTemplate sqlSession, UserDTO u) {
+		return sqlSession.update("userMapper.userUpdate", u);
+	}
+
+	public int userPwUpdate(SqlSessionTemplate sqlSession, UserDTO u) {
+		return sqlSession.update("userMapper.userPwUpdate", u);
 	}
 }
