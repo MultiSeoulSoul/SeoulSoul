@@ -113,13 +113,13 @@
     <button class="write-btn" onclick="location.href='eventInsertForm'">글쓰기</button>
     <br>
 
-    <div class="event-container">
-        <c:forEach items="${eventList}" var="event">
-            <div class="event-card" onclick="navigateToDetail(${event.eventNo})">
-                <c:if test="${not empty event.imagePath}">
-                    <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${event.imagePath}" alt="Event Image">
-                </c:if>
-                <div class="event-details">
+<div class="event-container">
+    <c:forEach items="${eventList}" var="event">
+        <div class="event-card" onclick="navigateToDetail(${event.eventNo})">
+            <c:if test="${not empty event.imagePath}">
+                <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${event.imagePath}" alt="Event Image">
+            </c:if>
+            <div class="event-details">
                     <div>
                         <div class="event-title">${event.title}</div>
                         <div class="event-info">

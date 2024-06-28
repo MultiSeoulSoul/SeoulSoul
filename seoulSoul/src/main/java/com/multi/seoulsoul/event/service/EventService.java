@@ -22,4 +22,10 @@ public interface EventService {
 
 	void incrementViews(int eventNo) throws Exception;
 
+	void deleteEvent(int eventNo) throws Exception;
+
+	void updateEvent(EventDTO eventDTO) throws Exception;
+
+	void updateEventFile(Map<String, Object> fileParams) throws Exception;
+
 }

@@ -11,12 +11,37 @@
             text-align: center;
         }
 
+        .body-text {
+            font-family: 'Freesentation-5Black', sans-serif;
+            font-weight: normal;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .event-title {
+            font-family: 'Freesentation-9Black', sans-serif;
+            font-weight: bold;
+            text-align: center;
+            font-size: 30px; /* 제목을 더 크게 강조 */
+            margin-bottom: 10px; /* 제목과 내용 사이에 여백 추가 */
+        }
+
         .detail-image {
             width: 100%;
             max-width: 300px;
             height: auto;
             max-height: 400px; /* 필요에 따라 최대 높이를 설정 */
             object-fit: contain; /* 이미지를 컨테이너에 맞추어 조정 */
+        }
+
+        .image-container {
+            width: 300px;  /* 고정된 너비 */
+            height: 400px; /* 고정된 높이 */
+            overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 숨김 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
         }
 
         .detail-btn {
@@ -26,10 +51,25 @@
             border-radius: 5px;
             padding: 5px 10px;
             cursor: pointer;
+            margin-right: 10px;
         }
 
         .detail-btn:hover {
             background-color: #0056b3;
+        }
+
+        .detail-btn1 {
+            background-color: #C42A2A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .detail-btn1:hover {
+            background-color: #9b1d1d;
         }
 
         #map {
@@ -41,7 +81,20 @@
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0e2c2d679898678e6c157d1de02b14a4&libraries=services"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
-            var address = document.getElementById('address').textContent.replace('장소: ', '');
+            var addressElement = document.getElementById('address');
+            if (!addressElement) {
+                console.error('Address element not found.');
+                alert('주소를 찾을 수 없습니다.');
+                return;
+            }
+            
+            var address = addressElement.textContent.replace('장소: ', '').trim();
+            if (!address) {
+                console.error('Address is empty.');
+                alert('주소를 찾을 수 없습니다.');
+                return;
+            }
+            
             console.log('Address:', address);  // 디버깅을 위해 콘솔에 주소 출력
 
             // 카카오 지도 API가 로드된 후 initMap 함수 호출
@@ -80,17 +133,29 @@
 <body>
     <jsp:include page="../common/menubar.jsp" />
     <div class="detail-container">
-        <h2>${event.title}</h2>
+        <h2 class="event-title">&#127881; ${event.title}</h2>
         <p><strong>작성일:</strong> ${event.createdDate}</p>
         <p><strong>조회수:</strong> ${event.views}</p>
-        <p>${event.content}</p>
-        <p><span id="address">장소: ${event.address}</span></p>
+        <p class="body-text">${event.content}</p>
+       
         <c:if test="${not empty event.imagePath}">
-            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${event.imagePath}" alt="Image" class="detail-image">
+            <div class="image-container">
+                <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${event.imagePath}" alt="Image" class="detail-image">
+            </div>
         </c:if>
+        <br><br>
+         <p><span id="address">장소: ${event.address}</span></p>
         <div id="map"></div>
         <br>
         <button class="detail-btn" onclick="history.back()">뒤로가기</button>
+         <button class="detail-btn1"
+            onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
+        <form action="${pageContext.request.contextPath}/event/deleteEvent"
+            method="post" style="display: inline;">
+            <input type="hidden" name="eventNo" value="${event.eventNo}">
+            <button type="submit" class="detail-btn1">삭제하기</button>
+        </form>
+        <br><br>
     </div>
 </body>
 </html>

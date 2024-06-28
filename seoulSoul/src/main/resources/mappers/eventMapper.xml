@@ -35,4 +35,22 @@
 		LEFT JOIN EVENT_FILES f ON e.event_no = f.event_no
 		WHERE e.event_no = #{eventNo}
 	</select>
+	
+<update id="updateEvent" parameterType="com.multi.seoulsoul.event.model.dto.EventDTO">
+    UPDATE EVENT
+    SET title = #{title},
+        content = #{content},
+        address = #{address},
+        start_date = #{startDate},
+        end_date = #{endDate}
+    WHERE event_no = #{eventNo}
+</update>
+
+<update id="updateEventFile" parameterType="map">
+    UPDATE EVENT_FILES
+    SET original_name = #{originalName},
+        saved_name = #{savedName}
+    WHERE event_no = #{eventNo}
+</update>
+
 </mapper>
