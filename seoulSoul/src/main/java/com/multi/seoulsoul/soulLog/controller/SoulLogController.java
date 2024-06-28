@@ -76,6 +76,8 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
+			model.addAttribute("msg", "소울로그 리스트 조회 과정에서 문제가 발생했습니다.");
+			
 			return "common/errorPage";
 			
 		}
@@ -104,6 +106,8 @@ public class SoulLogController {
 		} catch (Exception e) {
 			
 			e.printStackTrace();
+			
+			model.addAttribute("msg", "소울로그 리스트 조회 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -212,7 +216,7 @@ public class SoulLogController {
 						// 오류 발생 시 생성한 파일을 삭제한다.
 						new File(filePath + "/" + savedName).delete();
 								
-						model.addAttribute("msg", "소울로그 작성 실패..");
+						model.addAttribute("msg", "이미지 업로드 과정에서 문제가 발생했습니다.");
 	
 						return "common/errorPage";
 							
@@ -241,7 +245,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 작성 실패..");
+			model.addAttribute("msg", "소울로그 작성 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -293,7 +297,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 상세 조회 실패..");
+			model.addAttribute("msg", "소울로그 상세 조회 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -322,7 +326,7 @@ public class SoulLogController {
 		
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "댓글 작성 실패..");
+			model.addAttribute("msg", "댓글 작성 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -347,7 +351,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 삭제 실패..");
+			model.addAttribute("msg", "소울로그 삭제 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -376,7 +380,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "댓글 삭제 실패..");
+			model.addAttribute("msg", "댓글 삭제 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -403,7 +407,7 @@ public class SoulLogController {
 			
 			e.printStackTrace();
 			
-			model.addAttribute("msg", "업데이트할 로그 정보 조회 실패..");
+			model.addAttribute("msg", "수정할 소울로그 데이터 조회 과정에서 문제가 발생했습니다.");
 			
 			return "common/errorPage";
 			
@@ -435,7 +439,7 @@ public class SoulLogController {
 			
 			e1.printStackTrace();
 			
-			model.addAttribute("msg", "소울로그 수정 실패..");
+			model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 			return "common/errorPage";
 			
@@ -476,7 +480,7 @@ public class SoulLogController {
 					// 오류 발생 시 생성한 파일을 삭제한다.
 					new File(filePath + "/" + savedName).delete();
 							
-					model.addAttribute("msg", "소울로그 수정 실패..");
+					model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 					return "common/errorPage";
 						
@@ -490,7 +494,7 @@ public class SoulLogController {
 					
 					e.printStackTrace();
 					
-					model.addAttribute("msg", "소울로그 수정 실패..");
+					model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 					return "common/errorPage";
 					
@@ -508,7 +512,7 @@ public class SoulLogController {
 					
 					e.printStackTrace();
 					
-					model.addAttribute("msg", "소울로그 수정 실패..");
+					model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 					return "common/errorPage";
 					
@@ -538,7 +542,7 @@ public class SoulLogController {
 					// 오류 발생 시 생성한 파일을 삭제한다.
 					new File(filePath + "/" + savedName).delete();
 							
-					model.addAttribute("msg", "소울로그 수정 실패..");
+					model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 					return "common/errorPage";
 						
@@ -552,7 +556,7 @@ public class SoulLogController {
 					
 					e.printStackTrace();
 					
-					model.addAttribute("msg", "소울로그 수정 실패..");
+					model.addAttribute("msg", "소울로그 수정 과정에서 문제가 발생했습니다.");
 
 					return "common/errorPage";
 					
