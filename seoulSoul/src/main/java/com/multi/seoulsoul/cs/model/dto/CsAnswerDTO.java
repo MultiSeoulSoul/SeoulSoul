@@ -10,6 +10,8 @@ public class CsAnswerDTO {
     private int writer;
     private Timestamp createdDate;
     
+    private CsWriterDTO writerInfo; //단일 작성자 정보
+    
     public CsAnswerDTO() {
     	
     }
@@ -54,10 +56,18 @@ public class CsAnswerDTO {
 		this.createdDate = createdDate;
 	}
 
+	public CsWriterDTO getWriterInfo() {
+		return writerInfo;
+	}
+
+	public void setWriterInfo(CsWriterDTO writerInfo) {
+		this.writerInfo = writerInfo;
+	}
+
 	@Override
 	public String toString() {
 		return "CsAnswerDTO [answerNo=" + answerNo + ", questionNo=" + questionNo + ", content=" + content + ", writer="
-				+ writer + ", createdDate=" + createdDate + "]";
+				+ writer + ", createdDate=" + createdDate + ", writerInfo=" + writerInfo + "]";
 	}
 
 }

@@ -15,8 +15,8 @@ public class CsQuestionDTO {
     private String isAnswered;
     private int views;
     
-    private List<CsCategoryDTO> categorys;
-    private List<CsWriterDTO> writers;
+    private CsCategoryDTO categoryInfo; //단일 카테고리 정보
+    private CsWriterDTO writerInfo; //단일 작성자 정보
     private List<CsQuestionFileDTO> files;
     private List<CsAnswerDTO> answers;
 	
@@ -54,7 +54,6 @@ public class CsQuestionDTO {
 	public void setWriter(int writer) {
 		this.writer = writer;
 	}
-
 	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
@@ -79,20 +78,18 @@ public class CsQuestionDTO {
 	public void setViews(int views) {
 		this.views = views;
 	}
-	public List<CsCategoryDTO> getCategorys() {
-		return categorys;
+	public CsCategoryDTO getCategoryInfo() {
+		return categoryInfo;
 	}
-	public void setCategorys(List<CsCategoryDTO> categorys) {
-		this.categorys = categorys;
+	public void setCategoryInfo(CsCategoryDTO categoryInfo) {
+		this.categoryInfo = categoryInfo;
 	}
-	public List<CsWriterDTO> getWriters() {
-		return writers;
+	public CsWriterDTO getWriterInfo() {
+		return writerInfo;
 	}
-
-	public void setWriters(List<CsWriterDTO> writers) {
-		this.writers = writers;
+	public void setWriterInfo(CsWriterDTO writerInfo) {
+		this.writerInfo = writerInfo;
 	}
-
 	public List<CsQuestionFileDTO> getFiles() {
 		return files;
 	}
@@ -110,9 +107,9 @@ public class CsQuestionDTO {
 	public String toString() {
 		return "CsQuestionDTO [questionNo=" + questionNo + ", categoryCode=" + categoryCode + ", title=" + title
 				+ ", content=" + content + ", writer=" + writer + ", createdDate=" + createdDate + ", modifiedDate="
-				+ modifiedDate + ", isAnswered=" + isAnswered + ", views=" + views + ", categorys=" + categorys
-				+ ", writers=" + writers + ", files=" + files + ", answers=" + answers + "]";
+				+ modifiedDate + ", isAnswered=" + isAnswered + ", views=" + views + ", categoryInfo=" + categoryInfo
+				+ ", writerInfo=" + writerInfo + ", files=" + files + ", answers=" + answers + "]";
 	}
-	
+
 }
 

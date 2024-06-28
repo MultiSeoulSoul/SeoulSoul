@@ -17,8 +17,8 @@
         	q.created_date, 
         	q.views, 
         	q.is_answered, 
-        	c.category_name,
-        	u.nickname
+        	c.category_name AS "categoryInfo.categoryName",
+			u.nickname AS "writerInfo.nickname"
         FROM CS_QUESTION q
         LEFT JOIN CS_CATEGORY c ON q.category_code = c.category_code
         LEFT JOIN USERS u ON q.writer = u.user_no
@@ -38,8 +38,8 @@
         	q.content, 
         	q.category_code,
         	q.is_answered, 
-        	c.category_name,
-        	u.nickname
+        	c.category_name AS "categoryInfo.categoryName",
+        	u.nickname AS "writerInfo.nickname"
         FROM CS_QUESTION q
         LEFT JOIN CS_CATEGORY c ON q.category_code = c.category_code
         LEFT JOIN USERS u ON q.writer = u.user_no
@@ -47,21 +47,35 @@
     </select>
     <!-- 문의글 상세 조회: 2. 첨부파일 가져오기 -->
     <select id="selectFilesByQuestionId" parameterType="int" resultType="csQuestionFileDTO">
-        SELECT file_no, question_no, original_file_name, stored_file_name, file_path
+        SELECT 
+        	file_no, 
+        	question_no, 
+        	original_file_name, 
+        	stored_file_name, 
+        	file_path
         FROM CS_QUESTION_FILES
         WHERE question_no = #{questionNo}
     </select>
     <!-- 문의글 상세 조회: 3. 답변 가져오기 -->
     <select id="selectAnswersByQuestionId" parameterType="int" resultType="csAnswerDTO">
-        SELECT answer_no, question_no, content, writer, created_date
-        FROM CS_ANSWER
-        WHERE question_no = #{questionNo}
+	    SELECT 
+	        a.answer_no,
+	        a.question_no,
+	        a.content,
+	        a.writer,
+	        a.created_date,
+	        u.nickname AS "writerInfo.nickname" -- 큰따옴표로 감싸기
+	    FROM CS_ANSWER a
+	    LEFT JOIN USERS u ON a.writer = u.user_no
+	    WHERE a.question_no = #{questionNo}
     </select>
     <!-- 문의글 상세 조회: 4. 조회수 증가시키기 -->
     <update id="increaseViewCount" parameterType="int">
 	    UPDATE CS_QUESTION
-	    SET views = views + 1
-	    WHERE question_no = #{questionNo}
+	    SET 
+	    	views = views + 1
+	    WHERE 
+	    	question_no = #{questionNo}
 	</update>
     
     <!-- 문의글 삭제 -->
@@ -114,8 +128,10 @@
 	</insert>
 	<update id="updateQuestionToAnswered" parameterType="int">
         UPDATE CS_QUESTION
-        SET is_answered = 'Y'
-        WHERE question_no = #{questionNo}
+        SET 
+        	is_answered = 'Y'
+        WHERE 
+        	question_no = #{questionNo}
     </update>
     
 </mapper>

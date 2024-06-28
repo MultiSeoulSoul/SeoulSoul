@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,9 +48,12 @@ th {
      <div class="content">
         <br><br>
         
-        <!-- 내가 쓴 문의글 보기 페이지 -->   
-        <h1>내가 쓴 문의글 보기</h1>
-        <p>내가 쓴 문의글 설명글</p>
+        <!-- (회원) 내가 쓴 문의글 보기 페이지 -->   
+        <!-- <h1>내가 쓴 문의글 보기</h1>
+        <p>내가 쓴 문의글 설명글</p> -->
+        <!-- (관리자) 문의글 전체 목록 페이지 -->
+        <h1>문의글 상세 보기</h1>
+        <p>문의글은 최대 일주일 이내로 답변 완료하도록 하며, 작성된 답변은 수정이 불가하니 유의하시길 바랍니다.</p>
 
         <div class="form-container">
                 
@@ -62,20 +66,20 @@ th {
                     </tr>
                     <tr>
                         <th>카테고리</th>
-                        <td>${qna.categoryCode}</td>
+                        <td>${qna.categoryInfo.categoryName}</td>
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td>${qna.writer}</td>
+                        <td>${qna.writerInfo.nickname}</td>
                     </tr>
                     <tr>
-                        <th>작성일</th>
-                        <td>${qna.createdDate}</td>
+                        <th>작성일시</th>
+                        <td><fmt:formatDate value="${qna.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
                     </tr>
                     <c:if test="${qna.createdDate != qna.modifiedDate}">
                         <tr>
-                            <th>수정일</th>
-                            <td>${qna.modifiedDate}</td>
+                            <th>수정일시</th>
+                            <td><fmt:formatDate value="${qna.modifiedDate}" dateStyle="long" type="both" timeStyle="long"/></td>
                         </tr>
                     </c:if>
                     <tr>
@@ -107,15 +111,15 @@ th {
                         <thead>
                             <tr>
                                 <th>답변자</th>
-                                <th>작성일</th>
+                                <th>작성일시</th>
                                 <th>내용</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="answer" items="${qna.answers}">
                                 <tr>
-                                    <td>${answer.writer}</td>
-                                    <td>${answer.createdDate}</td>
+                                    <td>${answer.writerInfo.nickname}</td>
+                                    <td><fmt:formatDate value="${answer.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
                                     <td>${answer.content}</td>
                                 </tr>
                             </c:forEach>
