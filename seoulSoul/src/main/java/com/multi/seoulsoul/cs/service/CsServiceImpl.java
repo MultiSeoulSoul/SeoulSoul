@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ import com.multi.seoulsoul.cs.model.dto.CsCategoryDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
 
+@EnableAspectJAutoProxy
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class CsServiceImpl implements CsService {
 
@@ -29,18 +32,18 @@ public class CsServiceImpl implements CsService {
 	
 	//문의글 전체 조회
 	@Override
-    public int getTotalQuestions() {
+    public int getTotalQuestions() throws Exception {
         return csDAO.getTotalQuestions(sqlSession);
     }
     @Override
-    public List<CsQuestionDTO> getQuestionsByPage(int page, int pageSize) {
+    public List<CsQuestionDTO> getQuestionsByPage(int page, int pageSize) throws Exception {
         int offset = (page - 1) * pageSize;
         return csDAO.getQuestionsByPage(sqlSession, offset, pageSize);
     }
     
     //문의글 상세 조회
     @Override
-    public CsQuestionDTO getQuestionById(int questionNo) {
+    public CsQuestionDTO getQuestionById(int questionNo) throws Exception {
         CsQuestionDTO question = csDAO.selectQuestionById(sqlSession, questionNo);
         if (question != null) {
             question.setFiles(csDAO.selectFilesByQuestionId(sqlSession, questionNo));
@@ -50,29 +53,29 @@ public class CsServiceImpl implements CsService {
     }
     //문의글 상세 조회: 첨부파일 저장
     @Override
-    public CsQuestionFileDTO getFileById(int fileNo) {
+    public CsQuestionFileDTO getFileById(int fileNo) throws Exception {
         return csDAO.selectFileById(sqlSession, fileNo);
     }
     //문의글 상세 조회: 조회수 증가
     @Override
-    public void increaseViewCount(int questionNo) {
+    public void increaseViewCount(int questionNo) throws Exception {
         csDAO.increaseViewCount(sqlSession, questionNo);
     }
     
   	//문의글 삭제
   	@Override
-	public void deleteQuestion(Integer questionNo) {
+	public void deleteQuestion(Integer questionNo) throws Exception {
 		csDAO.deleteQuestion(sqlSession, questionNo);
 	}
 	
 	//문의글 작성: 1. 카테고리
 	@Override
-	public List<CsCategoryDTO> getCategories() {
+	public List<CsCategoryDTO> getCategories() throws Exception {
         return csDAO.getCategories(sqlSession);
     }
 	// 문의글 작성: 2. 문의글, 3. 첨부파일
 	@Override
-    public void insertQuestion(CsQuestionDTO question, List<Map<String, String>> files) {
+    public void insertQuestion(CsQuestionDTO question, List<Map<String, String>> files) throws Exception {
         csDAO.insertQuestion(sqlSession, question);
         if (!files.isEmpty()) {
             for (Map<String, String> file : files) {
@@ -84,7 +87,6 @@ public class CsServiceImpl implements CsService {
     
   	//문의글 수정
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void updateQuestion(CsQuestionDTO question, List<Map<String, String>> files) throws Exception {
         csDAO.updateQuestion(sqlSession, question);
 
@@ -103,7 +105,7 @@ public class CsServiceImpl implements CsService {
     
     //문의글 답변 작성
     @Override
-    public void insertAnswer(int questionNo, String content, int writer) {
+    public void insertAnswer(int questionNo, String content, int writer) throws Exception {
         CsAnswerDTO answer = new CsAnswerDTO();
         answer.setQuestionNo(questionNo);
         answer.setContent(content);
