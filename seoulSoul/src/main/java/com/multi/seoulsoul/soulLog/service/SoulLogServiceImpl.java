@@ -180,6 +180,14 @@ public class SoulLogServiceImpl implements SoulLogService {
 		return soulLogDAO.insertImage(sqlSession, file);
 		
 	}
+
+
+	@Override
+	public int updateSoulLogReply(RepliesDTO repliesDTO) throws Exception {
+		
+		return soulLogDAO.updateSoulLogReply(sqlSession, repliesDTO);
+		
+	}
 	
 	
 	

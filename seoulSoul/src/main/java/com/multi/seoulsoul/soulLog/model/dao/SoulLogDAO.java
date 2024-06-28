@@ -112,6 +112,12 @@ public class SoulLogDAO {
 		
 	}
 
+	public int updateSoulLogReply(SqlSessionTemplate sqlSession, RepliesDTO repliesDTO) {
+		
+		return sqlSession.update("soulLogMapper.updateSoulLogReply", repliesDTO);
+		
+	}
+
 	
 
 }

@@ -41,5 +41,7 @@ public interface SoulLogService {
 	int deleteImage(int fileNo) throws Exception;
 
 	int insertImage(FilesDTO file) throws Exception;
+
+	int updateSoulLogReply(RepliesDTO repliesDTO) throws Exception;
 	
 }

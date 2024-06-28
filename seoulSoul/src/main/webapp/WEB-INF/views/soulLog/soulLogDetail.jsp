@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %> 
+<%@ page import="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" %>
+<%@ page import="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +16,15 @@
 	function confirmDelete() {
 	    return confirm("정말로 삭제하시겠습니까?");
 	}
+</script>
+
+<script>
+function updateReply(num) {
+    document.getElementById('replyContent' + num).style.display = 'none';
+    document.getElementById('replyUpdateBtn' + num).style.display = 'none';
+    document.getElementById('replyContentInput' + num).style.display = 'block';
+    document.getElementById('replyUpdateFormBtn' + num).style.display = 'block';
+}
 </script>
 
 </head>
@@ -99,29 +111,61 @@
 			</form>
 			<br>
 			<hr>
-			<table>
-				<c:forEach items="${soulLogDetail.replies}" var="one">
+			
+			
+			<%
+    		// updateDetail을 EL에서 직접 접근하는 대신, 스크립틀릿에서 변수를 선언하여 사용
+    		SoulLogDTO soulLogDetail = (SoulLogDTO) request.getAttribute("soulLogDetail");
+			%>
+				
+			<%
+			List<RepliesDTO> replies = soulLogDetail.getReplies();
+					
+			for(int i = 0; i < replies.size(); i++) {
+				int replyNo = replies.get(i).getReplyNo();
+				int soulLogNo = replies.get(i).getSoulLogNo();
+				String replyWriter = replies.get(i).getWriter().getNickname();
+				String replyContent = replies.get(i).getContent();
+			%>
+					
+			<form action="updateSoulLogReply" method="post">
+				<table>
 					<tr>
 						<td style="width: 130px; height: 40px; border-bottom: 1px solid #ccc;">
-							<span style="width: 40px;">${one.writer.nickname}</span>
+							<span style="width: 40px;"><%= replyWriter %></span>
 						</td>
 						<td style="width: 1000px; border-bottom: 1px solid #ccc;">
-							${one.content}
+							<div id="replyContent<%= (i+1) %>">
+								<span><%= replyContent %></span>
+							</div>
+							<div id="replyContentInput<%= (i+1) %>" style="display: none">
+								<input type="hidden" name="replyNo" value="<%= replyNo %>">
+								<input type="hidden" name="soulLogNo" value="<%= soulLogNo %>">
+								<input name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="<%= replyContent %>" maxlength="100" required>
+							</div>
 						</td>
-						<td style="width: 100px; border-bottom: 1px solid #ccc;">
-							<a href="updateSoulLogReply?replyNo=${one.replyNo}">
-								<button class="btns" style="width: 40px; height: 25px; background: #B0B0B0; color: white; border: 1px solid #c0c0c0; cursor: pointer;">수정</button>
-							</a>
-							<a href="deleteSoulLogReply?replyNo=${one.replyNo}&soulLogNo=${one.soulLogNo}" onclick="return confirmDelete();">
-								<button class="btns" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
+						<td style="width: 5px; border-bottom: 1px solid #ccc;">
+							<div id="replyUpdateBtn<%= (i+1) %>">
+								<button type="button" style="width: 40px; height: 25px; background: #A0A0A0; color: white; border: 1px solid #c0c0c0; cursor: pointer;" onclick="updateReply(<%= (i+1) %>)">수정</button>
+							</div>
+							<div id="replyUpdateFormBtn<%= (i+1) %>" style="display: none">
+								<button type="submit" style="width: 40px; height: 25px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">완료</button>
+							</div>
+						</td>
+						<td style="width: 50px; border-bottom: 1px solid #ccc;">	
+							<a href="deleteSoulLogReply?replyNo=<%= replyNo %>&soulLogNo=<%= soulLogNo %>" onclick="return confirmDelete();">
+								<button type="button" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
 							</a>
 						</td>
 					</tr>
-				</c:forEach>
-			</table>
+				</table>
+			</form>
+						
+			<%
+			}
+			%>
+				
 		</div>
-		
-		
 		
 		<br>
 		<br>

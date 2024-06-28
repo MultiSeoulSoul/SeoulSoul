@@ -290,6 +290,13 @@
 			#{ savedName }
 			)
 	</insert>
+	
+	
+	<update id="updateSoulLogReply" parameterType="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO">
+		UPDATE SL_REPLY
+		SET content = #{ content }
+		WHERE reply_no = #{ replyNo }
+	</update>
 
 	
 

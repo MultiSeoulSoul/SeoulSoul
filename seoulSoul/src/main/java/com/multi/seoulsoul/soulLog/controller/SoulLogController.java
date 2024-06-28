@@ -571,6 +571,31 @@ public class SoulLogController {
 	}
 	
 	
+	@PostMapping("/updateSoulLogReply")
+	public String updateSoulLogReply(RepliesDTO repliesDTO, Model model) {
+		
+		int soulLogNo = repliesDTO.getSoulLogNo();
+		
+		try {
+			
+			soulLogService.updateSoulLogReply(repliesDTO);
+			
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
+			
+		} catch (Exception e) {
+		
+			e.printStackTrace();
+			
+			model.addAttribute("msg", "댓글 수정 과정에서 문제가 발생했습니다.");
+
+			return "common/errorPage";
+			
+		}
+		
+		
+		
+		
+	}
 	
 	
 }
