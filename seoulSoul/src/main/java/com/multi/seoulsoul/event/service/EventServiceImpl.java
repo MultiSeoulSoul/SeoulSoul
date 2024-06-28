@@ -74,4 +74,10 @@ public class EventServiceImpl implements EventService {
 	public void updateEventFile(Map<String, Object> fileParams) throws Exception {
 	    eventDAO.updateEventFile(fileParams);
 	}
+
+	@Override
+	public void deleteRecommend(int recommendationNo) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -199,7 +199,7 @@
                     <textarea id="content" name="content" rows="25" required>${event.content}</textarea>
                 </div>
             </div>
-            <button type="submit" class="submit-button" id="b1">수정 완료</button>
+            <button type="submit" class="submit-button" id="b1">수정 하기</button>
         </form>
     </div>
     <br><br>

@@ -2,45 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.seoulsoul.rec.model.dao.RecDAO">
 
-	<!-- 추천 글 삽입 -->
-	<insert id="insertRecommendation"
-		parameterType="com.multi.seoulsoul.rec.model.dto.RecDTO"
-		useGeneratedKeys="true" keyProperty="recommendationNo">
-		INSERT INTO REC_BOARD (title,
-		content, created_date, views)
-		VALUES (#{title}, #{content}, NOW(),
-		#{views})
-	</insert>
+    <!-- 추천 글 삽입 -->
+    <insert id="insertRecommendation"
+            parameterType="com.multi.seoulsoul.rec.model.dto.RecDTO"
+            useGeneratedKeys="true" keyProperty="recommendationNo">
+        INSERT INTO REC_BOARD (title, content, created_date, views)
+        VALUES (#{title}, #{content}, NOW(), #{views})
+    </insert>
 
-	<!-- 모든 추천 글 선택 -->
-	<select id="selectAllRecommendations"
-		resultType="com.multi.seoulsoul.rec.model.dto.RecDTO">
-		SELECT rb.*, rf.saved_name AS imagePath
-		FROM REC_BOARD rb
-		LEFT JOIN REC_FILES rf ON rb.recommendation_no = rf.recommendation_no
-	</select>
+    <!-- 모든 추천 글 선택 -->
+    <select id="selectAllRecommendations"
+            resultType="com.multi.seoulsoul.rec.model.dto.RecDTO">
+        SELECT rb.*, rf.saved_name AS imagePath
+        FROM REC_BOARD rb
+        LEFT JOIN REC_FILES rf ON rb.recommendation_no = rf.recommendation_no
+    </select>
 
-	<!-- 파일 정보 삽입 -->
-	<insert id="insertFile">
-		INSERT INTO REC_FILES (recommendation_no,
-		original_name, saved_name)
-		VALUES (#{recommendationNo},
-		#{originalName}, #{savedName})
-	</insert>
+    <!-- 파일 정보 삽입 -->
+    <insert id="insertFile">
+        INSERT INTO REC_FILES (recommendation_no, original_name, saved_name)
+        VALUES (#{recommendationNo}, #{originalName}, #{savedName})
+    </insert>
 
-	<select id="selectRecommendationById" parameterType="int"
-		resultType="com.multi.seoulsoul.rec.model.dto.RecDTO">
-		SELECT rb.*, rf.saved_name AS imagePath
-		FROM REC_BOARD rb
-		LEFT JOIN REC_FILES rf ON rb.recommendation_no = rf.recommendation_no
-		WHERE rb.recommendation_no = #{recommendationNo}
-	</select>
+    <select id="selectRecommendationById" parameterType="int"
+            resultType="com.multi.seoulsoul.rec.model.dto.RecDTO">
+        SELECT rb.*, rf.saved_name AS imagePath
+        FROM REC_BOARD rb
+        LEFT JOIN REC_FILES rf ON rb.recommendation_no = rf.recommendation_no
+        WHERE rb.recommendation_no = #{recommendationNo}
+    </select>
 
-	<!-- 조회수 증가 쿼리 -->
-	<update id="incrementViews" parameterType="int">
-		UPDATE REC_BOARD
-		SET views = views + 1
-		WHERE recommendation_no = #{recommendationNo}
-	</update>
+    <!-- 조회수 증가 쿼리 -->
+    <update id="incrementViews" parameterType="int">
+        UPDATE REC_BOARD
+        SET views = views + 1
+        WHERE recommendation_no = #{recommendationNo}
+    </update>
+
+    <!-- 추천 글 업데이트 -->
+    <update id="updateRecommend"
+            parameterType="com.multi.seoulsoul.rec.model.dto.RecDTO">
+        UPDATE REC_BOARD
+        SET title = #{title},
+            content = #{content},
+            views = #{views}, -- 필요시 추가
+            created_date = #{createdDate} -- 필요시 추가
+        WHERE recommendation_no = #{recommendationNo}
+    </update>
+
+    <!-- 파일 정보 업데이트 -->
+    <update id="updateFile">
+        UPDATE REC_FILES
+        SET original_name = #{originalName},
+            saved_name = #{savedName}
+        WHERE recommendation_no = #{recommendationNo}
+    </update>
+
+    <delete id="deleteRecommend" parameterType="int">
+        DELETE FROM REC_BOARD WHERE recommendation_no = #{recommendationNo}
+    </delete>
+
+    <select id="selectRecByNo" parameterType="int"
+            resultType="com.multi.seoulsoul.rec.model.dto.RecDTO">
+        SELECT * FROM REC_BOARD WHERE recommendation_no = #{recommendationNo}
+    </select>
 
 </mapper>

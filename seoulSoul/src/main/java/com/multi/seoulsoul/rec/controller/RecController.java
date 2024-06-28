@@ -22,131 +22,177 @@ import com.multi.seoulsoul.rec.model.dto.RecDTO;
 import com.multi.seoulsoul.rec.service.RecService;
 
 @Controller
-@RequestMapping("rec")
+@RequestMapping("/rec")
 public class RecController {
 
-    @Autowired
-    private RecService recService;
+	@Autowired
+	private RecService recService;
 
-    @GetMapping("recMain")
-    public String recMain(Model model) {
-        try {
-            List<RecDTO> recList = recService.selectAllRecommendations();
-            model.addAttribute("recList", recList);
+	@GetMapping("recMain")
+	public String recMain(Model model) {
+		try {
+			List<RecDTO> recList = recService.selectAllRecommendations();
+			model.addAttribute("recList", recList);
 
-            // 페이지 계산
-            int pages = calculatePages(recList.size());
-            model.addAttribute("pages", pages);
+			// 페이지 계산
+			int pages = calculatePages(recList.size());
+			model.addAttribute("pages", pages);
 
-            // 디버깅용 로그 출력
-            System.out.println("Rec List Size: " + recList.size());
-            for (RecDTO rec : recList) {
-                System.out.println("Controller Layer Rec: " + rec);
-                System.out.println("Controller Layer Title: " + rec.getTitle());
-                System.out.println("Controller Layer Content: " + rec.getContent());
-                System.out.println("Controller Layer Image Path: " + rec.getImagePath());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "rec/recMain";
-    }
+			// 디버깅용 로그 출력
+			System.out.println("Rec List Size: " + recList.size());
+			for (RecDTO rec : recList) {
+				System.out.println("Controller Layer Rec: " + rec);
+				System.out.println("Controller Layer Title: " + rec.getTitle());
+				System.out.println("Controller Layer Content: " + rec.getContent());
+				System.out.println("Controller Layer Image Path: " + rec.getImagePath());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "rec/recMain";
+	}
 
-    private int calculatePages(int size) {
-        // 페이지 계산 로직 추가 필요
-        return 0;
-    }
+	private int calculatePages(int size) {
+		// 페이지 계산 로직 추가 필요
+		return 0;
+	}
 
-    @GetMapping("recInsertForm")
-    public String recInsertForm() {
-        return "rec/recInsertForm";
-    }
+	@GetMapping("recInsertForm")
+	public String recInsertForm() {
+		return "rec/recInsertForm";
+	}
 
-    @PostMapping("recInsertForm")
-    public ModelAndView insertRecommendation(@RequestParam("title") String title,
-                                             @RequestParam("content") String content,
-                                             @RequestParam("file") MultipartFile file,
-                                             HttpServletRequest request) throws Exception {
-        RecDTO recDTO = new RecDTO();
-        recDTO.setTitle(title);
-        recDTO.setContent(content);
-        recDTO.setViews(0);
+	@PostMapping("recInsertForm")
+	public ModelAndView insertRecommendation(@RequestParam("title") String title,
+			@RequestParam("content") String content, @RequestParam("file") MultipartFile file,
+			HttpServletRequest request) throws Exception {
+		RecDTO recDTO = new RecDTO();
+		recDTO.setTitle(title);
+		recDTO.setContent(content);
+		recDTO.setViews(0);
 
-        try {
-            // 추천 글 저장
-            recService.recInsertForm(recDTO);
-            int recommendationNo = recDTO.getRecommendationNo();
-            System.out.println("Inserted recommendationNo: " + recommendationNo); // 디버깅용 로그 출력
+		try {
+			// 추천 글 저장
+			recService.recInsertForm(recDTO);
+			int recommendationNo = recDTO.getRecommendationNo();
+			System.out.println("Inserted recommendationNo: " + recommendationNo); // 디버깅용 로그 출력
 
-            // 파일 저장
-            if (!file.isEmpty()) {
-                // 프로젝트 내 경로 설정
-                String uploadDir = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
-                File dir = new File(uploadDir);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
+			// 파일 저장
+			if (!file.isEmpty()) {
+				// 프로젝트 내 경로 설정
+				String uploadDir = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+				File dir = new File(uploadDir);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
 
-                String originalFilename = file.getOriginalFilename();
-                String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
-                File saveFile = new File(uploadDir + savedFilename);
-                file.transferTo(saveFile);
+				String originalFilename = file.getOriginalFilename();
+				String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+				File saveFile = new File(uploadDir + savedFilename);
+				file.transferTo(saveFile);
 
-                System.out.println("Original Filename: " + originalFilename); // 디버깅용 로그 출력
-                System.out.println("Saved Filename: " + savedFilename); // 디버깅용 로그 출력
-                System.out.println("Saved File Path: " + saveFile.getAbsolutePath()); // 파일 경로 확인 로그
+				System.out.println("Original Filename: " + originalFilename); // 디버깅용 로그 출력
+				System.out.println("Saved Filename: " + savedFilename); // 디버깅용 로그 출력
+				System.out.println("Saved File Path: " + saveFile.getAbsolutePath()); // 파일 경로 확인 로그
 
-                recService.saveFile(recommendationNo, originalFilename, savedFilename);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ModelAndView("redirect:/rec/recInsertForm");
-        }
+				recService.saveFile(recommendationNo, originalFilename, savedFilename);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ModelAndView("redirect:/rec/recInsertForm");
+		}
 
-        return new ModelAndView("redirect:/rec/recMain");
-    }
+		return new ModelAndView("redirect:/rec/recMain");
+	}
 
-    @GetMapping("/recDetail")
-    public String recDetail(@RequestParam("recommendationNo") int recommendationNo, Model model) {
-        try {
-            // 조회수 증가
-            recService.incrementViews(recommendationNo);
-            
-            RecDTO recDTO = recService.selectRecommendationByNo(recommendationNo);
-            model.addAttribute("rec", recDTO);
+	@GetMapping("/recDetail")
+	public String recDetail(@RequestParam("recommendationNo") int recommendationNo, Model model) {
+		try {
+			// 조회수 증가
+			recService.incrementViews(recommendationNo);
 
-            // 디버깅용 로그 출력
-            System.out.println("Detail Layer RecDTO: " + recDTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "rec/recDetail";
-    }
+			RecDTO recDTO = recService.selectRecommendationByNo(recommendationNo);
+			model.addAttribute("rec", recDTO);
 
-    @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        if (!file.isEmpty()) {
-            try {
-                String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                String uploadDir = "src/main/webapp/resources/uploadFiles/";
-                File destFile = new File(uploadDir + filename);
+			// 디버깅용 로그 출력
+			System.out.println("Detail Layer RecDTO: " + recDTO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "rec/recDetail";
+	}
 
-                if (!destFile.getParentFile().exists()) {
-                    destFile.getParentFile().mkdirs();
-                }
+	@PostMapping("/upload")
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+		if (!file.isEmpty()) {
+			try {
+				String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+				String uploadDir = "src/main/webapp/resources/uploadFiles/";
+				File destFile = new File(uploadDir + filename);
 
-                file.transferTo(destFile);
-                RecDTO recDTO = new RecDTO();
-                recDTO.setImagePath("uploadFiles/" + filename); // 경로 수정
-                recService.saveRecommendation(recDTO);
+				if (!destFile.getParentFile().exists()) {
+					destFile.getParentFile().mkdirs();
+				}
 
-                redirectAttributes.addFlashAttribute("message", "File uploaded successfully");
-                return "redirect:/recMain";
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        redirectAttributes.addFlashAttribute("message", "File upload failed");
-        return "redirect:/recMain";
-    }
+				file.transferTo(destFile);
+				RecDTO recDTO = new RecDTO();
+				recDTO.setImagePath("uploadFiles/" + filename); // 경로 수정
+				recService.saveRecommendation(recDTO);
+
+				redirectAttributes.addFlashAttribute("message", "File uploaded successfully");
+				return "redirect:/recMain";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		redirectAttributes.addFlashAttribute("message", "File upload failed");
+		return "redirect:/recMain";
+	}
+
+	@GetMapping("/editRec")
+	public String editRec(@RequestParam("recommendationNo") int recommendationNo, Model model) throws Exception {
+		RecDTO rec = recService.selectRecommendationById(recommendationNo);
+		model.addAttribute("rec", rec);
+		return "rec/editRec";
+	}
+
+	@PostMapping("/updateRecommend")
+	public String updateRecommend(HttpServletRequest request,
+	                              @RequestParam("recommendationNo") int recommendationNo,
+	                              @RequestParam("title") String title,
+	                              @RequestParam("content") String content,
+	                              @RequestParam("image") MultipartFile image,
+	                              RedirectAttributes redirectAttributes) throws Exception {
+	    RecDTO rec = recService.selectRecommendationById(recommendationNo);
+	    rec.setTitle(title);
+	    rec.setContent(content);
+
+	    if (!image.isEmpty()) {
+	        String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+	        String originalFilename = image.getOriginalFilename();
+	        String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+	        File file = new File(saveDirectory, savedFilename);
+	        try {
+	            image.transferTo(file);
+	            rec.setImagePath(savedFilename);
+	            recService.updateFile(recommendationNo, originalFilename, savedFilename); // 파일 정보를 저장하는 메서드 호출
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            redirectAttributes.addFlashAttribute("message", "이미지 업로드 중 오류가 발생했습니다.");
+	            return "redirect:/rec/editRec?recommendationNo=" + recommendationNo;
+	        }
+	    }
+
+	    recService.updateRecommend(rec);
+	    redirectAttributes.addFlashAttribute("message", "추천이 수정되었습니다.");
+	    return "redirect:/rec/recDetail?recommendationNo=" + recommendationNo;
+	}
+
+	@PostMapping("/deleteRecommend")
+	public String deleteRecommend(@RequestParam("recommendationNo") int recommendationNo,
+			RedirectAttributes redirectAttributes) throws Exception {
+		recService.deleteRecommend(recommendationNo);
+		redirectAttributes.addFlashAttribute("message", "추천이 삭제되었습니다.");
+		return "redirect:/rec/recMain";
+	}
 }

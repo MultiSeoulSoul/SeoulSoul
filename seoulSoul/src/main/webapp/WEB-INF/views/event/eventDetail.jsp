@@ -159,14 +159,14 @@
     </div>
 
     <script type="text/javascript">
-        function confirmDeletion(event) {
-            if (confirm("정말로 이 이벤트를 삭제하시겠습니까?")) {
-                alert('이벤트가 삭제되었습니다.');
-                return true;
-            } else {
-                return false;
-            }
+    function confirmDeletion(event) {
+        if (confirm("정말로 이 이벤트를 삭제하시겠습니까? 😱")) {
+            alert('이벤트가 삭제되었습니다.');
+            return true;
+        } else {
+            return false;
         }
-    </script>
+    }
+</script>
 </body>
 </html>
