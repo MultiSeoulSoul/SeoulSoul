@@ -53,4 +53,11 @@
     WHERE event_no = #{eventNo}
 </update>
 
+<delete id="deleteEvent" parameterType="int">
+    DELETE FROM EVENT WHERE event_no = #{eventNo}
+</delete>
+
+<delete id="deleteEventFiles" parameterType="int">
+    DELETE FROM EVENT_FILES WHERE event_no = #{eventNo}
+</delete>
 </mapper>

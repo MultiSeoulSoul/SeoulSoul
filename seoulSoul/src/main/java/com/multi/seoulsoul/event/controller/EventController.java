@@ -205,18 +205,7 @@ public class EventController {
             return "redirect:/event/editEvent?eventNo=" + eventNo;
         }
     }
-    @PostMapping("/deleteEvent")
-    @Transactional
-    public String deleteEvent(@RequestParam("eventNo") int eventNo, RedirectAttributes redirectAttributes) {
-        try {
-            eventService.deleteEvent(eventNo);
-            redirectAttributes.addFlashAttribute("message", "이벤트가 성공적으로 삭제되었습니다.");
-            return "redirect:/event/eventMain";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "이벤트 삭제에 실패했습니다.");
-            return "redirect:/WEB-INF/common/errorPage.jsp";
-        }
-    }
+ 
     
     @GetMapping("/editEvent")
     public String editEvent(@RequestParam("eventNo") int eventNo, Model model) {
@@ -232,5 +221,21 @@ public class EventController {
         }
         return "event/editEvent";
     }
+    @PostMapping("/deleteEvent")
+    @Transactional
+    public String deleteEvent(@RequestParam("eventNo") int eventNo, RedirectAttributes redirectAttributes) {
+        try {
+            // 이벤트 삭제 서비스 호출
+            eventService.deleteEvent(eventNo);
+            redirectAttributes.addFlashAttribute("message", "이벤트가 성공적으로 삭제되었습니다.");
+            return "redirect:/event/eventMain";
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "이벤트 삭제에 실패했습니다.");
+            return "redirect:/WEB-INF/common/errorPage.jsp";
+        }
+    }
+    
+
 }
 

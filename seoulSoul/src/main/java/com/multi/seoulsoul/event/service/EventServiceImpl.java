@@ -61,7 +61,8 @@ public class EventServiceImpl implements EventService {
 	@Override
 	@Transactional
 	public void deleteEvent(int eventNo) throws Exception {
-		eventDAO.deleteEvent(eventNo);
+		 eventDAO.deleteEventFiles(eventNo); // 먼저 이벤트에 연결된 파일을 삭제
+		    eventDAO.deleteEvent(eventNo);
 	}
 
 	@Override

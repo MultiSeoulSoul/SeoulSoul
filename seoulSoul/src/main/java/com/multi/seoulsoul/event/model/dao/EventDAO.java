@@ -24,10 +24,12 @@ public interface EventDAO {
 
 	void updateEvent(EventDTO eventDTO);
 
-	void deleteEvent(int eventNo);
+	void deleteEvent(int eventNo) throws Exception;
 
 	void updateEventImage(Map<String, Object> fileParams);
 
 	void updateEventFile(Map<String, Object> fileParams);
+
+	void deleteEventFiles(int eventNo) throws Exception;
 
 }

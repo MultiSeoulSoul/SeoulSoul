@@ -151,11 +151,22 @@
          <button class="detail-btn1"
             onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
         <form action="${pageContext.request.contextPath}/event/deleteEvent"
-            method="post" style="display: inline;">
+            method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
             <input type="hidden" name="eventNo" value="${event.eventNo}">
             <button type="submit" class="detail-btn1">삭제하기</button>
         </form>
         <br><br>
     </div>
+
+    <script type="text/javascript">
+        function confirmDeletion(event) {
+            if (confirm("정말로 이 이벤트를 삭제하시겠습니까?")) {
+                alert('이벤트가 삭제되었습니다.');
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </body>
 </html>

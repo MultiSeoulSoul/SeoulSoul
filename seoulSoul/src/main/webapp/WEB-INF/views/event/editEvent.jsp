@@ -5,107 +5,203 @@
 <head>
     <meta charset="UTF-8">
     <title>이벤트 수정</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
     <style type="text/css">
-        .detail-container {
-            margin: 0 auto;
+        .title {
+            font-family: 'Freesentation-9Black', sans-serif;
+            font-weight: bold;
             text-align: center;
         }
 
         .body-text {
-            font-family: 'Freesentation-5Black', sans-serif;
+            font-family: 'Freesentation-7Black', sans-serif;
             font-weight: normal;
             text-align: center;
-            font-size: 15px;
+            font-size: 12px;
         }
 
-        .event-title {
-            font-family: 'Freesentation-9Black', sans-serif;
-            font-weight: bold;
-            text-align: center;
-            font-size: 30px; /* 제목을 더 크게 강조 */
-            margin-bottom: 10px; /* 제목과 내용 사이에 여백 추가 */
+        .content {
+            width: 80%;
+            margin: 0 auto;
         }
 
-        .image-container {
-            width: 300px;  /* 고정된 너비 */
-            height: 400px; /* 고정된 높이 */
-            overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 숨김 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto; /* 컨테이너를 중앙으로 배치 */
-        }
-
-        .detail-image {
+        .form-group input, .form-group textarea {
             width: 100%;
-            height: auto; /* 이미지 비율을 유지하면서 너비에 맞추어 조정 */
-            max-height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
-        .detail-btn {
+        .form-group textarea {
+            resize: none;
+            height: 400px;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .left-pane, .right-pane {
+            width: 30%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .right-pane {
+            width: 68%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-pane label {
+            margin-bottom: 10px;
+        }
+
+        .address {
+            width: 96%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            height: 450px;
+            margin: 0 auto; /* 좌우 중앙 정렬 */
+        }
+
+        #b1 {
+            display: inline-block;
+            padding: 5px 10px;
             background-color: #4382A6;
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 5px 10px;
+            font-size: 14px;
             cursor: pointer;
-            margin-right: 10px;
+            transition: background-color 0.3s;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            margin-left: auto;
         }
 
-        .detail-btn:hover {
+        #b1 {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        #b1:hover {
             background-color: #0056b3;
         }
 
-        .detail-btn1 {
-            background-color: #C42A2A;
+        #image-preview {
+            width: 100%;
+            height: auto;
+            color: #999;
+            display: block;
+            text-align: center;
+            line-height: 450px;
+        }
+
+        .custom-file-input {
+            display: none;
+        }
+
+        .custom-file-label {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #4382A6;
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: 50 !important;
             cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            margin-left: auto;
+        }
+
+        .custom-file-label:hover {
+            background-color: #0056b3;
+        }
+
+        .date-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .date-group .form-group {
+            flex: 1;
             margin-right: 10px;
         }
 
-        .detail-btn1:hover {
-            background-color: #9b1d1d;
+        .date-group .form-group:last-child {
+            margin-right: 0;
         }
     </style>
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('image-preview');
+                output.src = reader.result;
+                output.style.lineHeight = 'normal';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </head>
 <body>
     <jsp:include page="../common/menubar.jsp" />
-    <div class="detail-container">
-        <h2 class="event-title">이벤트 수정</h2>
+    <div class="content">
+        <br> <br>
         <form action="${pageContext.request.contextPath}/event/updateEvent" method="post" enctype="multipart/form-data">
             <input type="hidden" name="eventNo" value="${event.eventNo}">
-            <div>
-                <label for="title">제목:</label>
-                <input type="text" id="title" name="title" value="${event.title}" required>
+            <!-- 제목 -->
+            <div class="form-group">
+                <label for="title"></label>
+                <input type="text" id="title" name="title" value="${event.title}" placeholder="제목:" required>
             </div>
-            <div>
-                <label for="content">내용:</label>
-                <textarea id="content" name="content" required>${event.content}</textarea>
+            <!-- 시작일과 종료일 같은 줄에 배치 -->
+            <div class="date-group">
+                <div class="form-group">
+                    <label for="startDate">시작일</label>
+                    <input type="datetime-local" id="startDate" name="startDate" value="${event.startDate}" placeholder="시작일:" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">종료일</label>
+                    <input type="datetime-local" id="endDate" name="endDate" value="${event.endDate}" placeholder="종료일:" required>
+                </div>
             </div>
-            <div>
-                <label for="address">주소:</label>
-                <input type="text" id="address" name="address" value="${event.address}" required>
+            <!-- 주소 -->
+            <div class="form-group">
+                <label for="address"></label>
+                <input type="text" id="address" name="address" value="${event.address}" placeholder="주소:" required>
             </div>
-            <div>
-                <label for="startDate">시작 날짜:</label>
-                <input type="datetime-local" id="startDate" name="startDate" value="${event.startDate}" required>
+            <div class="form-container">
+                <!-- 이미지 첨부 -->
+                <div class="left-pane">
+                    <label for="image" class="custom-file-label">이미지 첨부</label>
+                    <input type="file" id="image" name="image" accept="image/*" class="custom-file-input" onchange="previewImage(event)">
+                    <img id="image-preview" src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${event.imagePath}" alt="Image preview">
+                </div>
+                <!-- 내용 작성 -->
+                <div class="right-pane">
+                    <label for="content">내용 작성</label>
+                    <textarea id="content" name="content" rows="25" required>${event.content}</textarea>
+                </div>
             </div>
-            <div>
-                <label for="endDate">종료 날짜:</label>
-                <input type="datetime-local" id="endDate" name="endDate" value="${event.endDate}" required>
-            </div>
-            <div>
-                <label for="image">이미지 업로드:</label>
-                <input type="file" id="image" name="image">
-            </div>
-            <div>
-                <button type="submit" class="detail-btn">수정하기</button>
-                <button type="button" class="detail-btn1" onclick="history.back()">취소</button>
-            </div>
+            <button type="submit" class="submit-button" id="b1">수정 완료</button>
         </form>
     </div>
+    <br><br>
 </body>
 </html>
