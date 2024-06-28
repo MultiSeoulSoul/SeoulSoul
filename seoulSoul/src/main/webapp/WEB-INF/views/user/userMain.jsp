@@ -396,7 +396,6 @@
                     <span>용산구</span>
                     <span>20%</span>
                 </div>
-                <!-- 추가적인 차트 아이템들 -->
             </div>
             <div class="board">
                 <ul class="board-tabs">

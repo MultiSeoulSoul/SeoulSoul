@@ -29,7 +29,7 @@
 	<logger name="com.multi.seoulsoul" level="debug" />
 	<logger name="jdbc.sqlonly" level="debug" />
 
-	<root level="trace">
+	<root level="debug">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="file" />
 	</root>

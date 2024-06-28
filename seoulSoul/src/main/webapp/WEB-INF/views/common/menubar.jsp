@@ -28,7 +28,7 @@
         <div class="user-menu">
             <a href="${pageContext.request.contextPath}/user/userMain">
 
-            	<sec:authentication property="name"/> 님 | </a>
+            	<sec:authentication property="principal.nickname"/> 님 | </a>
             	<a href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
             <form id="logoutForm" method="post" action="${pageContext.request.contextPath}/user/logout" style="display:none;">
             	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

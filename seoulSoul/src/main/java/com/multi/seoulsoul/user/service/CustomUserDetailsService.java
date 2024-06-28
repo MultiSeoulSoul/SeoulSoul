@@ -34,6 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserDTO userDTO = userDAO.findUserByUsername(sqlSession, userId);
         
         if (userDTO == null) {
+        	System.out.println("ID가없습니다");
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
 

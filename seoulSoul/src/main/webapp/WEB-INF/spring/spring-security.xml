@@ -12,9 +12,11 @@
 	<bean id="BCryptPasswordEncoder" name="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
     <security:http auto-config="true">
+    <security:csrf disabled="true"/>
 	    <security:intercept-url pattern="/login.jsp" access="permitAll" />
 	    <security:intercept-url pattern="/join.jsp" access="permitAll" />
 	    <security:intercept-url pattern="/index.jsp" access="permitAll" />
+	    <security:intercept-url pattern="/kakao/**" access="permitAll" />
 	    
     	<security:intercept-url pattern="/main.jsp" access="isAuthenticated()" />
         <security:intercept-url pattern="/soulLog/**" access="isAuthenticated()" />
