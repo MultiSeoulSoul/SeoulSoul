@@ -199,11 +199,11 @@ public class AchieveController {
     }
 	
     @GetMapping("/achLocaUpdateForm")
-    public String achieveUpdateForm(@RequestParam("achNo") int achNo, Model model) {
+    public String achieveUpdateForm(@RequestParam("achNo") int achNo, Model model) throws Exception {
         // 기존 업적 데이터 가져오기
         AchLocaDTO achLoca = achieveService.getAchLocaById(achNo);
         AchLocaIconsDTO achLocaIcons = achieveService.getAchLocaIconsByAchNo(achNo);
-        List<LocationDTO> locationList = achieveService.getAllLocations();
+        List<LocationDTO> locationList = soulLogService.selectLocationList();
         
         // 모델에 데이터 추가
         model.addAttribute("achLoca", achLoca);
@@ -214,9 +214,34 @@ public class AchieveController {
     }
 	
 	@GetMapping("/achCateUpdateForm")
-	public String achCateUpdateForm() {
+	public String achCateUpdateForm(@RequestParam("achNo") int achNo, Model model) throws Exception {
+		
+		AchCateDTO achCate = achieveService.getAchCateById(achNo);
+        AchCateIconsDTO achCateIcons = achieveService.getAchCateIconsByAchNo(achNo);
+        List<CategoryDTO> categoryList = soulLogService.selectCategoryList();
+        
+        model.addAttribute("achCate", achCate);
+        model.addAttribute("achCateIcons", achCateIcons);
+        model.addAttribute("categoryList", categoryList);
+        
 		return "achieve/achCateUpdateForm";
 	}
+	
+	@PostMapping("/achLocaUpdateForm")
+    public String achieveUpdate(AchLocaDTO achLocaDTO, 
+                                AchLocaIconsDTO achLocaIconsDTO,
+                                @RequestParam("singleFile") MultipartFile singleFile,
+                                HttpServletRequest request, 
+                                Model model) {
+        try {
+            achieveService.updateAchLoca(achLocaDTO, achLocaIconsDTO, singleFile, request);
+            return "redirect:/admin/adminMain";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "업적 수정 실패");
+            return "error";
+        }
+    }
 	
 	@GetMapping("/deleteLoca")
 	public String achieveDeleteLoca(AchLocaDTO achLocaDTO) {

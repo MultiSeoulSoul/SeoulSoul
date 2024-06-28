@@ -72,13 +72,13 @@
     </select>
 	
 	<insert id="insertAchieveLoca" parameterType="achLocaDTO" useGeneratedKeys="true" keyProperty="achNo">
-		insert into ACH_LOCA
-		values (null, #{locationCode}, #{maxCount}, #{title}, null, null)
+		insert into ACH_LOCA (location_code, max_count, title)
+		values (#{locationCode}, #{maxCount}, #{title})
 	</insert>
 	
 	<insert id="insertAchieveCate" parameterType="achCateDTO" useGeneratedKeys="true" keyProperty="achNo">
-		insert into ACH_CATE
-		values (null, #{categoryCode}, #{maxCount}, #{title}, null, null)
+		insert into ACH_CATE (category_code, max_count, title)
+		values (#{categoryCode}, #{maxCount}, #{title})
 	</insert>
 	
 	<insert id="insertLocaIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
@@ -98,13 +98,13 @@
 	<select id="selectAchieveCate" resultType="achCateDTO">
 		select * from ACH_CATE
 	</select>
-	
-    <select id="selectAchLocaById" resultType="achLocaDTO">
-        SELECT * FROM ACH_LOCA WHERE ach_no = #{achNo}
-    </select>
     
     <select id="selectAchLocaIconsByAchNo" resultType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
         SELECT * FROM ACH_LOCA_ICONS WHERE ach_no = #{achNo}
+    </select>
+    
+    <select id="selectAchCateIconsByAchNo" resultType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+        SELECT * FROM ACH_CATE_ICONS WHERE ach_no = #{achNo}
     </select>
 	
 	<select id="findAllAchLoca" resultType="achLocaDTO">
@@ -118,6 +118,38 @@
         order by ach_no
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
+    
+    <update id="updateAchLoca" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO">
+        UPDATE ACH_LOCA
+        SET location_code = #{locationCode},
+            max_count = #{maxCount},
+            title = #{title},
+            modified_date = CURRENT_TIMESTAMP
+        WHERE ach_no = #{achNo}
+    </update>
+
+    <update id="updateLocaIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+        UPDATE ACH_LOCA_ICONS
+        SET original_name = #{originalName},
+            saved_name = #{savedName}
+        WHERE ach_no = #{achLoca.achNo}
+    </update>
+    
+    <update id="updateAchCate" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO">
+        UPDATE ACH_CATE
+        SET category_code = #{categoryCode},
+            max_count = #{maxCount},
+            title = #{title},
+            modified_date = CURRENT_TIMESTAMP
+        WHERE ach_no = #{achNo}
+    </update>
+
+    <update id="updateCateIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+        UPDATE ACH_CATE_ICONS
+        SET original_name = #{originalName},
+            saved_name = #{savedName}
+        WHERE ach_no = #{achCate.achNo}
+    </update>
 	
 	<delete id="deleteAchieveLoca" parameterType="int">
 		delete from ACH_LOCA where ach_no = #{achNo}

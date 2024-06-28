@@ -89,36 +89,36 @@
         <!-- 기존 데이터 표시 -->
         <div class="existing-data">
             <h3>기존 업적 데이터</h3>
-            <p><strong>업적 번호:</strong> ${achLoca.achNo}</p>
-            <p><strong>자치구:</strong> ${achLoca.locationCode}</p>
-            <p><strong>필요 횟수:</strong> ${achLoca.maxCount}</p>
-            <p><strong>타이틀명:</strong> ${achLoca.title}</p>
-            <p><strong>업적 아이콘:</strong> <img src="${pageContext.request.contextPath}/resources/uploadFiles/${achLocaIcons.savedName}" alt="업적 아이콘"></p>
+            <p><strong>업적 번호:</strong> ${achCate.achNo}</p>
+            <p><strong>자치구:</strong> ${achCate.categoryCode}</p>
+            <p><strong>필요 횟수:</strong> ${achCate.maxCount}</p>
+            <p><strong>타이틀명:</strong> ${achCate.title}</p>
+            <p><strong>업적 아이콘:</strong> <img src="${pageContext.request.contextPath}/resources/uploadFiles/${achCateIcons.savedName}" alt="업적 아이콘"></p>
         </div>
 
         <!-- 수정 폼 -->
         <div class="full-width">
-            <form action="${pageContext.request.contextPath}/admin/achLocaUpdateForm" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="achNo" value="${achLoca.achNo}">
+            <form action="${pageContext.request.contextPath}/admin/achCateUpdateForm" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="achNo" value="${achCate.achNo}">
                 <div class="form-group">
                     <label for="singleFile"><strong>업적 아이콘 업로드 폼</strong></label>
                     <input type="file" id="singleFile" name="singleFile">
                 </div>
                 <div class="form-group">
-                    <label for="locationCode"><strong>업적 조건 입력 폼</strong></label>
-                    <select id="locationCode" name="locationCode">
-                        <c:forEach items="${locationList}" var="location">
-                            <option value="${location.locationCode}" ${location.locationCode == achLoca.locationCode ? 'selected' : ''}>${location.locationName}</option>
+                    <label for="categoryCode"><strong>업적 조건 입력 폼</strong></label>
+                    <select id="categoryCode" name="categoryCode">
+                        <c:forEach items="${categoryList}" var="category">
+                            <option value="${category.categoryCode}" ${category.categoryCode == achCate.categoryCode ? 'selected' : ''}>${category.categoryName}</option>
                         </c:forEach>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="maxCount"><strong>필요 횟수 입력 폼</strong></label>
-                    <input type="number" id="maxCount" name="maxCount" value="${achLoca.maxCount}">
+                    <input type="number" id="maxCount" name="maxCount" value="${achCate.maxCount}">
                 </div>
                 <div class="form-group">
                     <label for="title"><strong>타이틀 이름 입력 폼</strong></label>
-                    <input type="text" id="title" name="title" value="${achLoca.title}">
+                    <input type="text" id="title" name="title" value="${achCate.title}">
                 </div>
                 <div class="button-group">
                     <button type="button" class="back" onclick="history.back()">뒤로가기</button>

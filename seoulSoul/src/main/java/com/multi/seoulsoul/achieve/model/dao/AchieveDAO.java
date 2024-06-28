@@ -76,4 +76,35 @@ public class AchieveDAO {
 		return sqlSession.selectOne("achieveMapper.selectAchLocaById", achNo);
 	}
 
+	public AchLocaIconsDTO selectAchLocaIconsByAchNo(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("achieveMapper.selectAchLocaIconsByAchNo", achNo);
+	}
+	
+    public int updateAchLoca(SqlSessionTemplate sqlSession, AchLocaDTO achLocaDTO) {
+        return sqlSession.update("achieveMapper.updateAchLoca", achLocaDTO);
+    }
+
+    public int updateLocaIcons(SqlSessionTemplate sqlSession, AchLocaIconsDTO achLocaIconsDTO) {
+        return sqlSession.update("achieveMapper.updateLocaIcons", achLocaIconsDTO);
+    }
+    
+    public AchCateDTO selectAchCateById(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("achieveMapper.selectAchCateById", achNo);
+	}
+
+	public AchCateIconsDTO selectAchCateIconsByAchNo(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("achieveMapper.selectAchCateIconsByAchNo", achNo);
+	}
+    
+    public int updateAchCate(SqlSessionTemplate sqlSession, AchCateDTO achCateDTO) {
+        return sqlSession.update("achieveMapper.updateAchLoca", achCateDTO);
+    }
+
+    public int updateCateIcons(SqlSessionTemplate sqlSession, AchCateIconsDTO achCateIconsDTO) {
+        return sqlSession.update("achieveMapper.updateCateIcons", achCateIconsDTO);
+    }
+
 }
