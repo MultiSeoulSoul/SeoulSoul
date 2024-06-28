@@ -9,6 +9,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
@@ -592,8 +595,49 @@ public class SoulLogController {
 			
 		}
 		
+	}
+	
+	
+	@PostMapping("/insertLike")
+	public ResponseEntity<Void> insertLike(LikesDTO likesDTO) {
+		
+		System.out.println("좋아요 추가할 로그 No는 >>>>> " + likesDTO.getSoulLogNo());
+		System.out.println("좋아요하는 유저 No는 >>>>> " + likesDTO.getUserNo());
+		
+		try {
+			
+			soulLogService.insertLike(likesDTO);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
 		
 		
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
+	
+	@PostMapping("/deleteLike")
+	public ResponseEntity<Void> deleteLike(LikesDTO likesDTO) {
+		
+		System.out.println("좋아요 취소할 로그 No는 >>>>> " + likesDTO.getSoulLogNo());
+		System.out.println("좋아요 취소하는 유저 No는 >>>>> " + likesDTO.getUserNo());
+		
+		try {
+			
+			soulLogService.deleteLike(likesDTO);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 		
 	}
 	

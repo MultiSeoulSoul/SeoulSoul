@@ -12,6 +12,7 @@ import com.multi.seoulsoul.soulLog.model.dao.SoulLogDAO;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
@@ -186,6 +187,22 @@ public class SoulLogServiceImpl implements SoulLogService {
 	public int updateSoulLogReply(RepliesDTO repliesDTO) throws Exception {
 		
 		return soulLogDAO.updateSoulLogReply(sqlSession, repliesDTO);
+		
+	}
+
+
+	@Override
+	public int insertLike(LikesDTO likesDTO) throws Exception {
+		
+		return soulLogDAO.insertLike(sqlSession, likesDTO);
+		
+	}
+
+
+	@Override
+	public int deleteLike(LikesDTO likesDTO) throws Exception {
+		
+		return soulLogDAO.deleteLike(sqlSession, likesDTO);
 		
 	}
 	

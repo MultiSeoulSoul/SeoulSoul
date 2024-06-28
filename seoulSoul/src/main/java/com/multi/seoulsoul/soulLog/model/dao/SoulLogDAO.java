@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
@@ -115,6 +116,18 @@ public class SoulLogDAO {
 	public int updateSoulLogReply(SqlSessionTemplate sqlSession, RepliesDTO repliesDTO) {
 		
 		return sqlSession.update("soulLogMapper.updateSoulLogReply", repliesDTO);
+		
+	}
+
+	public int insertLike(SqlSessionTemplate sqlSession, LikesDTO likesDTO) {
+		
+		return sqlSession.insert("soulLogMapper.insertLike", likesDTO);
+		
+	}
+
+	public int deleteLike(SqlSessionTemplate sqlSession, LikesDTO likesDTO) {
+		
+		return sqlSession.delete("soulLogMapper.deleteLike", likesDTO);
 		
 	}
 

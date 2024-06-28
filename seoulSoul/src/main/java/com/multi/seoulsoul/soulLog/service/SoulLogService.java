@@ -5,6 +5,7 @@ import java.util.List;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
@@ -43,5 +44,9 @@ public interface SoulLogService {
 	int insertImage(FilesDTO file) throws Exception;
 
 	int updateSoulLogReply(RepliesDTO repliesDTO) throws Exception;
+
+	int insertLike(LikesDTO likesDTO) throws Exception;
+
+	int deleteLike(LikesDTO likesDTO) throws Exception;
 	
 }

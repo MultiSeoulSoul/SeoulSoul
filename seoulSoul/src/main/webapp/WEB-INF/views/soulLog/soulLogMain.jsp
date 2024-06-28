@@ -150,7 +150,7 @@
 	<div class="card-grid" style="padding-left: 0px; padding-right: 0px;">
 		<c:forEach items="${soulLogList}" var="one">
 			<div class="card">
-	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}" style="width: 238px; height: 238px;">
+	            <img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.files[0].savedName}" style="width: 241px; height: 241px;">
 	            <div class="card-content">
 	                <h3>${one.title}<input type="hidden" value="soulLogDetail?soulLogNo=${one.soulLogNo}"></h3>
 	                <span style="margin-right:10px">${one.location.locationName}</span><span>|</span><span style="margin-left:10px">${one.category.categoryName}</span>

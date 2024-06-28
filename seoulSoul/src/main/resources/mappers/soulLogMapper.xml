@@ -297,6 +297,23 @@
 		SET content = #{ content }
 		WHERE reply_no = #{ replyNo }
 	</update>
+	
+	
+	<insert id="insertLike" parameterType="com.multi.seoulsoul.soulLog.model.dto.LikesDTO">
+		INSERT INTO SL_LIKE
+			(user_no, soul_log_no)
+		VALUES
+			(
+			#{ userNo },
+			#{ soulLogNo }
+			)
+	</insert>
+	
+	
+	<delete id="deleteLike" parameterType="com.multi.seoulsoul.soulLog.model.dto.LikesDTO">
+		DELETE FROM SL_LIKE
+		WHERE user_no = #{ userNo } AND soul_log_no = #{ soulLogNo }
+	</delete>
 
 	
 

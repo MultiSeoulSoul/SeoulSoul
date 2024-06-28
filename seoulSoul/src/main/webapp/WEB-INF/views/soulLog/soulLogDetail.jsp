@@ -27,12 +27,69 @@ function updateReply(num) {
 }
 </script>
 
+<script>
+function activatingLike() {
+	
+    document.getElementById('inactiveLike').style.display = 'none';
+    document.getElementById('activeLike').style.display = 'inline';
+    
+    var userNo = 2; // 로그인된 유저의 No로 수정 필요!
+    var soulLogNo = parseInt("${soulLogDetail.soulLogNo}", 10);
+    var likesCount = parseInt("${soulLogDetail.likesCount}", 10);
+    
+    $.ajax({
+    	url: "${pageContext.servletContext.contextPath}/soulLog/insertLike", 
+    	type: 'POST', 
+    	data: {
+    		userNo: userNo,
+    		soulLogNo: soulLogNo
+    	},
+    	success: function(response) {
+    		var spanElement = document.getElementById('likesCount');
+    		var curLikeCount = parseInt(spanElement.textContent, 10);
+    		spanElement.textContent = curLikeCount + 1;
+    	},
+    	error: function(error) {
+    		
+    	}
+    });
+}
+
+function inactivatingLike() {
+	document.getElementById('inactiveLike').style.display = 'inline';
+    document.getElementById('activeLike').style.display = 'none';
+    
+    var userNo = 2; // 로그인된 유저의 No로 수정 필요!
+    var soulLogNo = parseInt("${soulLogDetail.soulLogNo}", 10);
+    var likesCount = parseInt("${soulLogDetail.likesCount}", 10);
+    
+    $.ajax({
+    	url: "${pageContext.servletContext.contextPath}/soulLog/deleteLike", 
+    	type: 'POST', 
+    	data: {
+    		userNo: userNo,
+    		soulLogNo: soulLogNo
+    	},
+    	success: function(response) {
+    		var spanElement = document.getElementById('likesCount');
+    		var curLikeCount = parseInt(spanElement.textContent, 10);
+    		spanElement.textContent = curLikeCount - 1;
+    	},
+    	error: function(error) {
+    		
+    	}
+    });
+    
+}
+
+</script>
+
 </head>
 <body>
 
 <jsp:include page="../common/menubar.jsp"/>
 
-<div class="content" style="margin: 30px">
+<div class="content" style="margin: 30px;">
 		
 		<div style="height: 50px; background: white">
 			<span style="margin-left:20px">제목</span>
@@ -60,24 +117,52 @@ function updateReply(num) {
 		</div>
 		
 		<br>
-	
-		<table>
-			<tr>
-				<c:forEach items="${soulLogDetail.files}" var="one">
-					<td>
-						<div style="width: 240px; height: 240px; margin-right: 14px; background: white">
-							<img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.savedName}" width="240px" height="240px">
-						</div>
-					</td>
-				</c:forEach>
-			</tr>
-		</table>
+		
+		<div style="background: white; padding: 20px;">
+			<table>
+				<tr>
+					<c:forEach items="${soulLogDetail.files}" var="one">
+						<td>
+							<div style="width: 230px; height: 225px; margin-right: 17px; background: white">
+								<img src="${pageContext.servletContext.contextPath}/resources/uploadFiles/${one.savedName}" width="225px" height="225px">
+							</div>
+						</td>
+					</c:forEach>
+				</tr>
+			</table>
+		</div>
 		
 		<br>
 		
-		<span style="margin-right:20px; font-size:20px;">&#128153; &nbsp;${soulLogDetail.likesCount}</span>
-	    <span style="margin-right:20px; font-size:20px;">&#128064; &nbsp;${soulLogDetail.views}</span>
-	    <span style="font-size:20px;">&#128172; &nbsp;${soulLogDetail.repliesCount}</span>
+		<span id="likeSpan" style="margin-right:7px">
+		
+			<svg id="activeLike" xmlns="http://www.w3.org/2000/svg" width="22" viewBox="0 0 512 512" fill="#1172F8" onclick="inactivatingLike()"
+			style="cursor: pointer; 
+				
+				<c:if test="${soulLogDetail.viewerLike == 0}">display: none;</c:if>
+				<c:if test="${soulLogDetail.viewerLike == 1}">display: inline;</c:if>
+			
+			">
+            	<!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            	<path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+        	</svg>
+        	
+        	<svg id="inactiveLike" xmlns="http://www.w3.org/2000/svg" width="22" viewBox="0 0 512 512" fill="#C0C0C0" onclick="activatingLike()"
+        	style="cursor: pointer; 
+        	
+        		<c:if test="${soulLogDetail.viewerLike == 0}">display: inline</c:if>
+				<c:if test="${soulLogDetail.viewerLike == 1}">display: none;</c:if>
+        	
+        	">
+            	<!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            	<path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+        	</svg>
+        	
+        </span>
+		
+		<span id="likesCount" style="margin-right:40px; font-size:24px;">${soulLogDetail.likesCount}</span>
+	    <span style="margin-right:40px; font-size:24px;">&#128064; &nbsp;${soulLogDetail.views}</span>
+	    <span style="font-size:24px;">&#128172; &nbsp;${soulLogDetail.repliesCount}</span>
 	    
 	    <br>
 		<br>
@@ -101,7 +186,7 @@ function updateReply(num) {
 						<td>
 							<input type="hidden" name="soulLogNo" value="${soulLogDetail.soulLogNo}">
 							<input type="hidden" name="userNo" value="2"> <!-- 로그인된 유저no로 바꿔야 함. post라 컨트롤러에서 안 받아도 될지도.. -->
-							<input id="content" name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 댓글 입력..." maxlength="100" required>
+							<input id="content" name="content" style="width: 917px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 댓글 입력..." maxlength="100" required>
 						</td>
 						<td>
 							<button type="submit" style="width: 110px; height: 35px; margin-left: 30px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">댓글 작성</button>
