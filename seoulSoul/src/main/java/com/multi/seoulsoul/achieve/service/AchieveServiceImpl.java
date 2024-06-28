@@ -5,12 +5,17 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class AchieveServiceImpl implements AchieveService {
 	
 	private final AchieveDAO achieveDAO;
@@ -23,19 +28,25 @@ public class AchieveServiceImpl implements AchieveService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public int insertAchieveLoca(AchLocaDTO achLocaDTO) {
-		// TODO Auto-generated method stub
-		System.out.println("insertAchieveLoca AchieveServiceImpl 도착.");
-		
-		int result = achieveDAO.insertAchieveLoca(sqlSession, achLocaDTO);
-		
-		System.out.println("result >> " + result);
-		
-		return result;
-	}
+    public int insertAchieveLoca(AchLocaDTO achLocaDTO) throws Exception {
+        int result = achieveDAO.insertAchieveLoca(sqlSession, achLocaDTO);
+        if (result <= 0) {
+            throw new Exception("업적 생성 실패.");
+        }
+        return result;
+    }
+
+    @Override
+    public int insertLocaIcons(AchLocaIconsDTO achLocaIconsDTO) throws Exception {
+        int result = achieveDAO.insertLocaIcons(sqlSession, achLocaIconsDTO);
+        if (result <= 0) {
+            throw new Exception("아이콘 삽입 실패.");
+        }
+        return result;
+    }
 
 	@Override
-	public int insertAchieveCate(AchCateDTO achCateDTO) {
+	public int insertAchieveCate(AchCateDTO achCateDTO) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("insertAchieveCate AchieveServiceImpl 도착.");
 		
@@ -44,6 +55,16 @@ public class AchieveServiceImpl implements AchieveService {
 		System.out.println("result >> " + result);
 		
 		return result;
+	}
+
+	@Override
+	public int insertCateIcons(AchCateIconsDTO achCateIconsDTO) throws Exception {
+		int result = achieveDAO.insertCateIcons(sqlSession, achCateIconsDTO);
+        if (result <= 0) {
+            throw new Exception("아이콘 삽입 실패.");
+        }
+        return result;
+		
 	}
 
 	@Override
@@ -65,6 +86,11 @@ public class AchieveServiceImpl implements AchieveService {
 		
 		return achieveCateList;
 	}
+	
+	@Override
+    public AchLocaDTO getAchLocaById(int achNo) {
+        return achieveDAO.selectAchLocaById(sqlSession, achNo);
+    }
 
 	@Override
 	public int deleteAchieveLoca(int achNo) {
@@ -88,6 +114,16 @@ public class AchieveServiceImpl implements AchieveService {
 		System.out.println("result >> " + result);
 		
 		return result;
+	}
+
+	@Override
+	public List<UserDTO> userList() {
+		// TODO Auto-generated method stub
+		System.out.println("userList AchieveServiceImpl 도착.");
+
+		List<UserDTO> userList = achieveDAO.userList(sqlSession);
+		
+		return userList;
 	}
 
 }

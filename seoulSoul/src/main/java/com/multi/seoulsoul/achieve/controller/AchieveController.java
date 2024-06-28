@@ -1,6 +1,10 @@
 package com.multi.seoulsoul.achieve.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,10 +12,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.service.AchieveService;
+import com.multi.seoulsoul.report.model.dto.ReportDTO;
+import com.multi.seoulsoul.report.service.ReportService;
+import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
+import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
+import com.multi.seoulsoul.soulLog.service.SoulLogService;
+import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 
 @Controller
@@ -19,53 +33,189 @@ import com.multi.seoulsoul.achieve.service.AchieveService;
 public class AchieveController {
 	
 	private final AchieveService achieveService;
+	private final ReportService reportService;
+	private final SoulLogService soulLogService;
 	@Autowired
-	public AchieveController(AchieveService achieveService) {
+	public AchieveController(AchieveService achieveService, ReportService reportService, SoulLogService soulLogService) {
 		this.achieveService = achieveService;
+		this.reportService = reportService;
+		this.soulLogService = soulLogService;
 	}
 	
 	@GetMapping("/adminMain")
 	public String adminMainPage(Model model) {
 		System.out.println("관리자 메인 페이지 호출 성공.");
+		
 		List<AchLocaDTO> achieveLocaList = achieveService.achieveLocaList();
 		List<AchCateDTO> achieveCateList = achieveService.achieveCateList();
+		
+		List<ReportDTO> reportList = reportService.reportList();
+		List<UserDTO> userList = achieveService.userList();
         
         model.addAttribute("achieveLocaList", achieveLocaList);
         model.addAttribute("achieveCateList", achieveCateList);
         
+        model.addAttribute("reportList", reportList);
+        model.addAttribute("userList", userList);
+        
 		return "achieve/adminMain";
 	}
 	
-	@GetMapping("/achieveInsertForm")
-	public String achieveInsertForm() {
-		return "achieve/achieveInsertForm";
+	@GetMapping("/achLocaInsertForm")
+	public String achLocaInsertForm(Model model) throws Exception {
+		List<LocationDTO> locationList = soulLogService.selectLocationList();
+        model.addAttribute("locationList", locationList);
+		return "achieve/achLocaInsertForm";
 	}
 	
-	@PostMapping("/achieveInsertForm")
-	public String achieveInsertForm(AchLocaDTO achLocaDTO, AchCateDTO achCateDTO) {
-		System.out.println("Post >> achieveInsertForm.");
-		System.out.println("Post >> " + achLocaDTO);
-		
-		int result = 0;
-		
-		if (achLocaDTO.getLocationCode() != 0) {
-			result = achieveService.insertAchieveLoca(achLocaDTO);
-		} else {
-			result = achieveService.insertAchieveCate(achCateDTO);
-		}
-		
-		if (result > 0) {
-			System.out.println("업적 생성 성공.");
-		} else {
-			System.out.println("업적 생성 실패.");
-		}
-		
-		return "redirect:/admin/adminMain";
+	@GetMapping("/achCateInsertForm")
+	public String achCateInsertForm(Model model) throws Exception {
+		List<CategoryDTO> categoryList = soulLogService.selectCategoryList();
+        model.addAttribute("categoryList", categoryList);
+		return "achieve/achCateInsertForm";
 	}
 	
-	@GetMapping("achieveUpdateForm")
-	public String achieveUpdateForm() {
-		return "achieve/achieveUpdateForm";
+	@PostMapping("/achLocaInsertForm")
+    public String achLocaInsertForm(AchLocaDTO achLocaDTO,
+                                    AchLocaIconsDTO achLocaIconsDTO,
+                                    HttpServletRequest request, 
+                                    MultipartFile singleFile, 
+                                    Model model) {
+        
+        System.out.println("Post >> achLocaInsertForm.");
+        System.out.println("Post >> " + achLocaDTO);
+        
+        try {
+            achieveService.insertAchieveLoca(achLocaDTO);
+            
+            System.out.println("업적 생성 성공.");
+            
+            System.out.println("singleFile : " + singleFile);
+            
+            String root = request.getSession().getServletContext().getRealPath("resources");
+            
+            System.out.println("root : " + root);
+            
+            String filePath = root + "/uploadFiles";
+            
+            File mkdir = new File(filePath);
+            if (!mkdir.exists()) {
+                mkdir.mkdirs();
+            }
+            
+            /* 파일명 변경 처리 */
+            String originFileName = singleFile.getOriginalFilename();
+            String ext = originFileName.substring(originFileName.lastIndexOf("."));
+            String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+            
+            /* 파일을 저장한다. */
+            saveFile(singleFile, filePath, savedName);
+            
+            model.addAttribute("savedName", savedName);
+            
+            System.out.println("img넣기 전 >> " + achLocaIconsDTO);
+            achLocaIconsDTO.setAchLoca(achLocaDTO);  // 여기서 achNo가 설정됨
+            achLocaIconsDTO.setOriginalName(originFileName);
+            achLocaIconsDTO.setSavedName(savedName);
+            System.out.println("img넣은 후 >> " + achLocaIconsDTO);
+            
+            achieveService.insertLocaIcons(achLocaIconsDTO);
+            model.addAttribute("achLocaIconsDTO", achLocaIconsDTO);
+            System.out.println("insertMovie 후 >> " + achLocaIconsDTO);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "업적 생성 실패: " + e.getMessage());
+            return "redirect:/admin/adminMain";
+        }
+        
+        return "redirect:/admin/adminMain";
+    }
+
+    private void saveFile(MultipartFile file, String filePath, String fileName) throws Exception {
+        try {
+            file.transferTo(new File(filePath + "/" + fileName));
+        } catch (Exception e) {
+            new File(filePath + "/" + fileName).delete();
+            throw new Exception("파일 업로드 실패");
+        }
+    }
+	
+    @PostMapping("/achCateInsertForm")
+    public String achCateInsertForm(AchCateDTO achCateDTO,
+                                    AchCateIconsDTO achCateIconsDTO,
+                                    HttpServletRequest request, 
+                                    MultipartFile singleFile, 
+                                    Model model) {
+        
+        System.out.println("Post >> achCateInsertForm.");
+        System.out.println("Post >> " + achCateDTO);
+        
+        try {
+            achieveService.insertAchieveCate(achCateDTO);
+            
+            System.out.println("업적 생성 성공.");
+            
+            System.out.println("singleFile : " + singleFile);
+            
+            String root = request.getSession().getServletContext().getRealPath("resources");
+            
+            System.out.println("root : " + root);
+            
+            String filePath = root + "/uploadFiles";
+            
+            File mkdir = new File(filePath);
+            if (!mkdir.exists()) {
+                mkdir.mkdirs();
+            }
+            
+            /* 파일명 변경 처리 */
+            String originFileName = singleFile.getOriginalFilename();
+            String ext = originFileName.substring(originFileName.lastIndexOf("."));
+            String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+            
+            /* 파일을 저장한다. */
+            saveFile(singleFile, filePath, savedName);
+            
+            model.addAttribute("savedName", savedName);
+            
+            System.out.println("img넣기 전 >> " + achCateIconsDTO);
+            achCateIconsDTO.setAchCate(achCateDTO);  // 여기서 achNo가 설정됨
+            achCateIconsDTO.setOriginalName(originFileName);
+            achCateIconsDTO.setSavedName(savedName);
+            System.out.println("img넣은 후 >> " + achCateIconsDTO);
+            
+            achieveService.insertCateIcons(achCateIconsDTO);
+            model.addAttribute("achLocaIconsDTO", achCateIconsDTO);
+            System.out.println("insertMovie 후 >> " + achCateIconsDTO);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "업적 생성 실패: " + e.getMessage());
+            return "redirect:/admin/adminMain";
+        }
+        
+        return "redirect:/admin/adminMain";
+    }
+	
+    @GetMapping("/achLocaUpdateForm")
+    public String achieveUpdateForm(@RequestParam("achNo") int achNo, Model model) {
+        // 기존 업적 데이터 가져오기
+        AchLocaDTO achLoca = achieveService.getAchLocaById(achNo);
+        AchLocaIconsDTO achLocaIcons = achieveService.getAchLocaIconsByAchNo(achNo);
+        List<LocationDTO> locationList = achieveService.getAllLocations();
+        
+        // 모델에 데이터 추가
+        model.addAttribute("achLoca", achLoca);
+        model.addAttribute("achLocaIcons", achLocaIcons);
+        model.addAttribute("locationList", locationList);
+        
+        return "achieve/achLocaUpdateForm";
+    }
+	
+	@GetMapping("/achCateUpdateForm")
+	public String achCateUpdateForm() {
+		return "achieve/achCateUpdateForm";
 	}
 	
 	@GetMapping("/deleteLoca")
@@ -85,11 +235,11 @@ public class AchieveController {
 	}
 	
 	@GetMapping("/deleteCate")
-	public String achieveDeleteCate(AchLocaDTO achLocaDTO) {
+	public String achieveDeleteCate(AchCateDTO achCateDTO) {
 		System.out.println("Request >> achieveDelete.");
-		System.out.println("Request >> " + achLocaDTO);
+		System.out.println("Request >> " + achCateDTO);
 		
-		int result = achieveService.deleteAchieveLoca(achLocaDTO.getAchNo());
+		int result = achieveService.deleteAchieveCate(achCateDTO.getAchNo());
 		
 		if (result > 0) {
 			System.out.println("업적 삭제 성공.");

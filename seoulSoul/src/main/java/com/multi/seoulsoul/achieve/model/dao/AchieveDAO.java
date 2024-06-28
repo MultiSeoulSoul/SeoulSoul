@@ -6,7 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Repository
 public class AchieveDAO {
@@ -51,6 +54,26 @@ public class AchieveDAO {
 		System.out.println("deleteAchieveCate AchieveDAO 도착.");
 		
 		return sqlSession.delete("achieveMapper.deleteAchieveCate", achNo);
+	}
+
+	public List<UserDTO> userList(SqlSessionTemplate sqlSession) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("userMapper.selectUserList");
+	}
+
+	public int insertLocaIcons(SqlSessionTemplate sqlSession, AchLocaIconsDTO achLocaIconsDTO) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("achieveMapper.insertLocaIcons", achLocaIconsDTO);
+	}
+
+	public int insertCateIcons(SqlSessionTemplate sqlSession, AchCateIconsDTO achCateIconsDTO) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("achieveMapper.insertCateIcons", achCateIconsDTO);
+	}
+
+	public AchLocaDTO selectAchLocaById(SqlSessionTemplate sqlSession, int achNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("achieveMapper.selectAchLocaById", achNo);
 	}
 
 }

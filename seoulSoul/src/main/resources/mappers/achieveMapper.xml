@@ -71,14 +71,24 @@
         WHERE ach_no = #{achNo}
     </select>
 	
-	<insert id="insertAchieveLoca" parameterType="achLocaDTO">
+	<insert id="insertAchieveLoca" parameterType="achLocaDTO" useGeneratedKeys="true" keyProperty="achNo">
 		insert into ACH_LOCA
 		values (null, #{locationCode}, #{maxCount}, #{title}, null, null)
 	</insert>
 	
-	<insert id="insertAchieveCate" parameterType="achCateDTO">
+	<insert id="insertAchieveCate" parameterType="achCateDTO" useGeneratedKeys="true" keyProperty="achNo">
 		insert into ACH_CATE
 		values (null, #{categoryCode}, #{maxCount}, #{title}, null, null)
+	</insert>
+	
+	<insert id="insertLocaIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+		insert into ACH_LOCA_ICONS
+		values (null, #{achLoca.achNo}, #{originalName}, #{savedName})
+	</insert>
+	
+	<insert id="insertCateIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+		insert into ACH_CATE_ICONS
+		values (null, #{achCate.achNo}, #{originalName}, #{savedName})
 	</insert>
 	
 	<select id="selectAchieveLoca" resultType="achLocaDTO">
@@ -88,6 +98,14 @@
 	<select id="selectAchieveCate" resultType="achCateDTO">
 		select * from ACH_CATE
 	</select>
+	
+    <select id="selectAchLocaById" resultType="achLocaDTO">
+        SELECT * FROM ACH_LOCA WHERE ach_no = #{achNo}
+    </select>
+    
+    <select id="selectAchLocaIconsByAchNo" resultType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+        SELECT * FROM ACH_LOCA_ICONS WHERE ach_no = #{achNo}
+    </select>
 	
 	<select id="findAllAchLoca" resultType="achLocaDTO">
         select * from ACH_LOCA

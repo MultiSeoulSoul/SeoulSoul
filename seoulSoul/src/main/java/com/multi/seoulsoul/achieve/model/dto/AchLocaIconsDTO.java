@@ -15,7 +15,7 @@ public class AchLocaIconsDTO {
 	public AchLocaDTO getAchLoca() {
 		return achLoca;
 	}
-	public void setAchCate(AchLocaDTO achLoca) {
+	public void setAchLoca(AchLocaDTO achLoca) {
 		this.achLoca = achLoca;
 	}
 	public String getOriginalName() {
