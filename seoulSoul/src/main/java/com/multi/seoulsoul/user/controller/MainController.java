@@ -30,9 +30,8 @@ public class MainController {
 	}
 	
 	@PostMapping("/join")
-	public String joinUser(UserDTO u, HttpSession session) throws Exception {
+	public String joinUser(UserDTO u) throws Exception {
 		userService.joinUser(u);
-		session.setAttribute("msg", "회원가입성공");
 		return "/user/login";
 	}
 	

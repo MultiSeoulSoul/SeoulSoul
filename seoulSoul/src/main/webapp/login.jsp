@@ -54,14 +54,5 @@ div>button, input[type=submit] {
 		<br>
 		<button class="btn btn-secondary">아이디 / 비밀번호 찾기</button>
 	</div>
-
-	<!-- <script>
-		$(function() {
-			$("input[name=userId]").focus();
-			$("input[type=submit]").click(function() {
-				$("#loginForm").submit();
-			});
-		})
-	</script> -->
 </body>
 </html>

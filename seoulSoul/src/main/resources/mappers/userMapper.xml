@@ -46,6 +46,18 @@
 	    INSERT INTO users (user_id, user_pw, nickname, phone, email)
 	    VALUES (#{userId}, #{userPw}, #{nickname}, #{phone}, #{email})
 	</insert>
+	<select id="selectLastInsertId" resultType="int">
+		<!-- LAST_INSERT_ID(): MySQL에서 마지막으로 AUTO_INCREMENT된 값을 반환하는 함수 -->
+	    SELECT LAST_INSERT_ID()
+	</select>
+	<insert id="insertUserRole" parameterType="int">
+	    INSERT INTO user_role (user_no)
+	    VALUES (#{userNo})
+	</insert>
+	<insert id="insertUserProfile" parameterType="int">
+	    INSERT INTO USER_PROFILE (user_no, profile_content, profile_pic_name)
+	    VALUES (#{userNo}, '', 'defaultProfile.jpg')
+	</insert>
 	
 	<!-- 회원정보 변경 -->
 	<update id="userUpdate" parameterType="userDTO">
@@ -72,9 +84,23 @@
 
     <!-- 시큐리티 사용 시 쿼리 -->
     <select id="findUserByUsername" parameterType="String" resultType="userDTO">
-        SELECT *
-        FROM users
-        WHERE user_id = #{userId}
+        SELECT 
+	        u.user_no,
+	        u.user_id,
+	        u.user_pw,
+	        u.nickname,
+	        u.phone,
+	        u.email,
+	        u.blacklist_status,
+	        u.created_date,
+	        up.profile_content,
+	        up.profile_pic_name
+	    FROM 
+	        USERS u
+	    LEFT JOIN 
+	        USER_PROFILE up ON u.user_no = up.user_no
+	    WHERE 
+	        u.user_id = #{userId}
     </select>
     <select id="findAuthoritiesByUserNo" parameterType="int" resultType="String">
         SELECT ua.authority_name
@@ -124,5 +150,16 @@
 	    ) b2
 	    WHERE b2.rownum BETWEEN #{start} AND #{end}
     </select>
+    
+    <!-- 프로필 업데이트 -->
+    <update id="updateProfile" parameterType="userProfileDTO">
+    	UPDATE USERS u
+		JOIN USER_PROFILE up ON u.user_no = up.user_no
+		SET 
+		    u.nickname = #{nickname},
+		    up.profile_content = #{profileContent},
+		    up.profile_pic_name = CASE WHEN #{profilePicName} IS NOT NULL THEN #{profilePicName} ELSE up.profile_pic_name END
+		WHERE u.user_no = #{userNo};
+    </update>
 
 </mapper>

@@ -6,6 +6,7 @@ import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
+import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 
 public interface UserService {
 
@@ -24,4 +25,8 @@ public interface UserService {
 	void userPwUpdate(UserDTO u) throws Exception;
 
 	void userDelete(int userNo) throws Exception;
+
+	void updateProfile(UserProfileDTO up) throws Exception;
+
+	void updateCustomUserDetails(String userId);
 }

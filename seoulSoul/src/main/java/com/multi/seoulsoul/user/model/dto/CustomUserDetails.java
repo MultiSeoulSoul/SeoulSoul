@@ -18,22 +18,30 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private char blacklistStatus;
     private Timestamp createdDate;
+    
+    private String profileContent;
+    private String profilePicName;
+    
     private List<String> authorities;
 
     public CustomUserDetails(int userNo, String username, String password, String nickname, String phone, String email,
-                             char blacklistStatus, Timestamp createdDate, List<String> authorities) {
-        this.userNo = userNo;
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.phone = phone;
-        this.email = email;
-        this.blacklistStatus = blacklistStatus;
-        this.createdDate = createdDate;
-        this.authorities = authorities;
-    }
+			char blacklistStatus, Timestamp createdDate, String profileContent, String profilePicName,
+			List<String> authorities) {
+		super();
+		this.userNo = userNo;
+		this.username = username;
+		this.password = password;
+		this.nickname = nickname;
+		this.phone = phone;
+		this.email = email;
+		this.blacklistStatus = blacklistStatus;
+		this.createdDate = createdDate;
+		this.profileContent = profileContent;
+		this.profilePicName = profilePicName;
+		this.authorities = authorities;
+	}
 
-    @Override
+	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream()
                           .map(SimpleGrantedAuthority::new)
@@ -94,10 +102,22 @@ public class CustomUserDetails implements UserDetails {
         return createdDate;
     }
 
-    @Override
-    public String toString() {
-        return "CustomUserDetails [userNo=" + userNo + ", username=" + username + ", password=" + password
-                + ", nickname=" + nickname + ", phone=" + phone + ", email=" + email
-                + ", blacklistStatus=" + blacklistStatus + ", createdDate=" + createdDate + "]";
-    }
+    public String getProfileContent() {
+		return profileContent;
+	}
+
+	public String getProfilePicName() {
+		return profilePicName;
+	}
+
+	@Override
+	public String toString() {
+		return "CustomUserDetails [userNo=" + userNo + ", username=" + username + ", password=" + password
+				+ ", nickname=" + nickname + ", phone=" + phone + ", email=" + email + ", blacklistStatus="
+				+ blacklistStatus + ", createdDate=" + createdDate + ", profileContent=" + profileContent
+				+ ", profilePicName=" + profilePicName + ", authorities=" + authorities + "]";
+	}
+	
+	public CustomUserDetails() {
+	}
 }

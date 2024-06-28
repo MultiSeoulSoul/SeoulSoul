@@ -9,6 +9,7 @@ import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
+import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 
 @Repository
 public class UserDAO {
@@ -23,7 +24,11 @@ public class UserDAO {
 	}
 
 	public int joinUser(SqlSessionTemplate sqlSession, UserDTO u) {
-		return sqlSession.insert("userMapper.joinUser", u);
+		int result = sqlSession.insert("userMapper.joinUser", u);
+	    int userNo = sqlSession.selectOne("userMapper.selectLastInsertId");
+	    sqlSession.insert("userMapper.insertUserRole", userNo);
+	    sqlSession.insert("userMapper.insertUserProfile", userNo);
+		return result;
 	}
 
 	public UserDTO findUserByUsername(SqlSessionTemplate sqlSession, String userId) {
@@ -52,5 +57,9 @@ public class UserDAO {
 
 	public int userDelete(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.delete("userMapper.userDelete", userNo);
+	}
+
+	public int updateProfile(SqlSessionTemplate sqlSession, UserProfileDTO up) {
+		return sqlSession.update("userMapper.updateProfile", up);
 	}
 }

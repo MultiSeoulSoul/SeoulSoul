@@ -9,7 +9,21 @@
 <title>User Main</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <style>
+	div>button, input {
+		width: 200px;
+		margin-top: 10px;
+	}
+	.input-group {
+		display: flex;
+	    width: 100%;
+	}
+	.input-group-text {
+		width: 150px;
+	}
     body {
         display: flex;
         flex-direction: column;
@@ -50,9 +64,14 @@
         align-items: center;
         gap: 15px;
     }
+    .profile-info-edit {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
     .profile-img {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         border: 1px solid #ddd;
     }
@@ -82,6 +101,14 @@
         background-color: #b2ebf2;
     }
     .edit-btn {
+        background-color: #5c9eaf;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .save-btn {
         background-color: #5c9eaf;
         color: white;
         padding: 10px 20px;
@@ -229,16 +256,96 @@
 	    for (let page = 1; page <= pages; page++) {
 	        const pageLink = document.createElement('a');
 	        const url = "/seoulsoul/user/SLBoardPage?page=" + page;
-
-	        console.log('Current Page:', page);
-	        console.log('Generate url:', url);
-	        
 	        pageLink.href = 'javascript:void(0);';
 	        pageLink.textContent = page;
 	        pageLink.onclick = () => showBoard(boardType, url);
 	        pagination.appendChild(pageLink);
 	    }
 	}
+</script>
+
+<script>
+	function changeProfile() {
+	    // 입력 필드를 표시하고 버튼의 가시성을 변경
+	    document.getElementById('nickname-display').style.display = 'none';
+	    document.getElementById('content-display').style.display = 'none';
+	 /* document.getElementById('profile-img').style.display = 'none'; */
+	    document.getElementById('nickname-input').style.display = 'inline';
+	    document.getElementById('content-input').style.display = 'inline';
+	    document.getElementById('profile-img-input').style.display = 'inline';
+	
+	    // 입력 필드에 현재 값을 채움
+	    document.getElementById('nickname-input').value = document.getElementById('nickname-display').textContent;
+	    document.getElementById('content-input').value = document.getElementById('content-display').textContent;
+	
+	    document.querySelector('.edit-btn').style.display = 'none';
+	    document.querySelector('.save-btn').style.display = 'inline';
+	}
+	
+	function saveProfile() {
+	    // 입력 필드에서 업데이트된 값 가져오기
+	    const updatedNickname = document.getElementById('nickname-input').value;
+	    const updatedContent = document.getElementById('content-input').value;
+	    const updatedProfileImg = document.getElementById('profile-img-input').files[0];
+	
+	    // 데이터를 보내기 위해 FormData 객체 생성
+	    let formData = new FormData();
+	    formData.append('nickname', updatedNickname);
+	    formData.append('profileContent', updatedContent);
+	    if (updatedProfileImg) {
+	        formData.append('profileImage', updatedProfileImg);
+	    }
+	    sendUpdateRequest(formData);
+	}
+	
+	function sendUpdateRequest(formData) {
+		
+		var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+		
+	    $.ajax({
+	        url: '${pageContext.request.contextPath}/user/updateProfile',
+	        type: 'POST',
+	        data: formData,
+	        processData: false,
+	        contentType: false,
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader(csrfHeader, csrfToken);
+	        },
+	        success: function(data) {
+	            // 새로운 값으로 화면 업데이트
+	            document.getElementById('nickname-display').textContent = data.nickname;
+	            document.getElementById('content-display').textContent = data.ProfileContent;
+	            if (data.profileImagePath) {
+	                document.getElementById('profile-img').src = data.ProfilePicName;
+	            }
+
+	            // 입력 필드를 숨기고 표시 필드를 보여줌
+	            document.getElementById('nickname-display').style.display = 'inline';
+	            document.getElementById('content-display').style.display = 'inline';
+	            document.getElementById('profile-img').style.display = 'inline';
+	            document.getElementById('nickname-input').style.display = 'none';
+	            document.getElementById('content-input').style.display = 'none';
+	            document.getElementById('profile-img-input').style.display = 'none';
+
+	            // 버튼 가시성 변경
+	            document.querySelector('.edit-btn').style.display = 'inline';
+	            document.querySelector('.save-btn').style.display = 'none';
+	        },
+	        error: function() {
+	            alert("프로필 업데이트 중 오류가 발생했습니다.");
+	        }
+	    });
+	}
+	
+	function previewImg(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('profile-img');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
 
 </script>
 
@@ -251,13 +358,34 @@
         <div class="main-content">
             <div class="profile">
                 <div class="profile-info">
-                    <img src="profile.jpg" alt="프로필 사진" class="profile-img">
-                    <div>
-                        <h2>{achievement_title} <sec:authentication property="name"/></h2>
-                        <p>{user_description}</p>
-                    </div>
-                </div>
-                <button class="edit-btn" onclick="changeProfilePicture()">수정하기</button>
+				    <table class="profile-table">
+					    <tr>
+					        <td rowspan="3" class="profile-image">
+					            <img src="${pageContext.request.contextPath}/resources/uploadFiles/<sec:authentication property="principal.profilePicName"/>" alt="Profile Image" class="profile-img" id="profile-img">
+					            <input type="file" id="profile-img-input" style="display: none;" onchange="previewImg(event)">
+				            </td>
+					        <td class="profile-nickname">
+			                    <span id="nickname-display"><sec:authentication property="principal.nickname"/></span>
+			                    <input type="text" id="nickname-input" class="form-control" style="display: none;">
+			                </td>
+					    </tr>
+					    <tr>
+					        <td class="profile-content">
+						        <span id="content-display"><sec:authentication property="principal.profileContent"/></span>
+						        <input type="text" id="content-input" class="form-control" style="display: none;">
+					        </td>
+					    </tr>
+					    <tr>
+					    	<td>
+					    	<div text-align: right;>
+					    		<button class="edit-btn" onclick="changeProfile()">수정하기</button>
+								<button class="save-btn" onclick="saveProfile()" style="display: none;">저장하기</button>
+							</div>
+					    	</td>
+					    </tr>
+					</table>
+				</div>
+				
             </div>
             <div class="chart">
                 <div class="chart-item">

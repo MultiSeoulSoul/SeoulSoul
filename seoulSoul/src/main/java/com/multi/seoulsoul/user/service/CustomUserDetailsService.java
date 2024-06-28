@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,14 +29,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private SqlSessionTemplate sqlSession;
     
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        // 사용자 정보 조회
-    	System.out.println("CustomUserDetailsService userId " + userId);
+    public CustomUserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
     	
         UserDTO userDTO = userDAO.findUserByUsername(sqlSession, userId);
         
-        System.out.println("CustomUserDetailsService userDTO " + userDTO);
-    	
         if (userDTO == null) {
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
@@ -55,6 +50,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             userDTO.getEmail(),
             userDTO.getBlacklistStatus(),
             userDTO.getCreatedDate(),
+            userDTO.getProfileContent(),
+            userDTO.getProfilePicName(),
             authorities
         );
     }

@@ -124,6 +124,7 @@ main {
 		            </div>
 	            </div>
 	            <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/user/userDelete" style="display:none;">
+	            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </form>
             	<button class="delete-btn" onclick="document.getElementById('deleteForm').submit();" disabled>회원 탈퇴</button>
             </div>

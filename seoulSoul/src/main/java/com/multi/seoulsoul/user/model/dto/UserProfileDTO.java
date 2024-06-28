@@ -5,14 +5,23 @@ public class UserProfileDTO {
     private String profileContent;
     private String profilePicName;
     
+    private String nickname;
+    
     public UserProfileDTO() {
 	}
 
-	public UserProfileDTO(int userNo, String profileContent, String profilePicName) {
+	@Override
+	public String toString() {
+		return "UserProfileDTO [userNo=" + userNo + ", profileContent=" + profileContent + ", profilePicName="
+				+ profilePicName + ", nickname=" + nickname + "]";
+	}
+
+	public UserProfileDTO(int userNo, String profileContent, String profilePicName, String nickname) {
 		super();
 		this.userNo = userNo;
 		this.profileContent = profileContent;
 		this.profilePicName = profilePicName;
+		this.nickname = nickname;
 	}
 
 	public int getUserNo() {
@@ -39,10 +48,12 @@ public class UserProfileDTO {
 		this.profilePicName = profilePicName;
 	}
 
-	@Override
-	public String toString() {
-		return "UserProfileDTO [userNo=" + userNo + ", profileContent=" + profileContent + ", profilePicName="
-				+ profilePicName + "]";
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
     
 }

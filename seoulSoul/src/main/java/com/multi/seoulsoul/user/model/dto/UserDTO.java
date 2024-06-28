@@ -13,7 +13,32 @@ public class UserDTO {
     private char blacklistStatus;
     private Timestamp createdDate;
     
+    private String profileContent;
+    private String profilePicName;
+    
     public UserDTO() {
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [userNo=" + userNo + ", userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname
+				+ ", phone=" + phone + ", email=" + email + ", blacklistStatus=" + blacklistStatus + ", createdDate="
+				+ createdDate + ", profileContent=" + profileContent + ", profilePicName=" + profilePicName + "]";
+	}
+
+	public UserDTO(int userNo, String userId, String userPw, String nickname, String phone, String email,
+			char blacklistStatus, Timestamp createdDate, String profileContent, String profilePicName) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userPw = userPw;
+		this.nickname = nickname;
+		this.phone = phone;
+		this.email = email;
+		this.blacklistStatus = blacklistStatus;
+		this.createdDate = createdDate;
+		this.profileContent = profileContent;
+		this.profilePicName = profilePicName;
 	}
 
 	public int getUserNo() {
@@ -80,24 +105,20 @@ public class UserDTO {
 		this.createdDate = createdDate;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDTO [userNo=" + userNo + ", userId=" + userId + ", userPw=" + userPw + ", nickname=" + nickname
-				+ ", phone=" + phone + ", email=" + email + ", blacklistStatus=" + blacklistStatus + ", createdDate="
-				+ createdDate + "]";
+	public String getProfileContent() {
+		return profileContent;
 	}
 
-	public UserDTO(int userNo, String userId, String userPw, String nickname, String phone, String email,
-			char blacklistStatus, Timestamp createdDate) {
-		super();
-		this.userNo = userNo;
-		this.userId = userId;
-		this.userPw = userPw;
-		this.nickname = nickname;
-		this.phone = phone;
-		this.email = email;
-		this.blacklistStatus = blacklistStatus;
-		this.createdDate = createdDate;
+	public void setProfileContent(String profileContent) {
+		this.profileContent = profileContent;
+	}
+
+	public String getProfilePicName() {
+		return profilePicName;
+	}
+
+	public void setProfilePicName(String profilePicName) {
+		this.profilePicName = profilePicName;
 	}
     
 }
