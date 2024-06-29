@@ -104,8 +104,7 @@
     
 	<!-- 소울로그 조회 -->
 	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
-        SELECT 
-            b2.soul_log_no,
+        SELECT
             l.location_name,
             c.category_name,
             b2.title,
@@ -127,47 +126,133 @@
     </select>
     
     
-    <!-- 소울로그 댓글 조회(수정해야함) -->
+    <!-- 소울로그 댓글 조회 -->
 	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="slReplyDTO">
-        SELECT
-	        b2.count,
-	        b2.*
+	    SELECT
+	        b2.title,
+	        b2.content,
+	        b2.created_date,
+	        b2.total_count
 	    FROM (
 	        SELECT 
-	            b.*,
-	            COUNT(*) OVER() AS count,
-	            ROW_NUMBER() OVER (ORDER BY b.reply_no DESC) AS rownum
-	        FROM SL_REPLY b
-	        WHERE b.writer = #{userNo}
+	            r.*,
+	            sb.title,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.reply_no DESC) AS rownum
+	        FROM SL_REPLY r
+	        JOIN SL_BOARD sb ON r.soul_log_no = sb.soul_log_no
+	        WHERE r.writer = #{userNo}
 	    ) b2
 	    WHERE b2.rownum BETWEEN #{start} AND #{end}
-    </select>
-    
-    
-    
-   	<!-- UserDTO의 resultMap 정의 -->
-    <!-- <resultMap id="userResultMap" type="com.multi.seoulsoul.user.model.dto.UserDTO">
-        <id property="userNo" column="user_no"/>
-        <result property="userId" column="user_id"/>
-        <result property="userPw" column="user_pw"/>
-        <result property="nickname" column="nickname"/>
-        <result property="phone" column="phone"/>
-        <result property="email" column="email"/>
-        <result property="blacklistStatus" column="blacklist_status"/>
-        <result property="createdDate" column="created_date"/>
-    </resultMap> -->
-
-    <!-- UserAuthorityDTO의 resultMap 정의 -->
-    <!-- <resultMap id="userAuthorityResultMap" type="com.multi.seoulsoul.user.model.dto.UserAuthorityDTO">
-        <id property="authorityCode" column="authority_code"/>
-        <result property="authorityName" column="authority_name"/>
-        <result property="authorityDesc" column="authority_desc"/>
-    </resultMap> -->
-
-    <!-- UserRoleDTO의 resultMap 정의 -->
-    <!-- <resultMap id="userRoleResultMap" type="com.multi.seoulsoul.user.model.dto.UserRoleDTO">
-        <id property="userNo" column="user_no"/>
-        <result property="authorityCode" column="authority_code"/>
-    </resultMap> -->
+	</select>
+	
+	<!-- 이벤트 댓글 조회 -->
+	<select id="selectEventReplyPage" parameterType="userPageDTO" resultType="replyDTO">
+	    SELECT
+	        e.title,
+	        b2.content,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            r.*,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.reply_no DESC) AS rownum
+	        FROM EVENT_REPLY r
+	        WHERE r.user_no = #{userNo}
+	    ) b2
+	    JOIN EVENT e ON b2.event_no = e.event_no
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 소울로그 좋아요 조회 -->
+	<select id="selectLikesPage" parameterType="userPageDTO" resultType="likesDTO">
+	    SELECT
+	        b2.location_name,
+	        b2.category_name,
+	        b2.title,
+	        b2.liked_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            l.soul_log_no,
+	            loc.location_name,
+	            c.category_name,
+	            b.title,
+	            l.liked_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY l.liked_date DESC) AS rownum
+	        FROM SL_LIKE l
+	        JOIN SL_BOARD b ON l.soul_log_no = b.soul_log_no
+	        JOIN LOCATION loc ON b.location_code = loc.location_code
+	        JOIN SL_CATEGORY c ON b.category_code = c.category_code
+	        WHERE l.user_no = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 이벤트 찜 조회 -->
+	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="recHeartBtnDTO">
+	    SELECT
+	        b2.title,
+	        b2.created_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            e.event_no,
+	            e.title,
+	            e.created_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY e.created_date DESC) AS rownum
+	        FROM EVENT e
+	        JOIN EVENT_REPLY er ON e.event_no = er.event_no
+	        WHERE er.user_no = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 문의내역 조회 -->
+	<select id="selectCsQuestionPage" parameterType="userPageDTO" resultType="csQuestionDTO">
+	    SELECT
+	        b2.category_name,
+	        b2.title,
+	        b2.created_date,
+	        b2.is_answered,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            q.question_no,
+	            c.category_name,
+	            q.title,
+	            q.created_date,
+	            q.is_answered,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY q.created_date DESC) AS rownum
+	        FROM CS_QUESTION q
+	        JOIN CS_CATEGORY c ON q.category_code = c.category_code
+	        WHERE q.writer = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 신고내역 조회 -->
+	<select id="selectReportPage" parameterType="userPageDTO" resultType="reportDTO">
+	    SELECT
+	        b2.reason,
+	        b2.title,
+	        b2.created_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            r.report_no,
+	            r.reason,
+	            r.title,
+	            r.created_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.created_date DESC) AS rownum
+	        FROM SL_REPORT r
+	        WHERE r.reporter = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
 
 </mapper>

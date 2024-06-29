@@ -16,8 +16,13 @@
 		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserPageDTO" alias="userPageDTO"></typeAlias>
 		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserProfileDTO" alias="userProfileDTO"></typeAlias>
 		
-		<typeAlias type="com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO" alias="slBoardDTO"></typeAlias>
-		<typeAlias type="com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO" alias="slReplyDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SLBoardDTO" alias="slBoardDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SLReplyDTO" alias="slReplyDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReplyDTO" alias="replyDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.LikesDTO" alias="likesDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.RecHeartBtnDTO" alias="recHeartBtnDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.CsQuestionDTO" alias="csQuestionDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReportDTO" alias="reportDTO"></typeAlias>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/userMapper.xml" />

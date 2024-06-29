@@ -2,11 +2,11 @@ package com.multi.seoulsoul.user.service;
 
 import java.util.List;
 
-import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
-import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
+import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
 public interface UserService {
 	
@@ -30,9 +30,14 @@ public interface UserService {
 
 	List<SLReplyDTO> selectSLReplyPage(UserPageDTO up);
 
-	
+	List<?> selectEventReplyPage(UserPageDTO up);
 
-	
+	List<?> selectLikesPage(UserPageDTO up);
 
+	List<?> selectHeartBtnPage(UserPageDTO up);
+
+	List<?> selectCsQuestionPage(UserPageDTO up);
+
+	List<?> selectReportPage(UserPageDTO up);
 	
 }

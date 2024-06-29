@@ -5,11 +5,11 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
-import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
+import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
 @Repository
 public class UserDAO {
@@ -71,5 +71,25 @@ public class UserDAO {
 	// 소울로그 댓글 조회
 	public List<SLReplyDTO> selectSLReplyPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
 		return sqlSession.selectList("userMapper.selectSLReplyPage", up);
+	}
+
+	public List<?> selectEventReplyPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectEventReplyPage", up);
+	}
+
+	public List<?> selectLikesPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectLikesPage", up);
+	}
+
+	public List<?> selectHeartBtnPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectHeartBtnPage", up);
+	}
+
+	public List<?> selectCsQuestionPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectCsQuestionPage", up);
+	}
+
+	public List<?> selectReportPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
+		return sqlSession.selectList("userMapper.selectReportPage", up);
 	}
 }

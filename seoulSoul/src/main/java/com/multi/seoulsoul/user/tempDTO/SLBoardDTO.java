@@ -1,4 +1,4 @@
-package com.multi.seoulsoul.soulLog.model.dto;
+package com.multi.seoulsoul.user.tempDTO;
 
 public class SLBoardDTO {
     private int soulLogNo;         // soul_log_no
@@ -20,18 +20,8 @@ public class SLBoardDTO {
     public SLBoardDTO() {
 	}
 
-	@Override
-	public String toString() {
-		return "SLBoardDTO [soulLogNo=" + soulLogNo + ", locationCode=" + locationCode + ", categoryCode="
-				+ categoryCode + ", title=" + title + ", content=" + content + ", writer=" + writer + ", views=" + views
-				+ ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", totalCount=" + totalCount
-				+ ", locationName=" + locationName + ", categoryName=" + categoryName + ", replyCount=" + replyCount
-				+ "]";
-	}
-
 	public SLBoardDTO(int soulLogNo, int locationCode, int categoryCode, String title, String content, int writer,
-			int views, String createdDate, String modifiedDate, int totalCount, String locationName,
-			String categoryName, int replyCount) {
+			int views, String createdDate, String modifiedDate) {
 		super();
 		this.soulLogNo = soulLogNo;
 		this.locationCode = locationCode;
@@ -42,10 +32,13 @@ public class SLBoardDTO {
 		this.views = views;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
-		this.totalCount = totalCount;
-		this.locationName = locationName;
-		this.categoryName = categoryName;
-		this.replyCount = replyCount;
+	}
+
+	@Override
+	public String toString() {
+		return "SLBoardDTO [soulLogNo=" + soulLogNo + ", locationCode=" + locationCode + ", categoryCode="
+				+ categoryCode + ", title=" + title + ", content=" + content + ", writer=" + writer + ", views=" + views
+				+ ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
 	public int getSoulLogNo() {

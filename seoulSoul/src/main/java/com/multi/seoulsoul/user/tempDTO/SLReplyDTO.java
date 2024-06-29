@@ -1,6 +1,4 @@
-package com.multi.seoulsoul.soulLog.model.dto;
-
-import java.sql.Timestamp;
+package com.multi.seoulsoul.user.tempDTO;
 
 public class SLReplyDTO {
 	private int replyNo;
@@ -9,13 +7,15 @@ public class SLReplyDTO {
 	private int writer;
 	private String createdDate;
 	private String modifiedDate;
-	private int count;
+	
+	// 재식 추가
+	private int totalCount;
+	private String title;
 	
 	public SLReplyDTO() {
 	}
 
-	public SLReplyDTO(int replyNo, int soulLogNo, String content, int writer, String createdDate, String modifiedDate,
-			int count) {
+	public SLReplyDTO(int replyNo, int soulLogNo, String content, int writer, String createdDate, String modifiedDate) {
 		super();
 		this.replyNo = replyNo;
 		this.soulLogNo = soulLogNo;
@@ -23,13 +23,12 @@ public class SLReplyDTO {
 		this.writer = writer;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
-		this.count = count;
 	}
 
 	@Override
 	public String toString() {
 		return "SLReplyDTO [replyNo=" + replyNo + ", soulLogNo=" + soulLogNo + ", content=" + content + ", writer="
-				+ writer + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + ", count=" + count + "]";
+				+ writer + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + "]";
 	}
 
 	public int getReplyNo() {
@@ -80,12 +79,20 @@ public class SLReplyDTO {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public int getCount() {
-		return count;
+	public int getTotalCount() {
+		return totalCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
-	
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 }

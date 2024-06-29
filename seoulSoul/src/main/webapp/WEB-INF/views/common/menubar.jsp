@@ -1,11 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
+<style>
+	.profile-img {
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	    border: 1px solid #ddd;
+	    margin-right: 10px;
+	}
+</style>
 <title>Insert title here</title>
 </head>
 <body>
@@ -26,14 +34,15 @@
             </ul>
         </nav>
         <div class="user-menu">
-            <a href="${pageContext.request.contextPath}/user/userMain">
-
-            	<sec:authentication property="principal.nickname"/> 님 | </a>
-            	<a href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
-            <form id="logoutForm" method="post" action="${pageContext.request.contextPath}/user/logout" style="display:none;">
-            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-            </form>
-        </div>
+		    <a href="${pageContext.request.contextPath}/user/userMain">
+		        <img src="${pageContext.request.contextPath}/resources/uploadFiles/<sec:authentication property="principal.profilePicName"/>" alt="Profile Image" class="profile-img" id="profile-img">
+		        <sec:authentication property="principal.nickname"/> 님
+		    </a> | 
+		    <a href="#" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
+		    <form id="logoutForm" method="post" action="${pageContext.request.contextPath}/user/logout" style="display:none;">
+		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		    </form>
+		</div>
     </header>
 </body>
 </html>

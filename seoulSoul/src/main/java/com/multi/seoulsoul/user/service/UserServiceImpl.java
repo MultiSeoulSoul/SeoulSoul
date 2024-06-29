@@ -6,18 +6,17 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
-import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dao.UserDAO;
 import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
+import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -112,6 +111,31 @@ public class UserServiceImpl implements UserService {
 	public List<SLReplyDTO> selectSLReplyPage(UserPageDTO up) {
 		List<SLReplyDTO> list = userDAO.selectSLReplyPage(sqlSession, up);
 		return list;
+	}
+	
+	@Override
+	public List<?> selectEventReplyPage(UserPageDTO up) {
+		return userDAO.selectEventReplyPage(sqlSession, up);
+	}
+
+	@Override
+	public List<?> selectLikesPage(UserPageDTO up) {
+		return userDAO.selectLikesPage(sqlSession, up);
+	}
+
+	@Override
+	public List<?> selectHeartBtnPage(UserPageDTO up) {
+		return userDAO.selectHeartBtnPage(sqlSession, up);
+	}
+
+	@Override
+	public List<?> selectCsQuestionPage(UserPageDTO up) {
+		return userDAO.selectCsQuestionPage(sqlSession, up);
+	}
+
+	@Override
+	public List<?> selectReportPage(UserPageDTO up) {
+		return userDAO.selectReportPage(sqlSession, up);
 	}
 	
 	// 사용자 세션 업데이트

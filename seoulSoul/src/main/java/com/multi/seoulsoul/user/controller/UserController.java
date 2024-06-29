@@ -18,18 +18,24 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO;
-import com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO;
 import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.service.UserService;
+import com.multi.seoulsoul.user.tempDTO.CsQuestionDTO;
+import com.multi.seoulsoul.user.tempDTO.LikesDTO;
+import com.multi.seoulsoul.user.tempDTO.RecHeartBtnDTO;
+import com.multi.seoulsoul.user.tempDTO.ReplyDTO;
+import com.multi.seoulsoul.user.tempDTO.ReportDTO;
+import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
+import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
 @Controller
 @RequestMapping("/user")
@@ -214,50 +220,222 @@ public class UserController {
 	    return bCryptPasswordEncoder.matches(currentPassword, userDetails.getPassword());
 	}
 	
-	// 소울로그 조회
-	@GetMapping("/SLBoardPage")
+	@GetMapping("/{boardType}Page")
 	@ResponseBody
-	public Map<String, Object> selectSLBoardPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-	    // Principal 객체가 UsernamePasswordAuthenticationToken 으로 래핑되어있음
-	    // -> Principal을 UsernamePasswordAuthenticationToken 으로 캐스팅한 후
-	    // -> 다시 CustomUserDetails 으로 캐스팅하면 사용자 정보를 추출할 수 있음
+	public Map<String, Object> getBoardPage(@PathVariable String boardType, @AuthenticationPrincipal Principal principal, UserPageDTO up) {
 	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
 	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
 	    up.setUserNo(userDetails.getUserNo());
 	    up.setStartEnd(up.getPage());
-	        
-	    List<SLBoardDTO> slBoard = userService.selectSLBoardPage(up);
 	    
-	    int count = slBoard.get(0).getTotalCount();
-	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-
 	    Map<String, Object> response = new HashMap<>();
-	    response.put("slBoard", slBoard);
+	    List<?> dataList;
+	    int count, pages;
+
+	    switch (boardType) {
+	        case "soul-log":
+	            dataList = userService.selectSLBoardPage(up);
+	            count = ((SLBoardDTO) dataList.get(0)).getTotalCount();
+	            response.put("slBoard", dataList);
+	            break;
+	        case "soul-log-reply":
+	            dataList = userService.selectSLReplyPage(up);
+	            count = ((SLReplyDTO) dataList.get(0)).getTotalCount();
+	            response.put("slReply", dataList);
+	            break;
+	        case "event-reply":
+	            dataList = userService.selectEventReplyPage(up);
+	            count = ((ReplyDTO) dataList.get(0)).getTotalCount();
+	            response.put("eventReply", dataList);
+	            break;
+	        case "likes":
+	            dataList = userService.selectLikesPage(up);
+	            count = ((LikesDTO) dataList.get(0)).getTotalCount();
+	            response.put("likes", dataList);
+	            break;
+	        case "heart-btn":
+	            dataList = userService.selectHeartBtnPage(up);
+	            count = ((RecHeartBtnDTO) dataList.get(0)).getTotalCount();
+	            response.put("heartBtn", dataList);
+	            break;
+	        case "cs-question":
+	            dataList = userService.selectCsQuestionPage(up);
+	            count = ((CsQuestionDTO) dataList.get(0)).getTotalCount();
+	            response.put("csQuestion", dataList);
+	            break;
+	        case "report":
+	            dataList = userService.selectReportPage(up);
+	            count = ((ReportDTO) dataList.get(0)).getTotalCount();
+	            response.put("report", dataList);
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Invalid board type: " + boardType);
+	    }
+
+	    pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
 	    response.put("pages", pages);
-	    
+
 	    return response;
 	}
-	
-	// 소울로그 댓글 조회
-	@GetMapping("/SLReplyPage")
-	@ResponseBody
-	public Map<String, Object> selectSLBoardReplyPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
-	    up.setUserNo(userDetails.getUserNo());
-	    up.setStartEnd(up.getPage());
-	        
-	    List<SLReplyDTO> slReply = userService.selectSLReplyPage(up);
-	    
-	    int count = slReply.get(0).getCount();
-	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("slReply", slReply);
-	    response.put("pages", pages);
-	    
-	    return response;
-	}
+//	
+//	
+//	// 소울로그 조회
+//	@GetMapping("/SLBoardPage")
+//	@ResponseBody
+//	public Map<String, Object> selectSLBoardPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    // Principal 객체가 UsernamePasswordAuthenticationToken 으로 래핑되어있음
+//	    // -> Principal을 UsernamePasswordAuthenticationToken 으로 캐스팅한 후
+//	    // -> 다시 CustomUserDetails 으로 캐스팅하면 사용자 정보를 추출할 수 있음
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	        
+//	    List<SLBoardDTO> slBoard = userService.selectSLBoardPage(up);
+//	    
+//	    int count = slBoard.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("slBoard", slBoard);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 소울로그 댓글 조회
+//	@GetMapping("/SLReplyPage")
+//	@ResponseBody
+//	public Map<String, Object> selectSLBoardReplyPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	        
+//	    List<SLReplyDTO> slReply = userService.selectSLReplyPage(up);
+//	    
+//	    int count = slReply.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("slReply", slReply);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 이벤트 댓글 조회 이벤트제목, 댓글내용
+//	@GetMapping("/EventReplyPage")
+//	@ResponseBody
+//	public Map<String, Object> selectEventReplyPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	    
+//	    List<SLReplyDTO> eventReply = userService.selectEventReplyPage(up);
+//	    
+//	    int count = eventReply.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("eventReply", eventReply);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 소울로그 좋아요 조회 지역이름, 카테고리이름, 소울로그 제목 (날짜를 Timestamp로 정렬), 작성시간
+//	@GetMapping("/LikesPage")
+//	@ResponseBody
+//	public Map<String, Object> selectLikesPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	    
+//	    List<SLBoardDTO> likes = userService.selectLikesPage(up);
+//	    
+//	    int count = likes.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("likes", likes);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 이벤트 찜 조회 이벤트제목, 작성시간
+//	@GetMapping("/HeartBtnPage")
+//	@ResponseBody
+//	public Map<String, Object> selectHeartBtnPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	    
+//	    List<SLBoardDTO> heartBtn = userService.selectHeartBtnPage(up);
+//	    
+//	    int count = heartBtn.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("heartBtn", heartBtn);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 내 문의내역 조회 카테고리이름, 문의제목, 작성시간, 답변여부
+//	@GetMapping("/CsQuestionPage")
+//	@ResponseBody
+//	public Map<String, Object> selectCsQuestionPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	    
+//	    List<SLBoardDTO> csQuestion = userService.selectCsQuestionPage(up);
+//	    
+//	    int count = csQuestion.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("csQuestion", csQuestion);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
+//	
+//	// 내 신고내역 조회 신고사유, 신고제목, 작성시간, 답변여부
+//	@GetMapping("/ReportPage")
+//	@ResponseBody
+//	public Map<String, Object> selectReportPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
+//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+//
+//	    up.setUserNo(userDetails.getUserNo());
+//	    up.setStartEnd(up.getPage());
+//	    
+//	    List<SLBoardDTO> report = userService.selectReportPage(up);
+//	    
+//	    int count = report.get(0).getTotalCount();
+//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("report", report);
+//	    response.put("pages", pages);
+//	    
+//	    return response;
+//	}
 }
+
