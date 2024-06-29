@@ -30,15 +30,25 @@ public class CsServiceImpl implements CsService {
         this.sqlSession = sqlSession;
     }
 	
-	//문의글 전체 조회
+	//문의글 전체 조회: 페이징 처리된 전체 문의글
 	@Override
     public int getTotalQuestions() throws Exception {
         return csDAO.getTotalQuestions(sqlSession);
     }
     @Override
-    public List<CsQuestionDTO> getQuestionsByPage(int page, int pageSize) throws Exception {
+    public List<CsQuestionDTO> getQuestions(int page, int pageSize) throws Exception {
         int offset = (page - 1) * pageSize;
-        return csDAO.getQuestionsByPage(sqlSession, offset, pageSize);
+        return csDAO.getQuestions(sqlSession, offset, pageSize);
+    }
+    //문의글 전체 조회: 페이징 처리 된 사용자별 문의글
+    @Override
+    public int getTotalQuestionsByUser(int userNo) throws Exception {
+        return csDAO.getTotalQuestionsByUser(sqlSession, userNo);
+    }    
+    @Override
+    public List<CsQuestionDTO> getQuestionsByUser(int userNo, int page, int pageSize) throws Exception {
+    	int offset = (page - 1) * pageSize;
+    	return csDAO.getQuestionsByUser(sqlSession, userNo, offset, pageSize);
     }
     
     //문의글 상세 조회
@@ -113,5 +123,7 @@ public class CsServiceImpl implements CsService {
         csDAO.insertAnswer(sqlSession, answer);
         csDAO.updateQuestionToAnswered(sqlSession, questionNo);
     }
+
+
 
 }

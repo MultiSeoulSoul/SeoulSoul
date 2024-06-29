@@ -43,7 +43,7 @@ public class CsController {
 
 	}
 	
-    //문의글 전체 조회
+	//문의글 전체 조회: 페이징 처리된 전체 문의글
 	@GetMapping("/qnaAll")
     public String qnaAll(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         int totalQuestions;
@@ -52,7 +52,7 @@ public class CsController {
 			totalQuestions = csService.getTotalQuestions();
 			int totalPages = (int) Math.ceil((double) totalQuestions / PAGE_SIZE);
 
-	        List<CsQuestionDTO> questions = csService.getQuestionsByPage(page, PAGE_SIZE);
+	        List<CsQuestionDTO> questions = csService.getQuestions(page, PAGE_SIZE);
 
 	        model.addAttribute("questions", questions);
 	        model.addAttribute("currentPage", page);
@@ -67,6 +67,33 @@ public class CsController {
 		}
         return "cs/qnaAll";
         
+    }
+	//문의글 전체 조회: 페이징 처리 된 사용자별 문의글
+	@RequestMapping("/qnaAllUser")
+    public String getQnaAllUser(@RequestParam(value = "page", defaultValue = "1") int page, Model model/*, HttpSession session*/) {
+        
+//		int userNo = (int) session.getAttribute("userNo"); // 로그인한 사용자의 번호를 세션에서 가져옴
+        
+		int userNo = 3; //테스트용
+		
+        int totalQuestions;
+		try {
+			totalQuestions = csService.getTotalQuestionsByUser(userNo);
+			int totalPages = (int) Math.ceil((double) totalQuestions / PAGE_SIZE);
+
+	        List<CsQuestionDTO> questions = csService.getQuestionsByUser(userNo, page, PAGE_SIZE);
+	        
+	        model.addAttribute("questions", questions);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", totalPages);
+	        
+		} catch (Exception e) {
+			e.printStackTrace();
+			//문의글 전체 조회 실패 시 예외 처리: 에러 페이지 이동
+			model.addAttribute("msg", "문의글 전체 조회 과정에서 문제가 발생했습니다.");
+			return "common/errorPage";
+		}
+        return "cs/qnaAllUser";
     }
 	
 	//문의글 상세 조회

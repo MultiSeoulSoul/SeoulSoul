@@ -15,16 +15,27 @@ import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
 @Repository
 public class CsDAO {
 
-	//문의글 전체 조회: 1. 전체 문의글 수
+	//문의글 전체 조회: 페이징 처리된 전체 문의글
 	public int getTotalQuestions(SqlSessionTemplate sqlSession) {
         return sqlSession.selectOne("csMapper.getTotalQuestions");
     }
-	//문의글 전체 조회: 2. 페이징 처리된 문의글
-    public List<CsQuestionDTO> getQuestionsByPage(SqlSessionTemplate sqlSession, int offset, int pageSize) {
+    public List<CsQuestionDTO> getQuestions(SqlSessionTemplate sqlSession, int offset, int pageSize) {
         Map<String, Integer> params = new HashMap<>();
         params.put("offset", offset);
         params.put("pageSize", pageSize);
-        return sqlSession.selectList("csMapper.getQuestionsByPage", params);
+        return sqlSession.selectList("csMapper.getQuestions", params);
+    }
+    //문의글 전체 조회: 페이징 처리 된 사용자별 문의글
+    public int getTotalQuestionsByUser(SqlSessionTemplate sqlSession, int userNo) {
+        return sqlSession.selectOne("csMapper.getTotalQuestionsByUser", userNo);
+    }
+    
+    public List<CsQuestionDTO> getQuestionsByUser(SqlSessionTemplate sqlSession, int userNo, int offset, int pageSize) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userNo", userNo);
+        params.put("offset", offset);
+        params.put("pageSize", pageSize);
+        return sqlSession.selectList("csMapper.getQuestionsByUser", params);
     }
     
     //문의글 상세 조회: 1. 문의글 상세 가져오기

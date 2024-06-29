@@ -9,9 +9,12 @@ import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
 
 public interface CsService {
 
-	//문의글 전체 조회
+	//문의글 전체 조회: 페이징 처리된 전체 문의글
 	int getTotalQuestions() throws Exception;
-    List<CsQuestionDTO> getQuestionsByPage(int page, int pageSize) throws Exception;
+    List<CsQuestionDTO> getQuestions(int page, int pageSize) throws Exception;
+    //문의글 전체 조회: 페이징 처리 된 사용자별 문의글
+    int getTotalQuestionsByUser(int userNo) throws Exception;
+    List<CsQuestionDTO> getQuestionsByUser(int userNo, int page, int pageSize) throws Exception;
     
     //문의글 상세 조회
     CsQuestionDTO getQuestionById(int questionNo) throws Exception;

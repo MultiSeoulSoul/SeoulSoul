@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -51,17 +52,13 @@ th.title {
 	<!-- div content -->
      <div class="content">
      	<br><br>
-     	
-     	<!-- (회원) 내가 쓴 문의글 보기 페이지 -->   
-        <!-- <h1>내가 쓴 문의글 보기</h1>
-        <p>내가 쓴 문의글 설명글</p> -->
-        <!-- (관리자) 문의글 전체 목록 페이지 -->
+        
+        <!-- [관리자]로 로그인한 경우: 전체 문의글 목록 -->
         <h1>문의글 전체 목록 보기</h1>
         <p>회원들이 작성한 문의글 전체 목록을 볼 수 있습니다. 최대 일주일 이내로 답변 완료하도록 하며, 작성된 답변은 수정이 불가하니 유의하시길 바랍니다.</p>
         
      	<div class="form-container">
      	
-	     	<!-- 문의글 전체 목록 -->
 	     	<div class="table-container">
 				<c:choose>
 		            <c:when test="${empty questions}">
@@ -102,9 +99,7 @@ th.title {
 				
 			    <!-- 하단 버튼 -->
                 <div class="form-group" align ="right">
-                	<!-- (회원) -->
-                	<a href="qnaInsert"><button type="button" id="create-button">작성하기</button></a>
-                	<!-- (공통) -->
+                
                     <a href="csMain"><button type="button" id="back-button">돌아가기</button></a>
                 </div>	
 			</div>
@@ -116,7 +111,7 @@ th.title {
                 </c:forEach>
 			</div>
 			
-		</div>				  	
+		</div>        
        <br><br>	
    	</div>
    	
