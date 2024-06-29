@@ -1,6 +1,8 @@
 package com.multi.seoulsoul.achieve.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -106,5 +108,18 @@ public class AchieveDAO {
     public int updateCateIcons(SqlSessionTemplate sqlSession, AchCateIconsDTO achCateIconsDTO) {
         return sqlSession.update("achieveMapper.updateCateIcons", achCateIconsDTO);
     }
+
+	public List<UserDTO> blackList(SqlSessionTemplate sqlSession) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("userMapper.selectBlackList");
+	}
+
+	public int updateBlacklistStatus(SqlSessionTemplate sqlSession, int userNo, char status) {
+		// TODO Auto-generated method stub
+		Map<String, Object> params = new HashMap<>();
+        params.put("userNo", userNo);
+        params.put("status", status);
+		return sqlSession.update("userMapper.updateBlacklistStatus", params);
+	}
 
 }

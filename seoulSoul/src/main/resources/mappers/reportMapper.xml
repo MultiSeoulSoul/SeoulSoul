@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reportMapper">
+
+    <!-- ReportDTO resultMap -->
+    <resultMap type="com.multi.seoulsoul.report.model.dto.ReportDTO" id="reportResultMap">
+        <id property="reportNo" column="report_no"/>
+        <result property="title" column="title"/>
+        <result property="reason" column="reason"/>
+        <result property="createdDate" column="created_date"/>
+        <association property="reporter" javaType="com.multi.seoulsoul.report.model.dto.ReporterDTO" resultMap="reporterResultMap"/>
+        <association property="reportedSoulLog" javaType="com.multi.seoulsoul.report.model.dto.ReportedSoulLogDTO" resultMap="reportedSoulLogResultMap"/>
+        <collection property="reportReply" ofType="com.multi.seoulsoul.report.model.dto.ReportReplyDTO" resultMap="reportReplyResultMap"/>
+    </resultMap>
+    
+    <!-- ReporterDTO resultMap -->
+    <resultMap type="com.multi.seoulsoul.report.model.dto.ReporterDTO" id="reporterResultMap">
+        <id property="userNo" column="user_no"/>
+        <result property="nickname" column="nickname"/>
+    </resultMap>
+    
+    <!-- ReportedSoulLogDTO resultMap -->
+    <resultMap type="com.multi.seoulsoul.report.model.dto.ReportedSoulLogDTO" id="reportedSoulLogResultMap">
+        <id property="soulLogNo" column="soul_log_no"/>
+        <result property="title" column="title"/>
+    </resultMap>
+    
+    <!-- ReportReplyDTO resultMap -->
+    <resultMap type="com.multi.seoulsoul.report.model.dto.ReportReplyDTO" id="reportReplyResultMap">
+        <id property="replyNo" column="reply_no"/>
+        <result property="reportNo" column="report_no"/>
+        <result property="content" column="content"/>
+        <result property="createdDate" column="created_date"/>
+    </resultMap>
+
+    <!-- Select queries -->
+    <select id="selectReportedSoulLog" resultMap="reportedSoulLogResultMap">
+        SELECT soul_log_no, title
+        FROM SL_BOARD
+        WHERE soul_log_no = #{soulLogNo}
+    </select>
+    
+    <select id="selectReporterById" resultMap="reporterResultMap">
+        SELECT user_no, nickname
+        FROM USERS
+        WHERE user_no = #{reporter}
+    </select>
+
+    <select id="selectReportRepliesByReportNo" resultMap="reportReplyResultMap">
+        SELECT reply_no, report_no, content, created_date
+        FROM AD_REPORT_REPLY
+        WHERE report_no = #{reportNo}
+    </select>
+    
+    <!-- Main select query for all reports -->
+    <select id="selectReportList" resultMap="reportResultMap">
+        SELECT 
+            r.report_no, r.title, r.reason, r.created_date,
+            u.user_no AS user_no, u.nickname AS nickname,
+            b.soul_log_no AS soul_log_no, b.title AS title
+        FROM SL_REPORT r
+        LEFT JOIN USERS u ON r.reporter = u.user_no
+        LEFT JOIN SL_BOARD b ON r.reported_soul_log = b.soul_log_no
+    </select>
+
+    <!-- Select query for a specific report -->
+    <select id="selectReportById" resultMap="reportResultMap">
+        SELECT 
+            r.report_no, r.title, r.reason, r.created_date,
+            u.user_no AS user_no, u.nickname AS nickname,
+            b.soul_log_no AS soul_log_no, b.title AS title
+        FROM SL_REPORT r
+        LEFT JOIN USERS u ON r.reporter = u.user_no
+        LEFT JOIN SL_BOARD b ON r.reported_soul_log = b.soul_log_no
+        WHERE r.report_no = #{reportNo}
+    </select>
+
+    <!-- Insert query -->
+    <insert id="insertSoulLogReport" parameterType="com.multi.seoulsoul.report.model.dto.ReportDTO">
+        INSERT INTO SL_REPORT (title, reason, reporter, reported_soul_log)
+        VALUES (#{title}, #{reason}, #{reporter.userNo}, #{reportedSoulLog.soulLogNo})
+    </insert>
+
+</mapper>
+

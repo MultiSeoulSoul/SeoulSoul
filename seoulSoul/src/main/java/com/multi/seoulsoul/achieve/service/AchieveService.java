@@ -22,29 +22,32 @@ public interface AchieveService {
 	
 	int insertCateIcons(AchCateIconsDTO achCateIconsDTO) throws Exception ;
 
-	List<AchLocaDTO> achieveLocaList();
+	List<AchLocaDTO> achieveLocaList() throws Exception ;
 	
-	List<AchCateDTO> achieveCateList();
+	List<AchCateDTO> achieveCateList() throws Exception ;
 
-	int deleteAchieveLoca(int achNo);
+	int deleteAchieveLoca(int achNo) throws Exception ;
 	
-	int deleteAchieveCate(int achNo);
+	int deleteAchieveCate(int achNo) throws Exception ;
 
-	List<UserDTO> userList();
+	List<UserDTO> userList() throws Exception ;
+	
+	List<UserDTO> blackList() throws Exception ;
 
-	AchLocaDTO getAchLocaById(int achNo);
+	AchLocaDTO getAchLocaById(int achNo) throws Exception ;
 
-	AchLocaIconsDTO getAchLocaIconsByAchNo(int achNo);
+	AchLocaIconsDTO getAchLocaIconsByAchNo(int achNo) throws Exception ;
 
 	void updateAchLoca(AchLocaDTO achLocaDTO, AchLocaIconsDTO achLocaIconsDTO, MultipartFile singleFile,
 			HttpServletRequest request) throws Exception ;
 	
-	AchCateDTO getAchCateById(int achNo);
+	AchCateDTO getAchCateById(int achNo) throws Exception ;
 
-	AchCateIconsDTO getAchCateIconsByAchNo(int achNo);
+	AchCateIconsDTO getAchCateIconsByAchNo(int achNo) throws Exception ;
 	
 	void updateAchCate(AchCateDTO achCateDTO, AchCateIconsDTO achCateIconsDTO, MultipartFile singleFile,
 			HttpServletRequest request) throws Exception ;
-	
 
+	void updateBlacklistStatus(int userNo, char status) throws Exception ;
+	
 }

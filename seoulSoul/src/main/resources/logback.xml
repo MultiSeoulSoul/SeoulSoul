@@ -27,7 +27,7 @@
 	
 	<logger name="com.multi.seoulsoul" level="DEBUG" />
 	
-	<root level="INFO">
+	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="file" />
 	</root>

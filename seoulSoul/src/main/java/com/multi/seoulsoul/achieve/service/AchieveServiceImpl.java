@@ -73,7 +73,7 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public List<AchLocaDTO> achieveLocaList() {
+	public List<AchLocaDTO> achieveLocaList() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("achieveLocaList AchieveServiceImpl 도착.");
 
@@ -83,7 +83,7 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 	
 	@Override
-	public List<AchCateDTO> achieveCateList() {
+	public List<AchCateDTO> achieveCateList() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("achieveCateList AchieveServiceImpl 도착.");
 
@@ -93,27 +93,27 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 	
 	@Override
-    public AchLocaDTO getAchLocaById(int achNo) {
+    public AchLocaDTO getAchLocaById(int achNo) throws Exception {
         return achieveDAO.selectAchLocaById(sqlSession, achNo);
     }
 	
 	@Override
-    public AchLocaIconsDTO getAchLocaIconsByAchNo(int achNo) {
+    public AchLocaIconsDTO getAchLocaIconsByAchNo(int achNo) throws Exception {
         return achieveDAO.selectAchLocaIconsByAchNo(sqlSession, achNo);
     }
 	
 	@Override
-    public AchCateDTO getAchCateById(int achNo) {
+    public AchCateDTO getAchCateById(int achNo) throws Exception {
         return achieveDAO.selectAchCateById(sqlSession, achNo);
     }
 	
 	@Override
-    public AchCateIconsDTO getAchCateIconsByAchNo(int achNo) {
+    public AchCateIconsDTO getAchCateIconsByAchNo(int achNo) throws Exception {
         return achieveDAO.selectAchCateIconsByAchNo(sqlSession, achNo);
     }
 
 	@Override
-	public int deleteAchieveLoca(int achNo) {
+	public int deleteAchieveLoca(int achNo) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("deleteAchieveLoca AchieveServiceImpl 도착.");
 		
@@ -125,7 +125,7 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public int deleteAchieveCate(int achNo) {
+	public int deleteAchieveCate(int achNo) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("deleteAchieveCate AchieveServiceImpl 도착.");
 		
@@ -137,13 +137,23 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public List<UserDTO> userList() {
+	public List<UserDTO> userList() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("userList AchieveServiceImpl 도착.");
 
 		List<UserDTO> userList = achieveDAO.userList(sqlSession);
 		
 		return userList;
+	}
+
+	@Override
+	public List<UserDTO> blackList() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("blackList AchieveServiceImpl 도착.");
+
+		List<UserDTO> blackList = achieveDAO.blackList(sqlSession);
+		
+		return blackList;
 	}
 
 	@Override
@@ -201,6 +211,16 @@ public class AchieveServiceImpl implements AchieveService {
             achieveDAO.updateCateIcons(sqlSession, achCateIconsDTO);
         } else {
             throw new Exception("업적 수정 실패");
+        }
+	}
+
+	@Override
+	public void updateBlacklistStatus(int userNo, char status) throws Exception {
+		// TODO Auto-generated method stub
+		int result = achieveDAO.updateBlacklistStatus(sqlSession, userNo, status);
+		
+        if (result <= 0) {
+            throw new Exception("블랙리스트 상태 업데이트 실패");
         }
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
@@ -43,7 +44,7 @@ public class AchieveController {
 	}
 	
 	@GetMapping("/adminMain")
-	public String adminMainPage(Model model) {
+	public String adminMainPage(Model model) throws Exception {
 		System.out.println("관리자 메인 페이지 호출 성공.");
 		
 		List<AchLocaDTO> achieveLocaList = achieveService.achieveLocaList();
@@ -51,6 +52,8 @@ public class AchieveController {
 		
 		List<ReportDTO> reportList = reportService.reportList();
 		List<UserDTO> userList = achieveService.userList();
+		
+		List<UserDTO> blackList = achieveService.blackList();
         
         model.addAttribute("achieveLocaList", achieveLocaList);
         model.addAttribute("achieveCateList", achieveCateList);
@@ -58,7 +61,21 @@ public class AchieveController {
         model.addAttribute("reportList", reportList);
         model.addAttribute("userList", userList);
         
+        model.addAttribute("blackList", blackList);
+        
 		return "achieve/adminMain";
+	}
+	
+	@PostMapping("/blacklistUser")
+	@ResponseBody
+	public String blacklistUser(int userNo) {
+		try {
+            achieveService.updateBlacklistStatus(userNo, 'Y');
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
 	}
 	
 	@GetMapping("/achLocaInsertForm")
@@ -80,7 +97,7 @@ public class AchieveController {
                                     AchLocaIconsDTO achLocaIconsDTO,
                                     HttpServletRequest request, 
                                     MultipartFile singleFile, 
-                                    Model model) {
+                                    Model model) throws Exception {
         
         System.out.println("Post >> achLocaInsertForm.");
         System.out.println("Post >> " + achLocaDTO);
@@ -103,18 +120,16 @@ public class AchieveController {
                 mkdir.mkdirs();
             }
             
-            /* 파일명 변경 처리 */
             String originFileName = singleFile.getOriginalFilename();
             String ext = originFileName.substring(originFileName.lastIndexOf("."));
             String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
             
-            /* 파일을 저장한다. */
             saveFile(singleFile, filePath, savedName);
             
             model.addAttribute("savedName", savedName);
             
             System.out.println("img넣기 전 >> " + achLocaIconsDTO);
-            achLocaIconsDTO.setAchLoca(achLocaDTO);  // 여기서 achNo가 설정됨
+            achLocaIconsDTO.setAchLoca(achLocaDTO);  
             achLocaIconsDTO.setOriginalName(originFileName);
             achLocaIconsDTO.setSavedName(savedName);
             System.out.println("img넣은 후 >> " + achLocaIconsDTO);
@@ -146,7 +161,7 @@ public class AchieveController {
                                     AchCateIconsDTO achCateIconsDTO,
                                     HttpServletRequest request, 
                                     MultipartFile singleFile, 
-                                    Model model) {
+                                    Model model) throws Exception {
         
         System.out.println("Post >> achCateInsertForm.");
         System.out.println("Post >> " + achCateDTO);
@@ -169,18 +184,16 @@ public class AchieveController {
                 mkdir.mkdirs();
             }
             
-            /* 파일명 변경 처리 */
             String originFileName = singleFile.getOriginalFilename();
             String ext = originFileName.substring(originFileName.lastIndexOf("."));
             String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
             
-            /* 파일을 저장한다. */
             saveFile(singleFile, filePath, savedName);
             
             model.addAttribute("savedName", savedName);
             
             System.out.println("img넣기 전 >> " + achCateIconsDTO);
-            achCateIconsDTO.setAchCate(achCateDTO);  // 여기서 achNo가 설정됨
+            achCateIconsDTO.setAchCate(achCateDTO);  
             achCateIconsDTO.setOriginalName(originFileName);
             achCateIconsDTO.setSavedName(savedName);
             System.out.println("img넣은 후 >> " + achCateIconsDTO);
@@ -232,7 +245,7 @@ public class AchieveController {
                                 AchLocaIconsDTO achLocaIconsDTO,
                                 @RequestParam("singleFile") MultipartFile singleFile,
                                 HttpServletRequest request, 
-                                Model model) {
+                                Model model) throws Exception {
         try {
             achieveService.updateAchLoca(achLocaDTO, achLocaIconsDTO, singleFile, request);
             return "redirect:/admin/adminMain";
@@ -244,7 +257,7 @@ public class AchieveController {
     }
 	
 	@GetMapping("/deleteLoca")
-	public String achieveDeleteLoca(AchLocaDTO achLocaDTO) {
+	public String achieveDeleteLoca(AchLocaDTO achLocaDTO) throws Exception {
 		System.out.println("Request >> achieveDelete.");
 		System.out.println("Request >> " + achLocaDTO);
 		
@@ -260,7 +273,7 @@ public class AchieveController {
 	}
 	
 	@GetMapping("/deleteCate")
-	public String achieveDeleteCate(AchCateDTO achCateDTO) {
+	public String achieveDeleteCate(AchCateDTO achCateDTO) throws Exception {
 		System.out.println("Request >> achieveDelete.");
 		System.out.println("Request >> " + achCateDTO);
 		

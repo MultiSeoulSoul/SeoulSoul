@@ -14,12 +14,12 @@
         </div>
         <nav>
             <ul>
-                <li><a href="${pageContext.request.contextPath}/soulLog/soulLogMain">소울로그</a></li>
+                <li><a href="${pageContext.request.contextPath}/soulLog/soulLogMain?page=1">소울로그</a></li>
                 <li><a href="${pageContext.request.contextPath}/rec/recMain">추천</a></li>
-                
                 <li><a href="${pageContext.request.contextPath}/event/eventMain">이벤트</a></li>
-                
                 <li><a href="${pageContext.request.contextPath}/cs/csMain">고객센터</a></li>
+                
+                
             </ul>
         </nav>
         <div class="user-menu">

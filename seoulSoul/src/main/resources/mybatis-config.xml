@@ -13,8 +13,15 @@
 	<typeAliases>
      	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" alias="achLocaDTO"></typeAlias>
      	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" alias="achCateDTO"></typeAlias>
+     	<typeAlias type="com.multi.seoulsoul.user.model.dto.UserDTO" alias="userDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserPageDTO" alias="userPageDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.soulLog.model.dto.SLBoardDTO" alias="slBoardDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.soulLog.model.dto.SLReplyDTO" alias="slReplyDTO"></typeAlias>
     </typeAliases>
     <mappers>
+    	<mapper resource="mappers/userMapper.xml" />
+      	<mapper resource="mappers/soulLogMapper.xml" />
+      	<mapper resource="mappers/reportMapper.xml" />
       	<mapper resource="mappers/achieveMapper.xml" />
     </mappers>
    

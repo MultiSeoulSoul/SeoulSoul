@@ -75,6 +75,33 @@
 </style>
 
 <title>관리자 메인 페이지</title>
+
+<script>
+    function blacklistUser(userNo) {
+        if (confirm("정말로 이 사용자를 블랙리스트에 추가하시겠습니까?")) {
+            fetch('${pageContext.request.contextPath}/admin/blacklistUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'userNo': userNo
+                })
+            })
+            .then(response => response.text())
+            .then(result => {
+                if (result === 'success') {
+                    alert("사용자가 블랙리스트에 추가되었습니다.");
+                    location.reload();
+                } else {
+                    alert("블랙리스트 추가에 실패했습니다.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+</script>
+
 </head>
 <body>
 
@@ -89,7 +116,7 @@
             <c:forEach items="${userList}" var="bag">
                 No.${bag.userNo} | name : ${bag.nickname} | 
                 <button>강등</button> 
-                <button>블랙</button> 
+                <button onclick="blacklistUser(${bag.userNo})">블랙</button>
                 <button>탈퇴</button>
                 <hr>
             </c:forEach>
@@ -118,8 +145,8 @@
             </div>
             <div class="half-section">
                 <h2>블랙리스트</h2>
-                <c:forEach items="${blacklist}" var="bag">
-                    ${bag.nickname} | 블랙리스트에 등록된 날짜: ${bag.blacklistDate} 
+                <c:forEach items="${blackList}" var="bag">
+                    No.${bag.userNo} | name : ${bag.nickname} |
                     <button>해제</button>
                     <hr>
                 </c:forEach>
