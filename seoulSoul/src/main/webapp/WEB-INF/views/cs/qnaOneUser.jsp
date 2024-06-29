@@ -10,31 +10,36 @@
 <title>서울소울 SEOUL SOUL</title>
 
 <style type="text/css">
+h1 {
+    padding-bottom: 10px;
+}
 .content {
     width: 80%;
     margin: 0 auto;
 }
-.details-container {
+.table-container {
     margin-top: 20px;
 }
-.details-container h2 {
-    margin-bottom: 10px;
-}
-.details-container p {
-    margin-bottom: 10px;
-}
-table {
+table.detail-table, table.answer-table {
     width: 100%;
     border-collapse: collapse;
 }
-th, td {
+.detail-table th, .detail-table td, .answer-table th, .answer-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: left;
 }
-th {
+.detail-table th, .answer-table th {
     background-color: #f2f2f2;
-    width: 20%;
+}
+.detail-table td, .answer-table td {
+    background-color: white;
+}
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    resize: vertical;
 }
 </style>
 
@@ -51,93 +56,94 @@ th {
         <!-- [회원]으로 로그인한 경우: 내가 쓴 문의글 상세 페이지 -->
         <h1>내가 쓴 문의글 보기</h1>
         <p>답변 완료된 문의글은 수정이 불가하니 유의하시길 바랍니다.</p>
+        <p>서울소울 고객센터는 여러분의 소중한 의견을 듣고, 신속하게 도움을 드리기 위해 항상 노력하고 있습니다.</p>
+        <br>
 
-        <div class="form-container">
+        <div class="table-container">
+            <table class="detail-table">
                 
-            <div class="details-container">
-                <table>
+                <tr>
+                	<th colspan="8">문의글</th>
+                </tr>
+                
+                <tr>
+                	<th>카테고리</th>
+                    <td>${qna.categoryInfo.categoryName}</td>
+                    
+                    <th>작성자</th>
+                    <td>${qna.writerInfo.nickname}</td>
+                    <th>조회수</th>
+                    <td>${qna.views}</td>
+                </tr>
+                
+                <tr>
+                	<th>제목</th>
+                    <td colspan="5">${qna.title}</td>
+                </tr>
+                
+                <tr><!-- 내용 -->
+                    <td colspan="8"><pre>${qna.content}</pre></td>
+                </tr>
+                
+                <c:if test="${not empty qna.files}">
                     <tr>
-                        <th>제목</th>
-                        <td>${qna.title}</td>
-                    </tr>
-                    <tr>
-                        <th>카테고리</th>
-                        <td>${qna.categoryInfo.categoryName}</td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td>${qna.writerInfo.nickname}</td>
-                    </tr>
-                    <tr>
-                        <th>작성일시</th>
-                        <td><fmt:formatDate value="${qna.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
-                    </tr>
-                    <c:if test="${qna.createdDate != qna.modifiedDate}">
-                        <tr>
-                            <th>수정일시</th>
-                            <td><fmt:formatDate value="${qna.modifiedDate}" dateStyle="long" type="both" timeStyle="long"/></td>
-                        </tr>
-                    </c:if>
-                    <tr>
-                        <th>조회수</th>
-                        <td>${qna.views}</td>
-                    </tr>
-                    <tr>
-                        <th>내용</th>
-                        <td>${qna.content}</td>
-                    </tr>
-                    <c:if test="${not empty qna.files}">
-                        <tr>
-                            <th>첨부 파일</th>
-                            <td>
+                        <th>첨부 파일</th>
+                        <td colspan="7">
+                            <ul>
                                 <c:forEach var="file" items="${qna.files}">
-					                    <li><a href="${pageContext.request.contextPath}/cs/download?fileNo=${file.fileNo}&questionNo=${qna.questionNo}">${file.originalFileName}</a></li>
-					                </c:forEach>
-                            </td>
-                        </tr>
-                    </c:if>
-                </table>
-            </div>
-            
-            <!-- 답변 -->
-			<c:if test="${not empty qna.answers}">
-                <div class="answer-section">
-                    <h3>답변</h3>
-                    <table class="answer-table">
-                        <thead>
-                            <tr>
-                                <th>답변자</th>
-                                <th>작성일시</th>
-                                <th>내용</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="answer" items="${qna.answers}">
-                                <tr>
-                                    <td>${answer.writerInfo.nickname}</td>
-                                    <td><fmt:formatDate value="${answer.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
-                                    <td>${answer.content}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-            </c:if>     
-            <br>    
-
-            <!-- [회원]으로 로그인한 경우: 하단 버튼 -->
-            <div class="form-group" align ="right">             
-                <a href="qnaDelete?id=${qna.questionNo}" onclick="return confirm('정말 삭제하시겠습니까?');"><button type="button" id="delete-button">삭제하기</button></a>
-                <c:if test="${empty qna.answers}">
-                	<a href="qnaUpdate?id=${qna.questionNo}"><button type="button" id="edit-button">수정하기</button></a>
+                                    <li><a href="${pageContext.request.contextPath}/cs/download?fileNo=${file.fileNo}&questionNo=${qna.questionNo}">${file.originalFileName}</a></li>
+                                </c:forEach>
+                            </ul>
+                        </td>
+                    </tr>
+                </c:if>                
+                <tr>
+                    <th>작성일시</th>
+                    <td colspan="7"><fmt:formatDate value="${qna.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
+                </tr>
+                <c:if test="${qna.createdDate != qna.modifiedDate}">
+	                <tr>
+	                	<th>수정일시</th>
+	                    <td colspan="7"><fmt:formatDate value="${qna.modifiedDate}" dateStyle="long" type="both" timeStyle="long"/></td>
+	                </tr>
                 </c:if>
-                <a href="qnaAll"><button type="button" id="back-button">돌아가기</button></a>           
-            </div>
-            
+            </table>
         </div>
+        <br>
+       
+        <!-- 답변 -->
+        <c:if test="${not empty qna.answers}">
+        	<table class="answer-table">
+			<c:forEach var="answer" items="${qna.answers}">
+				<tr>
+                	<th colspan="4">답변</th>
+                </tr>
+                <tr>
+                	<td colspan="4"><pre>${answer.content}</pre></td>
+                </tr>
+                <tr>
+					<th>작성자</th>
+                    <td>${answer.writerInfo.nickname}</td>
+                    <th>작성일시</th>
+                    <td><fmt:formatDate value="${answer.createdDate}" dateStyle="long" type="both" timeStyle="long"/></td>
+                </tr>
+			</c:forEach>
+			</table>
+			<br>
+        </c:if>
+
+        <!-- [회원]으로 로그인한 경우: 하단 버튼 -->
+        <div class="form-group" align ="right">  
+            <c:if test="${empty qna.answers}">
+            	<a href="qnaUpdate?id=${qna.questionNo}"><button type="button" id="edit-button">수정하기</button></a>
+            </c:if>           
+        	<a href="qnaDelete?id=${qna.questionNo}" onclick="return confirm('정말 삭제하시겠습니까?');"><button type="button" id="delete-button">삭제하기</button></a>
+            <a href="qnaAllUser"><button type="button" id="back-button">돌아가기</button></a>           
+        </div>
+
                             
-       <br><br>    
     </div>
+    <br><br>
     
 </body>
 </html>

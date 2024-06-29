@@ -28,8 +28,10 @@
      	
      	<!-- 문의글 작성하기 페이지 -->   
         <h1>문의글 작성하기</h1>
-        <p>문의글 작성하기 설명글</p>
-              
+        <p>문의글 작성하시기 전에, 서울소울 고객센터 챗봇을 확인해주세요! 자주 묻는 질문(FAQ)은 챗봇이 안내해드릴 수 있습니다.</p>
+        <p>필요 시 다수의 파일을 첨부하실 수 있으며, 답변 완료된 문의글은 수정이 불가하니 유의하시길 바랍니다.</p>
+        <p>서울소울 고객센터는 여러분의 소중한 의견을 듣고, 신속하게 도움을 드리기 위해 항상 노력하고 있습니다.</p>
+        <br>       
         
         <div class="form-container">  
                  
@@ -38,7 +40,7 @@
                 
                 <!-- 테스트용: 작성자 writer(user_no) -->    
                 <div class="form-group">
-                    <input type="text" id="writer" name="writer" placeholder="테스트용: 3" required>
+                    <input type="text" id="writer" name="writer" placeholder="테스트용 user_no 입력" required>
                 </div>
                 
                 <!-- 카테고리 -->
@@ -60,7 +62,7 @@
                     <textarea id="content" name="content" placeholder="내용" rows="10" required></textarea>
                 </div>
                 
-                <!-- 파일 업로드를 위한 input -->
+                <!--첨부파일 -->
                 <div class="form-group">
                     <input type="file" id="multiFiles" name="multiFiles" multiple>
                 </div>

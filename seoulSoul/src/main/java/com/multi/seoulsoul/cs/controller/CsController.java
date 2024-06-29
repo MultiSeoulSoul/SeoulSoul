@@ -212,7 +212,7 @@ public class CsController {
 			model.addAttribute("msg", "문의글 삭제 과정에서 문제가 발생했습니다.");
 			return "common/errorPage";
 		}
-        return "redirect:/cs/qnaAll";
+        return "redirect:/cs/qnaAllUser";
         
     }
 	
@@ -314,7 +314,7 @@ public class CsController {
             model.addAttribute("msg", "문의글 작성 과정에서 문제가 발생했습니다.");
 			return "common/errorPage";
         }
-        return "redirect:/cs/qnaAll";
+        return "redirect:/cs/qnaAllUser";
     }
 
     
@@ -429,7 +429,7 @@ public class CsController {
             model.addAttribute("msg", "문의글 수정 과정에서 문제가 발생했습니다.");
 			return "common/errorPage";
         }
-        return "redirect:/cs/qnaOne?id=" + questionNo;
+        return "redirect:/cs/qnaOneUser?id=" + questionNo;
     }
     //문의글 수정: 3. 첨부파일 삭제
     @PostMapping("deleteFile")
@@ -448,7 +448,7 @@ public class CsController {
             model.addAttribute("msg", "문의글 수정 과정에서 문제가 발생했습니다.");
 			return "common/errorPage";  
         }
-        return "redirect:/cs/qnaOne?id=" + questionNo;
+        return "redirect:/cs/qnaOneUser?id=" + questionNo;
     }
     
     //문의글 답변 작성
