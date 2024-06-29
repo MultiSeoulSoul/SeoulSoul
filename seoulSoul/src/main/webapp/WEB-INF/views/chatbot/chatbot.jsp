@@ -70,7 +70,6 @@
 		setConnected(false); //연결끊어졌을 때 설정 변경 
 		console.log("Disconnected");
 	}
-	
 </script>
 </head>
 <body onload="connect();">
