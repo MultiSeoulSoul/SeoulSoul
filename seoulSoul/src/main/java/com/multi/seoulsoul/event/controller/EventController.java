@@ -13,6 +13,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ import com.multi.seoulsoul.event.service.EventService;
 
 @Controller
 @RequestMapping("event")
+@PropertySource("classpath:application.properties")
 public class EventController {
 
     @Autowired
@@ -118,6 +121,10 @@ public class EventController {
         return new ModelAndView("redirect:/event/eventMain");
     }
 
+    @Value("${kakao.api.key}")
+    private String kakaoApiKey;
+    
+
     @GetMapping("/eventDetail")
     public String eventDetail(@RequestParam("eventNo") int eventNo, Model model) {
         try {
@@ -127,6 +134,9 @@ public class EventController {
             // 이벤트 상세 정보 가져오기
             EventDTO eventDTO = eventService.selectEventByNo(eventNo);
             model.addAttribute("event", eventDTO);
+
+            // 카카오 API 키를 모델에 추가
+            model.addAttribute("kakaoApiKey", kakaoApiKey);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("msg", "이벤트 상세 정보를 가져오는 중 오류가 발생했습니다.");
@@ -134,6 +144,9 @@ public class EventController {
         }
         return "event/eventDetail";
     }
+
+
+
     @PostMapping("/insertEvent")
     public String insertEvent(@RequestParam("title") String title, @RequestParam("address") String address, Model model) {
         // 데이터베이스에 이벤트 저장 (로직 생략)
@@ -235,7 +248,6 @@ public class EventController {
             return "redirect:/WEB-INF/common/errorPage.jsp";
         }
     }
-    
 
 }
 

@@ -27,5 +27,7 @@ public interface EventService {
 	void updateEvent(EventDTO eventDTO) throws Exception;
 
 	void updateEventFile(Map<String, Object> fileParams) throws Exception;
+	
+	void deleteRecommend(int recommendationNo) throws Exception;
 
 }
