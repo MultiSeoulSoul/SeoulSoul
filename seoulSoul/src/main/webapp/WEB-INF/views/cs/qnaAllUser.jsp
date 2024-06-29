@@ -80,10 +80,10 @@ th.title {
                             <tbody>
                                 <c:forEach items="${questions}" var="qna" varStatus="status">
                                     <tr>
-                                        <td class="index">${fn:length(questions) - status.index}</td><!-- 문의글 번호를 역순으로 계산하여 표시 -->
-                                        <td class="category">${qna.categoryInfo.categoryName}</td><!-- 카테고리 이름 표시 -->
-                                        <td class="title"><a href="qnaOne?id=${qna.questionNo}">${qna.title}</a></td>
-                                        <td class="writer">${qna.writerInfo.nickname}</td><!-- 작성자 닉네임 표시 -->
+                                        <td class="index">${fn:length(questions) - status.index}</td>
+                                        <td class="category">${qna.categoryInfo.categoryName}</td>
+                                        <td class="title"><a href="qnaOneUser?id=${qna.questionNo}">${qna.title}</a></td>
+                                        <td class="writer">${qna.writerInfo.nickname}</td>
                                         <td class="views">${qna.views}</td>
                                         <td class="created_date">
                                             <fmt:formatDate value="${qna.createdDate}" pattern="yyyy-MM-dd" />

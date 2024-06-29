@@ -47,10 +47,10 @@ th {
     <!-- div content -->
      <div class="content">
         <br><br>
-
-        <!-- [관리자]로 로그인한 경우: 전체 문의글 상세 보기 -->
-        <h1>문의글 상세 보기</h1>
-        <p>문의글은 최대 일주일 이내로 답변 완료하도록 하며, 작성된 답변은 수정이 불가하니 유의하시길 바랍니다.</p>
+        
+        <!-- [회원]으로 로그인한 경우: 내가 쓴 문의글 상세 페이지 -->
+        <h1>내가 쓴 문의글 보기</h1>
+        <p>답변 완료된 문의글은 수정이 불가하니 유의하시길 바랍니다.</p>
 
         <div class="form-container">
                 
@@ -124,19 +124,15 @@ th {
                 </div>
             </c:if>     
             <br>    
-                
-            <!-- [관리자]로 로그인한 경우: 답변 작성 폼 -->
-			<c:if test="${empty qna.answers}">
-				<div class="form-group">
-					<form action="${pageContext.request.contextPath}/cs/answerInsert" method="post">
-					<input type="hidden" name="qnaId" value="${qna.questionNo}">
-					<textarea name="content" rows="5" placeholder="답변하기" required></textarea>
-					<button type="submit" class="submit-button">답변 작성</button>
-					</form>
-				</div>
-            </c:if>
-            <br>
-            
+
+            <!-- [회원]으로 로그인한 경우: 하단 버튼 -->
+            <div class="form-group" align ="right">             
+                <a href="qnaDelete?id=${qna.questionNo}" onclick="return confirm('정말 삭제하시겠습니까?');"><button type="button" id="delete-button">삭제하기</button></a>
+                <c:if test="${empty qna.answers}">
+                	<a href="qnaUpdate?id=${qna.questionNo}"><button type="button" id="edit-button">수정하기</button></a>
+                </c:if>
+                <a href="qnaAll"><button type="button" id="back-button">돌아가기</button></a>           
+            </div>
             
         </div>
                             

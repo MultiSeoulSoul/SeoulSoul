@@ -72,7 +72,7 @@ public class CsController {
 	@RequestMapping("/qnaAllUser")
     public String getQnaAllUser(@RequestParam(value = "page", defaultValue = "1") int page, Model model/*, HttpSession session*/) {
         
-//		int userNo = (int) session.getAttribute("userNo"); // 로그인한 사용자의 번호를 세션에서 가져옴
+		//int userNo = (int) session.getAttribute("userNo"); // 로그인한 사용자의 번호를 세션에서 가져옴
         
 		int userNo = 3; //테스트용
 		
@@ -96,7 +96,7 @@ public class CsController {
         return "cs/qnaAllUser";
     }
 	
-	//문의글 상세 조회
+	//문의글 상세 조회: 전체 문의글
 	@GetMapping("/qnaOne")
     public String getQuestionById(@RequestParam("id") int questionNo, Model model) {
 		try {
@@ -113,6 +113,23 @@ public class CsController {
 		}
         return "cs/qnaOne";
         
+    }
+    // 문의글 상세 조회: 사용자별 문의글
+    @GetMapping("/qnaOneUser")
+    public String getQuestionByUserId(@RequestParam("id") int questionNo, Model model) {
+        try {
+            csService.increaseViewCount(questionNo);
+            CsQuestionDTO question = csService.getQuestionById(questionNo);
+            model.addAttribute("qna", question);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+            //문의글 상세 조회 실패 시 예외 처리: 에러 페이지 이동
+            model.addAttribute("msg", "문의글 조회 과정에서 문제가 발생했습니다.");
+            return "common/errorPage";
+        }
+        return "cs/qnaOneUser";
     }
     //문의글 상세 조회: 파일 다운로드
     @GetMapping("/download")
