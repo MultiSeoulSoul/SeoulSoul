@@ -47,15 +47,44 @@
 .detail-btn1:hover {
 	background-color: #9b1d1d;
 }
+
+.heart-btn {
+	font-size: 35px;
+	cursor: pointer;
+}
 </style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-	function confirmDeletion(event) {
-		if (confirm("정말로 이 추천을 삭제하시겠습니까? 😱")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    // 로그인된 사용자 ID를 하드코딩된 값으로 설정 (로그인 기능이 구현되면 이를 동적으로 받아와야 함)
+    var userNo = 1; // 이 값을 로그인된 사용자의 ID로 변경해야 합니다.
+
+    function confirmDeletion(event) {
+        if (confirm("정말로 이 추천을 삭제하시겠습니까? 😱")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function toggleHeart(userNo, recommendationNo) {
+        $.post('${pageContext.request.contextPath}/rec/toggleHeart', {
+            userNo: userNo,
+            recommendationNo: recommendationNo
+        }, function(response) {
+            if (response.success) {
+                if (response.isHearted) {
+                    $('#heart-btn').html('&#128153;');
+                    alert('추천 게시물이 찜! 되었습니다.');
+                } else {
+                    $('#heart-btn').html('&#129654;');
+                    alert('추천 게시물의 찜이 취소되었습니다.');
+                }
+            } else {
+                alert('Error: ' + response.error);
+            }
+        });
+    }
 </script>
 </head>
 <body>
@@ -74,7 +103,9 @@
 				src="${pageContext.request.contextPath}/resources/uploadFiles/${rec.imagePath}"
 				alt="Image">
 		</c:if>
-		<br>
+		<br> <br> <span id="heart-btn" class="heart-btn"
+			onclick="toggleHeart(userNo, ${rec.recommendationNo})">&#129654;</span>
+		<br> <br>
 		<button class="detail-btn" onclick="history.back()">뒤로가기</button>
 		<button class="detail-btn1"
 			onclick="location.href='${pageContext.request.contextPath}/rec/editRec?recommendationNo=${rec.recommendationNo}'">수정하기</button>

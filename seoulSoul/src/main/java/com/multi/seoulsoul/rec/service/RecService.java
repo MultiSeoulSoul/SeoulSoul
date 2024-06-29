@@ -26,5 +26,7 @@ public interface RecService {
 	void deleteRecommend(int recommendationNo) throws Exception;
 	void updateFile(Map<String, Object> fileParams) throws Exception;
 	void updateFile(int recommendationNo, String originalFilename, String savedFilename) throws Exception;
+	boolean toggleHeart(int userNo, int recommendationNo) throws Exception;
+	boolean isHearted(int userNo, int recommendationNo) throws Exception;
 	
 }

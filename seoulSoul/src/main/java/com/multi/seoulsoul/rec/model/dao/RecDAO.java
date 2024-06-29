@@ -21,5 +21,8 @@ public interface RecDAO {
 	void deleteRecommend(int recommendationNo);
 	void deleteRecommendationFiles(int recommendationNo);
 	void updateFile(Map<String, Object> paramMap);
+	void addHeart(@Param("userNo") int userNo, @Param("recommendationNo") int recommendationNo) throws Exception;
+    void removeHeart(@Param("userNo") int userNo, @Param("recommendationNo") int recommendationNo) throws Exception;
+    boolean isHearted(@Param("userNo") int userNo, @Param("recommendationNo") int recommendationNo) throws Exception;
 	
 }

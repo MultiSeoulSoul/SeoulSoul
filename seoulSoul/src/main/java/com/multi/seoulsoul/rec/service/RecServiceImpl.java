@@ -139,4 +139,20 @@ public class RecServiceImpl implements RecService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public boolean toggleHeart(int userNo, int recommendationNo) throws Exception {
+	    if (recDAO.isHearted(userNo, recommendationNo)) {
+	        recDAO.removeHeart(userNo, recommendationNo);
+	        return false;
+	    } else {
+	        recDAO.addHeart(userNo, recommendationNo);
+	        return true;
+	    }
+	}
+
+    @Override
+    public boolean isHearted(int userNo, int recommendationNo) throws Exception {
+        return recDAO.isHearted(userNo, recommendationNo);
+    }
+
 }
