@@ -78,57 +78,6 @@
             margin: 20px auto;
         }
     </style>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0e2c2d679898678e6c157d1de02b14a4&libraries=services"></script>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            var addressElement = document.getElementById('address');
-            if (!addressElement) {
-                console.error('Address element not found.');
-                alert('주소를 찾을 수 없습니다.');
-                return;
-            }
-            
-            var address = addressElement.textContent.replace('장소: ', '').trim();
-            if (!address) {
-                console.error('Address is empty.');
-                alert('주소를 찾을 수 없습니다.');
-                return;
-            }
-            
-            console.log('Address:', address);  // 디버깅을 위해 콘솔에 주소 출력
-
-            // 카카오 지도 API가 로드된 후 initMap 함수 호출
-            if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
-                console.error('Kakao maps library not loaded properly.');
-                return;
-            }
-            console.log('Kakao map script loaded');
-            var mapContainer = document.getElementById('map'); // 지도를 표시할 div
-            var mapOption = {
-                center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심좌표 (서울 시청)
-                level: 3
-            };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            // 주소 검색
-            geocoder.addressSearch(address, function(result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                    var marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords
-                    });
-                    map.setCenter(coords);
-                    console.log('Map center set to:', coords);
-                } else {
-                    console.error('주소를 찾을 수 없습니다.', status);  // 에러 메시지 출력
-                    alert('주소를 찾을 수 없습니다.');
-                }
-            });
-        });
-    </script>
 </head>
 <body>
     <jsp:include page="../common/menubar.jsp" />
@@ -144,11 +93,44 @@
             </div>
         </c:if>
         <br><br>
-         <p><span id="address">장소: ${event.address}</span></p>
+        <p><span id="address">장소: ${event.address}</span></p>
         <div id="map"></div>
+        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&libraries=services,clusterer,drawing"></script>
+        <script type="text/javascript">
+	        var addressElement = document.getElementById('address');
+	        if (!addressElement) {
+	            console.error('Address element not found.');
+	            alert('주소를 찾을 수 없습니다.');
+	        }
+	
+	        var address = addressElement.textContent.replace('장소: ', '').trim();
+	        
+	        var geocoder = new kakao.maps.services.Geocoder();
+
+	        var callback = function(result, status) {
+	            if (status === kakao.maps.services.Status.OK) {
+	                var x = result[0].road_address.x;
+	                var y = result[0].road_address.y;
+	                
+	                var container = document.getElementById('map');
+	    			var options = {
+	    				center: new kakao.maps.LatLng(y, x),
+	    				level: 3
+	    			};
+	    	
+	    			var map = new kakao.maps.Map(container, options);
+	            }
+	        };
+
+	        geocoder.addressSearch(address, callback);
+	        
+	        
+	        
+			
+		</script>
         <br>
         <button class="detail-btn" onclick="history.back()">뒤로가기</button>
-         <button class="detail-btn1"
+        <button class="detail-btn1"
             onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
         <form action="${pageContext.request.contextPath}/event/deleteEvent"
             method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
@@ -157,6 +139,7 @@
         </form>
         <br><br>
     </div>
+
 
     <script type="text/javascript">
     function confirmDeletion(event) {
@@ -167,6 +150,7 @@
             return false;
         }
     }
-</script>
+    </script>
+
 </body>
 </html>
