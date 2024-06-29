@@ -1,5 +1,6 @@
 package com.multi.seoulsoul.event.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.event.model.dao.EventDAO;
 import com.multi.seoulsoul.event.model.dto.EventDTO;
+import com.multi.seoulsoul.event.model.dto.ReplyDTO;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -80,4 +82,27 @@ public class EventServiceImpl implements EventService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+    public void addComment(ReplyDTO reply) {
+        eventDAO.insertComment(reply);
+    }
+
+    @Override
+    public List<ReplyDTO> getComments(int eventNo) {
+        return eventDAO.selectCommentsByEventNo(eventNo);
+    }
+    
+    @Override
+    public void updateComment(ReplyDTO reply) {
+        eventDAO.updateComment(reply);
+    }
+
+    @Override
+    public void deleteComment(int replyNo, int userNo) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("replyNo", replyNo);
+        params.put("userNo", userNo);
+        eventDAO.deleteComment(params);
+    }
 }

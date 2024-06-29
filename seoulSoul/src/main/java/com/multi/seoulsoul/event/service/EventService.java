@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.multi.seoulsoul.event.model.dto.EventDTO;
+import com.multi.seoulsoul.event.model.dto.ReplyDTO;
 
 public interface EventService {
 	void insertEvent(EventDTO eventDTO) throws Exception;
@@ -29,5 +30,13 @@ public interface EventService {
 	void updateEventFile(Map<String, Object> fileParams) throws Exception;
 	
 	void deleteRecommend(int recommendationNo) throws Exception;
+	
+	void addComment(ReplyDTO reply);
+	
+    List<ReplyDTO> getComments(int eventNo);
+    
+    void updateComment(ReplyDTO reply);
+    
+    void deleteComment(int replyNo, int userNo);
 
 }

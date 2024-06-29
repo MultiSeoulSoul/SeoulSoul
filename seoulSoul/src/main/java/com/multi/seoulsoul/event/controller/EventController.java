@@ -23,13 +23,16 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.multi.seoulsoul.event.model.dto.EventDTO;
+import com.multi.seoulsoul.event.model.dto.ReplyDTO;
 import com.multi.seoulsoul.event.service.EventService;
 
 @Controller
@@ -137,6 +140,9 @@ public class EventController {
 
             // 카카오 API 키를 모델에 추가
             model.addAttribute("kakaoApiKey", kakaoApiKey);
+            
+            List<ReplyDTO> comments = eventService.getComments(eventNo);
+            model.addAttribute("comments", comments);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("msg", "이벤트 상세 정보를 가져오는 중 오류가 발생했습니다.");
@@ -249,5 +255,29 @@ public class EventController {
         }
     }
 
-}
+    @PostMapping("/addComment")
+    @ResponseBody
+    public String addComment(@RequestBody ReplyDTO comment) {
+        eventService.addComment(comment);
+        return "success";
+    }
 
+    @GetMapping("/getComments")
+    @ResponseBody
+    public List<ReplyDTO> getComments(@RequestParam("eventNo") int eventNo) {
+        return eventService.getComments(eventNo);
+    }
+    @PostMapping("/updateComment")
+    @ResponseBody
+    public String updateComment(@RequestBody ReplyDTO comment) {
+        eventService.updateComment(comment);
+        return "success";
+    }
+
+    @PostMapping("/deleteComment")
+    @ResponseBody
+    public String deleteComment(@RequestBody Map<String, Integer> params) {
+        eventService.deleteComment(params.get("replyNo"), params.get("userNo"));
+        return "success";
+    }
+}
