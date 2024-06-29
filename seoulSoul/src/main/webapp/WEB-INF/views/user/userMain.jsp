@@ -15,14 +15,22 @@
 <style>
 	div>button, input {
 		width: 200px;
-		margin-top: 10px;
+		align-items: right;
 	}
 	.input-group {
 		display: flex;
 	    width: 100%;
+	    position: relative;
 	}
 	.input-group-text {
 		width: 150px;
+	}
+	.input-group-append .btn {
+	    margin: 0;
+	    width: 100px;
+	}
+	#nickname-input, #content-input {
+	    display: none;
 	}
     body {
         display: flex;
@@ -58,14 +66,14 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
+	    height: 250px;
+	    position: relative;
     }
     .profile-info {
-        display: flex;
         align-items: center;
         gap: 15px;
     }
     .profile-info-edit {
-        display: flex;
         align-items: center;
         gap: 15px;
     }
@@ -74,6 +82,16 @@
         height: 100px;
         border-radius: 50%;
         border: 1px solid #ddd;
+    }
+    .profile-image {
+	    width: 200px;
+	    text-align: center;
+	}
+	.profile-buttons {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%); /* 수직 중앙 정렬 */
     }
     .board-tabs {
         display: flex;
@@ -151,7 +169,6 @@
 	        .then(data => {
 	            const tbody = document.querySelector('.board-list tbody');
 	            tbody.innerHTML = '';
-	            console.log('data:', data);
 	
 	            if (boardType === 'soul-log') {
 	                renderSoulLog(data.slBoard, tbody);
@@ -267,16 +284,11 @@
 <script>
 	function changeProfile() {
 	    // 입력 필드를 표시하고 버튼의 가시성을 변경
-	    document.getElementById('nickname-display').style.display = 'none';
 	    document.getElementById('content-display').style.display = 'none';
 	 /* document.getElementById('profile-img').style.display = 'none'; */
-	    document.getElementById('nickname-input').style.display = 'inline';
+	 
 	    document.getElementById('content-input').style.display = 'inline';
 	    document.getElementById('profile-img-input').style.display = 'inline';
-	
-	    // 입력 필드에 현재 값을 채움
-	    document.getElementById('nickname-input').value = document.getElementById('nickname-display').textContent;
-	    document.getElementById('content-input').value = document.getElementById('content-display').textContent;
 	
 	    document.querySelector('.edit-btn').style.display = 'none';
 	    document.querySelector('.save-btn').style.display = 'inline';
@@ -284,13 +296,11 @@
 	
 	function saveProfile() {
 	    // 입력 필드에서 업데이트된 값 가져오기
-	    const updatedNickname = document.getElementById('nickname-input').value;
 	    const updatedContent = document.getElementById('content-input').value;
 	    const updatedProfileImg = document.getElementById('profile-img-input').files[0];
 	
 	    // 데이터를 보내기 위해 FormData 객체 생성
 	    let formData = new FormData();
-	    formData.append('nickname', updatedNickname);
 	    formData.append('profileContent', updatedContent);
 	    if (updatedProfileImg) {
 	        formData.append('profileImage', updatedProfileImg);
@@ -299,7 +309,6 @@
 	}
 	
 	function sendUpdateRequest(formData) {
-		
 		var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 		
@@ -309,22 +318,21 @@
 	        data: formData,
 	        processData: false,
 	        contentType: false,
-	        beforeSend: function(xhr) {
+/* 	        beforeSend: function(xhr) {
 	            xhr.setRequestHeader(csrfHeader, csrfToken);
-	        },
+	        }, */
 	        success: function(data) {
+	        	console.log("date:", data);
 	            // 새로운 값으로 화면 업데이트
-	            document.getElementById('nickname-display').textContent = data.nickname;
 	            document.getElementById('content-display').textContent = data.ProfileContent;
 	            if (data.profileImagePath) {
 	                document.getElementById('profile-img').src = data.ProfilePicName;
 	            }
 
 	            // 입력 필드를 숨기고 표시 필드를 보여줌
-	            document.getElementById('nickname-display').style.display = 'inline';
 	            document.getElementById('content-display').style.display = 'inline';
 	            document.getElementById('profile-img').style.display = 'inline';
-	            document.getElementById('nickname-input').style.display = 'none';
+	            
 	            document.getElementById('content-input').style.display = 'none';
 	            document.getElementById('profile-img-input').style.display = 'none';
 
@@ -360,32 +368,37 @@
                 <div class="profile-info">
 				    <table class="profile-table">
 					    <tr>
-					        <td rowspan="3" class="profile-image">
-					            <img src="${pageContext.request.contextPath}/resources/uploadFiles/<sec:authentication property="principal.profilePicName"/>" alt="Profile Image" class="profile-img" id="profile-img">
+					        <td rowspan="2" class="profile-image">
+					            <img src="${pageContext.request.contextPath}/resources/uploadFiles/<sec:authentication property="principal.profilePicName"/>" alt="Profile Image" class="profile-img" id="profile-img"><br>
 					            <input type="file" id="profile-img-input" style="display: none;" onchange="previewImg(event)">
 				            </td>
 					        <td class="profile-nickname">
-			                    <span id="nickname-display"><sec:authentication property="principal.nickname"/></span>
-			                    <input type="text" id="nickname-input" class="form-control" style="display: none;">
+			                    <div class="input-group mb-3 input-group-lg">
+				                    <div class="input-group-prepend">
+										<span class="input-group-text">닉네임</span>
+									</div>
+									<span id="nickname-display" class="form-control"><sec:authentication property="principal.nickname"/></span>
+			                    </div>
 			                </td>
 					    </tr>
 					    <tr>
 					        <td class="profile-content">
-						        <span id="content-display"><sec:authentication property="principal.profileContent"/></span>
-						        <input type="text" id="content-input" class="form-control" style="display: none;">
+					        	<div class="input-group mb-3 input-group-lg">
+					        		<div class="input-group-prepend">
+										<span class="input-group-text">프로필 설명</span>
+									</div>
+							        <span id="content-display" class="form-control"><sec:authentication property="principal.profileContent"/></span>
+							        <input type="text" id="content-input" class="form-control" style="display: none;" value="<sec:authentication property="principal.profileContent"/>">
+						        </div>
 					        </td>
-					    </tr>
-					    <tr>
-					    	<td>
-					    	<div text-align: right;>
-					    		<button class="edit-btn" onclick="changeProfile()">수정하기</button>
-								<button class="save-btn" onclick="saveProfile()" style="display: none;">저장하기</button>
-							</div>
-					    	</td>
+					        
 					    </tr>
 					</table>
+					<div style="text-align: left;">
+			    		<button class="edit-btn" onclick="changeProfile()">수정하기</button>
+						<button class="save-btn" onclick="saveProfile()" style="display: none;">저장하기</button>
+					</div>
 				</div>
-				
             </div>
             <div class="chart">
                 <div class="chart-item">

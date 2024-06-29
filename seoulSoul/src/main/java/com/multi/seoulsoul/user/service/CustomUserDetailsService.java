@@ -34,14 +34,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserDTO userDTO = userDAO.findUserByUsername(sqlSession, userId);
         
         if (userDTO == null) {
-        	System.out.println("ID가없습니다");
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
 
         // 권한 정보 조회
         List<String> authorities = userDAO.findAuthoritiesByUserNo(sqlSession, userDTO.getUserNo());
 
-        System.out.println("CustomUserDetailsService authorities " + authorities);
         return new CustomUserDetails(
             userDTO.getUserNo(),
             userDTO.getUserId(),

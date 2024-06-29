@@ -28,7 +28,7 @@
         <security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
         
         <security:form-login
-            login-page="/login.jsp"
+            login-page="/user/login"
             login-processing-url="/user/login"
         	default-target-url="/main"
 			username-parameter="userId"
@@ -37,7 +37,7 @@
             
         <security:logout
 			logout-url="/user/logout"
-        	logout-success-url="/login.jsp"
+        	logout-success-url="/"
         	delete-cookies="JSESSIONID" />
     </security:http>
 

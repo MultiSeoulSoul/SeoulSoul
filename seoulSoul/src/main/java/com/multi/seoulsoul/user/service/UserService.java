@@ -9,24 +9,30 @@ import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 
 public interface UserService {
+	
+	void joinUser(UserDTO u) throws Exception;
 
+	void userUpdate(UserDTO u) throws Exception;
+
+	void userPwUpdate(UserDTO u) throws Exception;
+	
+	void updateProfile(UserProfileDTO up) throws Exception;
+	
+	void userDelete(int userNo) throws Exception;
+	
 	boolean isUserIdAvailable(String userId);
 
 	boolean isUserNicknameAvailable(String nickname);
-
-	void joinUser(UserDTO u) throws Exception;
+	
+	void updateCustomUserDetails(String userId);
 	
 	List<SLBoardDTO> selectSLBoardPage(UserPageDTO up);
 
 	List<SLReplyDTO> selectSLReplyPage(UserPageDTO up);
 
-	void userUpdate(UserDTO u) throws Exception;
+	
 
-	void userPwUpdate(UserDTO u) throws Exception;
+	
 
-	void userDelete(int userNo) throws Exception;
-
-	void updateProfile(UserProfileDTO up) throws Exception;
-
-	void updateCustomUserDetails(String userId);
+	
 }

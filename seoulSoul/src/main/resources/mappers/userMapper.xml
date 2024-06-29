@@ -2,64 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userMapper">
 
-	<!-- UserDTO의 resultMap 정의 -->
-    <resultMap id="userResultMap" type="com.multi.seoulsoul.user.model.dto.UserDTO">
-        <id property="userNo" column="user_no"/>
-        <result property="userId" column="user_id"/>
-        <result property="userPw" column="user_pw"/>
-        <result property="nickname" column="nickname"/>
-        <result property="phone" column="phone"/>
-        <result property="email" column="email"/>
-        <result property="blacklistStatus" column="blacklist_status"/>
-        <result property="createdDate" column="created_date"/>
-    </resultMap>
-
-    <!-- UserAuthorityDTO의 resultMap 정의 -->
-    <resultMap id="userAuthorityResultMap" type="com.multi.seoulsoul.user.model.dto.UserAuthorityDTO">
-        <id property="authorityCode" column="authority_code"/>
-        <result property="authorityName" column="authority_name"/>
-        <result property="authorityDesc" column="authority_desc"/>
-    </resultMap>
-
-    <!-- UserRoleDTO의 resultMap 정의 -->
-    <resultMap id="userRoleResultMap" type="com.multi.seoulsoul.user.model.dto.UserRoleDTO">
-        <id property="userNo" column="user_no"/>
-        <result property="authorityCode" column="authority_code"/>
-    </resultMap>
-
-	<!-- 아이디 중복 체크 -->
-	<select id="findByUserId" parameterType="String" resultType="boolean">
-		SELECT COUNT(1) > 0 
-	    FROM users 
-	    WHERE user_id = #{userId}
-	</select>
-	
-	<!-- 닉네임 중복 체크 -->
-	<select id="findByNickname" parameterType="String" resultType="boolean">
-		SELECT COUNT(1) > 0 
-	    FROM users 
-	    WHERE nickname = #{nickname}
-	</select>
-
-	<!-- 회원가입 -->
+	<!-- 회원 가입 -->
 	<insert id="joinUser" parameterType="userDTO" useGeneratedKeys="true" keyProperty="userNo">
 	    INSERT INTO users (user_id, user_pw, nickname, phone, email)
 	    VALUES (#{userId}, #{userPw}, #{nickname}, #{phone}, #{email})
 	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 1 -->
 	<select id="selectLastInsertId" resultType="int">
 		<!-- LAST_INSERT_ID(): MySQL에서 마지막으로 AUTO_INCREMENT된 값을 반환하는 함수 -->
 	    SELECT LAST_INSERT_ID()
 	</select>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 2 -->
 	<insert id="insertUserRole" parameterType="int">
 	    INSERT INTO user_role (user_no)
 	    VALUES (#{userNo})
 	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 3 -->
 	<insert id="insertUserProfile" parameterType="int">
 	    INSERT INTO USER_PROFILE (user_no, profile_content, profile_pic_name)
 	    VALUES (#{userNo}, '', 'defaultProfile.jpg')
 	</insert>
-	
-	<!-- 회원정보 변경 -->
+
+	<!-- 회원정보 업데이트 -->
 	<update id="userUpdate" parameterType="userDTO">
 		UPDATE USERS
 		SET
@@ -68,21 +35,44 @@
 			email = #{email}
 	    WHERE user_no = #{userNo}
 	</update>
-	
-	<!-- 비밀번호 변경 -->
+
+	<!-- 비밀번호 업데이트 -->
 	<update id="userPwUpdate" parameterType="userDTO">
 		UPDATE USERS
 		SET user_pw = #{userPw}
 	    WHERE user_no = #{userNo}
 	</update>
 
-	<!-- 회원탈퇴 -->
+	<!-- 프로필 업데이트 -->
+    <update id="updateProfile" parameterType="userProfileDTO">
+	    UPDATE USER_PROFILE up
+	    SET 
+	        up.profile_content = #{profileContent},
+	        up.profile_pic_name = CASE WHEN #{profilePicName} IS NOT NULL THEN #{profilePicName} ELSE up.profile_pic_name END
+	    WHERE up.user_no = #{userNo};
+	</update>
+
+	<!-- 회원 탈퇴 -->
 	<delete id="userDelete" parameterType="int">
 		DELETE FROM USERS
 		WHERE user_no = #{userNo};
 	</delete>
 
-    <!-- 시큐리티 사용 시 쿼리 -->
+	<!-- 아이디 중복조회 -->
+	<select id="findByUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE user_id = #{userId}
+	</select>
+	
+	<!-- 닉네임 중복조회 -->
+	<select id="findByNickname" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE nickname = #{nickname}
+	</select>
+
+    <!-- 시큐리티 사용자 객체 받아오기 -->
     <select id="findUserByUsername" parameterType="String" resultType="userDTO">
         SELECT 
 	        u.user_no,
@@ -102,6 +92,8 @@
 	    WHERE 
 	        u.user_id = #{userId}
     </select>
+    
+    <!-- 시큐리티 사용자 권한 받아오기 -->
     <select id="findAuthoritiesByUserNo" parameterType="int" resultType="String">
         SELECT ua.authority_name
         FROM USER_ROLE ur
@@ -110,7 +102,7 @@
     </select>
     
     
-	<!-- 임시 소울로그 조회 -->
+	<!-- 소울로그 조회 -->
 	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
         SELECT 
             b2.soul_log_no,
@@ -135,7 +127,7 @@
     </select>
     
     
-    <!-- 임시 소울로그댓글 조회 -->
+    <!-- 소울로그 댓글 조회(수정해야함) -->
 	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="slReplyDTO">
         SELECT
 	        b2.count,
@@ -151,15 +143,31 @@
 	    WHERE b2.rownum BETWEEN #{start} AND #{end}
     </select>
     
-    <!-- 프로필 업데이트 -->
-    <update id="updateProfile" parameterType="userProfileDTO">
-    	UPDATE USERS u
-		JOIN USER_PROFILE up ON u.user_no = up.user_no
-		SET 
-		    u.nickname = #{nickname},
-		    up.profile_content = #{profileContent},
-		    up.profile_pic_name = CASE WHEN #{profilePicName} IS NOT NULL THEN #{profilePicName} ELSE up.profile_pic_name END
-		WHERE u.user_no = #{userNo};
-    </update>
+    
+    
+   	<!-- UserDTO의 resultMap 정의 -->
+    <!-- <resultMap id="userResultMap" type="com.multi.seoulsoul.user.model.dto.UserDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="userPw" column="user_pw"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="blacklistStatus" column="blacklist_status"/>
+        <result property="createdDate" column="created_date"/>
+    </resultMap> -->
+
+    <!-- UserAuthorityDTO의 resultMap 정의 -->
+    <!-- <resultMap id="userAuthorityResultMap" type="com.multi.seoulsoul.user.model.dto.UserAuthorityDTO">
+        <id property="authorityCode" column="authority_code"/>
+        <result property="authorityName" column="authority_name"/>
+        <result property="authorityDesc" column="authority_desc"/>
+    </resultMap> -->
+
+    <!-- UserRoleDTO의 resultMap 정의 -->
+    <!-- <resultMap id="userRoleResultMap" type="com.multi.seoulsoul.user.model.dto.UserRoleDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="authorityCode" column="authority_code"/>
+    </resultMap> -->
 
 </mapper>

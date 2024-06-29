@@ -1,7 +1,6 @@
 package com.multi.seoulsoul.user.model.dto;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 public class UserDTO {
     private int userNo;
