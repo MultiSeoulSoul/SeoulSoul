@@ -60,7 +60,7 @@ public class AchieveDAO {
 
 	public List<UserDTO> userList(SqlSessionTemplate sqlSession) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("userMapper.selectUserList");
+		return sqlSession.selectList("achieveMapper.selectUserList");
 	}
 
 	public int insertLocaIcons(SqlSessionTemplate sqlSession, AchLocaIconsDTO achLocaIconsDTO) {
@@ -111,7 +111,7 @@ public class AchieveDAO {
 
 	public List<UserDTO> blackList(SqlSessionTemplate sqlSession) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("userMapper.selectBlackList");
+		return sqlSession.selectList("achieveMapper.selectBlackList");
 	}
 
 	public int updateBlacklistStatus(SqlSessionTemplate sqlSession, int userNo, char status) {
@@ -119,7 +119,7 @@ public class AchieveDAO {
 		Map<String, Object> params = new HashMap<>();
         params.put("userNo", userNo);
         params.put("status", status);
-		return sqlSession.update("userMapper.updateBlacklistStatus", params);
+		return sqlSession.update("achieveMapper.updateBlacklistStatus", params);
 	}
 
 }

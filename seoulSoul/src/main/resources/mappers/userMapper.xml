@@ -125,18 +125,5 @@
 	    WHERE b2.rownum BETWEEN #{start} AND #{end}
     </select>
     
-    <select id="selectUserList" resultType="userDTO">
-    	SELECT * FROM USERS WHERE blacklist_status = 'N'
-    </select>
-    
-    <select id="selectBlackList" resultType="userDTO">
-    	SELECT * FROM USERS WHERE blacklist_status = 'Y'
-    </select>
-    
-    <update id="updateBlacklistStatus" parameterType="map">
-    	UPDATE USERS
-	    SET blacklist_status = #{status}
-	    WHERE user_no = #{userNo}
-    </update>
 
 </mapper>
