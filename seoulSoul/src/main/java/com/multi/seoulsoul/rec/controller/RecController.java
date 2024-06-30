@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -105,11 +106,14 @@ public class RecController {
 	@GetMapping("/recDetail")
 	public String recDetail(@RequestParam("recommendationNo") int recommendationNo, Model model) {
 		try {
+			int userNo = 1; // 로그인 됐다는 가정으로 하드코딩 임의설정함.
 			// 조회수 증가
 			recService.incrementViews(recommendationNo);
 
 			RecDTO recDTO = recService.selectRecommendationByNo(recommendationNo);
 			model.addAttribute("rec", recDTO);
+			boolean isHearted = recService.isHearted(userNo, recommendationNo); // 찜 상태 확인
+			model.addAttribute("isHearted", isHearted); // 모델에 찜 상태 추가
 
 			// 디버깅용 로그 출력
 			System.out.println("Detail Layer RecDTO: " + recDTO);
