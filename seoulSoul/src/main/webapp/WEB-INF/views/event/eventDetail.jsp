@@ -13,24 +13,24 @@ body {
 }
 
 .detail-container {
-    margin: 20px auto; /* 메뉴바와의 여백을 위해 상단 여백 추가 */
+    margin: 20px auto; 
     display: flex;
-    flex-direction: column; /* 중앙 아래에 위치한 버튼을 위해 수직 정렬 */
-    align-items: center; /* 수직 중앙 정렬 */
+    flex-direction: column; 
+    align-items: center; 
 }
 
 .content-wrapper {
     display: flex;
-    width: 80%; /* 중앙 정렬을 위한 너비 설정 */
-    margin-bottom: 20px; /* 하단 여백 추가 */
+    width: 80%; 
+    margin-bottom: 20px; 
 }
 
 .image-container {
-    flex: 0 0 40%; /* 가로 공간의 40% 차지 */
-    max-height: 400px; /* 필요에 따라 최대 높이를 설정 */
-    overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 숨김 */
-    margin-right: 20px; /* 이미지와 컨텐츠 사이의 여백 */
-    margin-left: 20px; /* 이미지와 왼쪽 사이의 여백 추가 */
+    flex: 0 0 40%; 
+    max-height: 400px; 
+    overflow: hidden;
+    margin-right: 20px; 
+    margin-left: 20px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,13 +38,13 @@ body {
 
 .detail-image {
     width: 100%;
-    height: 100%; /* 이미지가 컨테이너의 높이를 채우도록 설정 */
-    object-fit: contain; /* 이미지를 컨테이너에 맞추어 조정하고 비율 유지 */
+    height: 100%;
+    object-fit: contain; 
 }
 
 .content-container {
-    flex: 1; /* 나머지 공간을 차지하도록 */
-    margin-right: 20px; /* 컨텐츠와 오른쪽 사이의 여백 추가 */
+    flex: 1;
+    margin-right: 20px; 
 }
 
 .detail-btn {
@@ -78,13 +78,13 @@ body {
 .heart-btn {
     font-size: 35px;
     cursor: pointer;
-    margin: 0 auto; /* 중앙 정렬 */
-    display: block; /* 블록 요소로 설정하여 중앙 정렬 */
+    margin: 0 auto; 
+    display: block; 
 }
 
 .button-container {
-    margin-top: 20px; /* 버튼들과 본문 사이의 여백 */
-    text-align: center; /* 버튼들을 중앙 정렬 */
+    margin-top: 20px; 
+    text-align: center; 
 }
 
 #content-text {
@@ -106,7 +106,7 @@ body {
     font-family: 'Freesentation-9Black', sans-serif;
     font-weight: normal;
     font-size: 13px;
-    margin-top: 10px; /* 지도 위에 여백 추가 */
+    margin-top: 10px; 
 }
 
 .comment-container {
@@ -115,7 +115,7 @@ body {
 }
 
 .comment-input {
-    width: calc(100% - 70px); /* 버튼을 제외한 너비 */
+    width: calc(100% - 70px);
     height: 50px;
     padding: 10px;
     font-size: 16px;
@@ -167,7 +167,7 @@ body {
 }
 
 .comment-edit-input {
-     width: calc(100% - 70px); /* 버튼을 제외한 너비 */
+     width: calc(100% - 70px); 
     height: 50px;
     padding: 10px;
     font-size: 16px;
@@ -188,7 +188,7 @@ body {
     display: none;
     margin-left: 20px;
     align-self: flex-end;
-    margin-left: auto; /* 왼쪽 여백 자동 */
+    margin-left: auto; 
     margin-top: 10px;
 }
 

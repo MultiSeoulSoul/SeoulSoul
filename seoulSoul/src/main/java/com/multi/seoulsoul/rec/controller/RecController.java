@@ -38,10 +38,6 @@ public class RecController {
 			List<RecDTO> recList = recService.selectAllRecommendations();
 			model.addAttribute("recList", recList);
 
-			// 페이지 계산
-			int pages = calculatePages(recList.size());
-			model.addAttribute("pages", pages);
-
 			// 디버깅용 로그 출력
 			System.out.println("Rec List Size: " + recList.size());
 			for (RecDTO rec : recList) {
@@ -52,13 +48,10 @@ public class RecController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorMessage", "추천 정보를 불러오는 중 오류가 발생했습니다.");
+			return "common/errorPage";
 		}
 		return "rec/recMain";
-	}
-
-	private int calculatePages(int size) {
-		// 페이지 계산 로직 추가 필요
-		return 0;
 	}
 
 	@GetMapping("recInsertForm")
@@ -122,12 +115,15 @@ public class RecController {
 			System.out.println("Detail Layer RecDTO: " + recDTO);
 		} catch (Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorMessage", "추천 상세 정보를 불러오는 중 오류가 발생했습니다.");
+			return "common/errorPage";
 		}
 		return "rec/recDetail";
 	}
 
 	@PostMapping("/upload")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes)
+			throws Exception {
 		if (!file.isEmpty()) {
 			try {
 				String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -161,35 +157,32 @@ public class RecController {
 	}
 
 	@PostMapping("/updateRecommend")
-	public String updateRecommend(HttpServletRequest request,
-	                              @RequestParam("recommendationNo") int recommendationNo,
-	                              @RequestParam("title") String title,
-	                              @RequestParam("content") String content,
-	                              @RequestParam("image") MultipartFile image,
-	                              RedirectAttributes redirectAttributes) throws Exception {
-	    RecDTO rec = recService.selectRecommendationById(recommendationNo);
-	    rec.setTitle(title);
-	    rec.setContent(content);
+	public String updateRecommend(HttpServletRequest request, @RequestParam("recommendationNo") int recommendationNo,
+			@RequestParam("title") String title, @RequestParam("content") String content,
+			@RequestParam("image") MultipartFile image, RedirectAttributes redirectAttributes) throws Exception {
+		RecDTO rec = recService.selectRecommendationById(recommendationNo);
+		rec.setTitle(title);
+		rec.setContent(content);
 
-	    if (!image.isEmpty()) {
-	        String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
-	        String originalFilename = image.getOriginalFilename();
-	        String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
-	        File file = new File(saveDirectory, savedFilename);
-	        try {
-	            image.transferTo(file);
-	            rec.setImagePath(savedFilename);
-	            recService.updateFile(recommendationNo, originalFilename, savedFilename); // 파일 정보를 저장하는 메서드 호출
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            redirectAttributes.addFlashAttribute("message", "이미지 업로드 중 오류가 발생했습니다.");
-	            return "redirect:/rec/editRec?recommendationNo=" + recommendationNo;
-	        }
-	    }
+		if (!image.isEmpty()) {
+			String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+			String originalFilename = image.getOriginalFilename();
+			String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+			File file = new File(saveDirectory, savedFilename);
+			try {
+				image.transferTo(file);
+				rec.setImagePath(savedFilename);
+				recService.updateFile(recommendationNo, originalFilename, savedFilename); // 파일 정보를 저장하는 메서드 호출
+			} catch (IOException e) {
+				e.printStackTrace();
+				redirectAttributes.addFlashAttribute("message", "이미지 업로드 중 오류가 발생했습니다.");
+				return "redirect:/rec/editRec?recommendationNo=" + recommendationNo;
+			}
+		}
 
-	    recService.updateRecommend(rec);
-	    redirectAttributes.addFlashAttribute("message", "추천이 수정되었습니다.");
-	    return "redirect:/rec/recDetail?recommendationNo=" + recommendationNo;
+		recService.updateRecommend(rec);
+		redirectAttributes.addFlashAttribute("message", "추천이 수정되었습니다.");
+		return "redirect:/rec/recDetail?recommendationNo=" + recommendationNo;
 	}
 
 	@PostMapping("/deleteRecommend")
@@ -199,20 +192,20 @@ public class RecController {
 		redirectAttributes.addFlashAttribute("message", "추천이 삭제되었습니다.");
 		return "redirect:/rec/recMain";
 	}
+
 	@PostMapping("/toggleHeart")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> toggleHeart(
-	        @RequestParam("userNo") int userNo,
-	        @RequestParam("recommendationNo") int recommendationNo) {
-	    Map<String, Object> response = new HashMap<>();
-	    try {
-	        boolean isHearted = recService.toggleHeart(userNo, recommendationNo);
-	        response.put("success", true);
-	        response.put("isHearted", isHearted);
-	    } catch (Exception e) {
-	        response.put("success", false);
-	        response.put("error", e.getMessage());
-	    }
-	    return ResponseEntity.ok(response);
+	public ResponseEntity<Map<String, Object>> toggleHeart(@RequestParam("userNo") int userNo,
+			@RequestParam("recommendationNo") int recommendationNo) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			boolean isHearted = recService.toggleHeart(userNo, recommendationNo);
+			response.put("success", true);
+			response.put("isHearted", isHearted);
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("error", e.getMessage());
+		}
+		return ResponseEntity.ok(response);
 	}
 }

@@ -19,7 +19,7 @@ public class RecServiceImpl implements RecService {
 	private RecDAO recDAO;
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {Exception.class})
 	public void recInsertForm(RecDTO recDTO) throws Exception {
 		recDAO.insertRecommendation(recDTO);
 	}
@@ -35,7 +35,7 @@ public class RecServiceImpl implements RecService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = {Exception.class})
 	public void saveFile(int recommendationNo, String originalName, String savedName) throws Exception {
 		recDAO.insertFile(recommendationNo, originalName, savedName);
 	}
@@ -81,6 +81,7 @@ public class RecServiceImpl implements RecService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteRecommend(int recommendationNo) {
         recDAO.deleteRecommend(recommendationNo); // 구현 추가
     }
@@ -92,6 +93,7 @@ public class RecServiceImpl implements RecService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public void updateRec(RecDTO rec, MultipartFile image) {
 		// TODO Auto-generated method stub
 		
@@ -103,17 +105,20 @@ public class RecServiceImpl implements RecService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public void insertRecommendation(RecDTO recDTO) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public void deleteRec(int recommendationNo) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public void updateRecommend(RecDTO recDTO) throws Exception {
 	    recDAO.updateRecommend(recDTO);
 	    if (recDTO.getImagePath() != null) {
@@ -126,6 +131,7 @@ public class RecServiceImpl implements RecService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public void updateFile(int recommendationNo, String originalName, String savedName) throws Exception {
 	    Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("recommendationNo", recommendationNo);
@@ -140,6 +146,7 @@ public class RecServiceImpl implements RecService {
 		
 	}
 	@Override
+	@Transactional(rollbackFor = {Exception.class})
 	public boolean toggleHeart(int userNo, int recommendationNo) throws Exception {
 	    if (recDAO.isHearted(userNo, recommendationNo)) {
 	        recDAO.removeHeart(userNo, recommendationNo);

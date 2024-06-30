@@ -61,48 +61,52 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	public void deleteEvent(int eventNo) throws Exception {
-		 eventDAO.deleteEventFiles(eventNo); // 먼저 이벤트에 연결된 파일을 삭제
-		    eventDAO.deleteEvent(eventNo);
+		eventDAO.deleteEventFiles(eventNo);
+		eventDAO.deleteEvent(eventNo);
 	}
 
 	@Override
+	@Transactional(rollbackFor = { Exception.class })
 	public void updateEvent(EventDTO eventDTO) throws Exception {
-	    eventDAO.updateEvent(eventDTO);
+		eventDAO.updateEvent(eventDTO);
 	}
 
 	@Override
+	@Transactional(rollbackFor = { Exception.class })
 	public void updateEventFile(Map<String, Object> fileParams) throws Exception {
-	    eventDAO.updateEventFile(fileParams);
+		eventDAO.updateEventFile(fileParams);
 	}
 
 	@Override
 	public void deleteRecommend(int recommendationNo) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
-    public void addComment(ReplyDTO reply) {
-        eventDAO.insertComment(reply);
-    }
+	public void addComment(ReplyDTO reply) {
+		eventDAO.insertComment(reply);
+	}
 
-    @Override
-    public List<ReplyDTO> getComments(int eventNo) {
-        return eventDAO.selectCommentsByEventNo(eventNo);
-    }
-    
-    @Override
-    public void updateComment(ReplyDTO reply) {
-        eventDAO.updateComment(reply);
-    }
+	@Override
+	public List<ReplyDTO> getComments(int eventNo) {
+		return eventDAO.selectCommentsByEventNo(eventNo);
+	}
 
-    @Override
-    public void deleteComment(int replyNo, int userNo) {
-        Map<String, Integer> params = new HashMap<>();
-        params.put("replyNo", replyNo);
-        params.put("userNo", userNo);
-        eventDAO.deleteComment(params);
-    }
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public void updateComment(ReplyDTO reply) {
+		eventDAO.updateComment(reply);
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public void deleteComment(int replyNo, int userNo) {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("replyNo", replyNo);
+		params.put("userNo", userNo);
+		eventDAO.deleteComment(params);
+	}
 }
