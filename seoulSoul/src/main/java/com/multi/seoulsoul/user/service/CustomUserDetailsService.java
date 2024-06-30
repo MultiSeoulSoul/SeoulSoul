@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
     	
         UserDTO userDTO = userDAO.findUserByUsername(sqlSession, userId);
-        
+
         if (userDTO == null) {
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
-
-        // 권한 정보 조회
+        
         List<String> authorities = userDAO.findAuthoritiesByUserNo(sqlSession, userDTO.getUserNo());
 
         return new CustomUserDetails(

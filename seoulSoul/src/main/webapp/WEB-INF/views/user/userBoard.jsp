@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -214,7 +215,7 @@
             row.appendChild(title);
 
             const likedDate = document.createElement('td');
-            likedDate.textContent = item.likedDate;
+            likedDate.textContent = formatDateTime(item.likedDate);
             row.appendChild(likedDate);
 
             tbody.appendChild(row);
@@ -230,7 +231,7 @@
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
-            createdDate.textContent = item.createdDate;
+            createdDate.textContent = formatDateTime(item.createdDate);
             row.appendChild(createdDate);
 
             tbody.appendChild(row);
@@ -250,7 +251,7 @@
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
-            createdDate.textContent = item.createdDate;
+            createdDate.textContent = formatDateTime(item.createdDate);
             row.appendChild(createdDate);
 
             const isAnswered = document.createElement('td');
@@ -274,7 +275,7 @@
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
-            createdDate.textContent = item.createdDate;
+            createdDate.textContent = formatDateTime(item.createdDate);
             row.appendChild(createdDate);
 
             const reportReply = document.createElement('td');
@@ -331,6 +332,18 @@
             pageLink.onclick = () => showBoard(boardType, page);
             pagination.appendChild(pageLink);
         }
+    }
+    
+    function formatDateTime(timestamp) {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const format = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+        return format;
     }
 </script>
 </head>

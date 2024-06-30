@@ -19,9 +19,103 @@ div>button, input[type=submit] {
 
 .input-group-append .btn {
     margin: 0;
-    width: 100px;
+    width: 150px;
 }
 </style>
+<script>
+var isUserIdValid = false;
+var isUserNicknameValid = false;
+
+function checkDuplicateId() {
+	var userId = $("#userId").val();
+	if (!userId) {
+		alert("아이디를 입력해주세요.");
+		return;
+		}
+	$.ajax({
+		url : '${pageContext.request.contextPath}/checkDuplicateId',
+		type : 'GET',
+		data : {userId : userId},
+		success : function(data) {
+		    if (data) {
+		        $("#idCheckMessage").hide();
+		        $("#idCheckSuccessMessage").show();
+		        isUserIdValid = true;
+		    } else {
+		        $("#idCheckMessage").show();
+		        $("#idCheckSuccessMessage").hide();
+		        isUserIdValid = false;
+		    }
+		},
+		error : function() {
+			alert("중복 확인 중 오류가 발생했습니다.");
+			}
+		});
+	}
+
+function checkDuplicateNickname() {
+	var nickname = $("#nickname").val();
+	if (!nickname) {
+		alert("닉네임을 입력해주세요.");
+		return;
+		}
+	$.ajax({
+		url : '${pageContext.request.contextPath}/checkDuplicateNickname',
+		type : 'GET',
+		data : {nickname : nickname},
+		success : function(data) {
+		    if (data) {
+		        $("#nicknameCheckMessage").hide();
+		        $("#nicknameCheckSuccessMessage").show();
+		        isUserNicknameValid = true;
+		    } else {
+		        $("#nicknameCheckMessage").show();
+		        $("#nicknameCheckSuccessMessage").hide();
+		        isUserNicknameValid = false;
+		    }
+		},
+		error : function() {
+			alert("중복 확인 중 오류가 발생했습니다.");
+			}
+		});
+	}
+	var isPasswordMatch = false;
+	
+	function validatePasswordMatch() {
+	    var password = $("input[name='userPw']").val();
+	    var confirmPassword = $("input[name='confirmPw']").val();
+	    if (password === confirmPassword) {
+	        $("#passwordMatchMessage").hide();
+	        isPasswordMatch = true;
+	    } else {
+	        $("#passwordMatchMessage").show();
+	        isPasswordMatch = false;
+	    }
+	}
+	
+	$(function() {
+	    $("input[name='userPw'], input[name='confirmPw']").on("keyup", validatePasswordMatch);
+
+	    $("input[type=submit]").click(function(e) {
+	        if (!isUserIdValid) {
+	            alert("아이디 중복 체크를 해주세요.");
+	            e.preventDefault();
+	            return false;
+	        }
+	        if (!isUserNicknameValid) {
+	            alert("닉네임 중복 체크를 해주세요.");
+	            e.preventDefault();
+	            return false;
+	        }
+	        if (!isPasswordMatch) {
+	            alert("비밀번호가 일치하지 않습니다.");
+	            e.preventDefault();
+	            return false;
+	        }
+	        $("#joinForm").submit();
+	    });
+	});
+</script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -109,108 +203,5 @@ div>button, input[type=submit] {
 			<input type="submit" value="회원가입" class="btn btn-info"><br>
 		</div>
 	</form>
-	<!-- <div align="center">
-		<button class="btn btn-success">카카오 회원가입</button>
-	</div> -->
-
-	<script>
-	var isUserIdValid = false;
-	var isUserNicknameValid = false;
-	
-	function checkDuplicateId() {
-		var userId = $("#userId").val();
-		if (!userId) {
-			alert("아이디를 입력해주세요.");
-			return;
-			}
-		$.ajax({
-			url : '${pageContext.request.contextPath}/user/checkDuplicateId',
-			type : 'GET',
-			data : {userId : userId},
-			success : function(data) {
-			    if (data) {
-			        $("#idCheckMessage").hide();
-			        $("#idCheckSuccessMessage").show();
-			        isUserIdValid = true;
-			    } else {
-			        $("#idCheckMessage").show();
-			        $("#idCheckSuccessMessage").hide();
-			        isUserIdValid = false;
-			    }
-			},
-			error : function() {
-				alert("중복 확인 중 오류가 발생했습니다.");
-				}
-			});
-		}
-	
-	function checkDuplicateNickname() {
-		var nickname = $("#nickname").val();
-		if (!nickname) {
-			alert("닉네임을 입력해주세요.");
-			return;
-			}
-		$.ajax({
-			url : '${pageContext.request.contextPath}/user/checkDuplicateNickname',
-			type : 'GET',
-			data : {nickname : nickname},
-			success : function(data) {
-			    if (data) {
-			        $("#nicknameCheckMessage").hide();
-			        $("#nicknameCheckSuccessMessage").show();
-			        isUserNicknameValid = true;
-			    } else {
-			        $("#nicknameCheckMessage").show();
-			        $("#nicknameCheckSuccessMessage").hide();
-			        isUserNicknameValid = false;
-			    }
-			},
-			error : function() {
-				alert("중복 확인 중 오류가 발생했습니다.");
-				}
-			});
-		}
-	</script>
-	
-	<script>
-		var isPasswordMatch = false;
-		
-		function validatePasswordMatch() {
-		    var password = $("input[name='userPw']").val();
-		    var confirmPassword = $("input[name='confirmPw']").val();
-		    if (password === confirmPassword) {
-		        $("#passwordMatchMessage").hide();
-		        isPasswordMatch = true;
-		    } else {
-		        $("#passwordMatchMessage").show();
-		        isPasswordMatch = false;
-		    }
-		}
-	</script>
-	
-	<script>
-		$(function() {
-		    $("input[name='userPw'], input[name='confirmPw']").on("keyup", validatePasswordMatch);
-	
-		    $("input[type=submit]").click(function(e) {
-		        if (!isUserIdValid) {
-		            alert("아이디 중복 체크를 해주세요.");
-		            e.preventDefault();
-		            return false;
-		        }
-		        if (!isUserNicknameValid) {
-		            alert("닉네임 중복 체크를 해주세요.");
-		            e.preventDefault();
-		            return false;
-		        }
-		        if (!isPasswordMatch) {
-		            alert("비밀번호가 일치하지 않습니다.");
-		            e.preventDefault();
-		            return false;
-		        }
-		        $("#joinForm").submit();
-		    });
-		});
-	</script>
 </body>
 </html>

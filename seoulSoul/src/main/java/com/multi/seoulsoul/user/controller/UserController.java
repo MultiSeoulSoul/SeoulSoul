@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,14 +46,10 @@ public class UserController {
 	// 블랙리스트에도 넣어야 할듯
 	
 	private final UserService userService;
-	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
-	public UserController(
-			UserService userService,
-			BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
 	@GetMapping("/login")
@@ -208,30 +203,6 @@ public class UserController {
 		}
 		
 		return "redirect:/user/login";
-	}
-	
-	// 아이디 중복조회
-	@GetMapping("/checkDuplicateId")
-    @ResponseBody
-    public boolean checkDuplicateId(String userId) {
-        return userService.isUserIdAvailable(userId);
-    }
-	
-	// 닉네임 중복조회
-	@GetMapping("/checkDuplicateNickname")
-    @ResponseBody
-    public boolean checkDuplicateNickname(String nickname) {
-        return userService.isUserNicknameAvailable(nickname);
-    }
-	
-	// 현재 비밀번호 조회
-	@PostMapping("/checkCurrentPassword")
-	@ResponseBody
-	public boolean checkCurrentPassword(@AuthenticationPrincipal Principal principal, String currentPassword) {
-		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-	    
-	    return bCryptPasswordEncoder.matches(currentPassword, userDetails.getPassword());
 	}
 	
 	// 동적 페이지 조회

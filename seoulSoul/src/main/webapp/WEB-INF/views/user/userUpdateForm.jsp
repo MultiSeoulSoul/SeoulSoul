@@ -84,7 +84,7 @@
 			return;
 			}
 		$.ajax({
-			url : '${pageContext.request.contextPath}/user/checkDuplicateNickname',
+			url : '${pageContext.request.contextPath}/checkDuplicateNickname',
 			type : 'GET',
 			data : {nickname : nickname},
 			success : function(data) {
@@ -125,7 +125,7 @@
 	        return;
 	    }
 	    $.ajax({
-	        url: '${pageContext.request.contextPath}/user/checkCurrentPassword',
+	        url: '${pageContext.request.contextPath}/checkCurrentPassword',
 	        type: 'POST',
 	        data: {currentPassword: currentPassword},
 	        success: function(isValid) {
