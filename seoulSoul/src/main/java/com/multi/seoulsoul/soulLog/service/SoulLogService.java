@@ -7,15 +7,15 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
-import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
 public interface SoulLogService {
 	
-	int selectSoulLogCount() throws Exception;
+	int selectSoulLogCount(FilterDTO filterDTO) throws Exception;
 
-	List<SoulLogDTO> selectSoulLogList(PageDTO pageDTO) throws Exception;
+	List<SoulLogDTO> selectSoulLogList(FilterDTO filterDTO) throws Exception;
 
 	List<LocationDTO> selectLocationList() throws Exception;
 

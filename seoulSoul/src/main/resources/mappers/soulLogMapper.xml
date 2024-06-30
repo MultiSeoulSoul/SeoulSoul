@@ -89,12 +89,23 @@
 	</resultMap>
 
 	
-	<select id="selectSoulLogCount" resultType="Integer">
+	<select id="selectSoulLogCount" resultType="Integer" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilterDTO">
 		SELECT COUNT(*) soulLogCount FROM SL_BOARD
+		<where>
+   				<if test="locationCode != 0">
+   					location_code = #{ locationCode }
+   				</if>
+   				<if test="categoryCode != 0">
+   					AND category_code = #{ categoryCode }
+   				</if>
+   				<if test="searchWord != null and searchWord != ''">
+   					AND title LIKE CONCAT('%', #{ searchWord }, '%')
+   				</if>
+   			</where>
 	</select>
 	
 
-	<select id="selectSoulLogList" resultMap="soulLogResultMap" parameterType="com.multi.seoulsoul.soulLog.model.dto.PageDTO">
+	<select id="selectSoulLogList" resultMap="soulLogResultMap" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilterDTO">
 		SELECT
 			A.soul_log_no, 
 			A.title, 
@@ -106,7 +117,18 @@
 			(SELECT F.saved_name FROM SL_FILES F WHERE F.soul_log_no = A.soul_log_no ORDER BY F.file_no LIMIT 1) AS saved_name 
 			FROM SL_BOARD A 
 			LEFT JOIN LOCATION B ON A.location_code = B.location_code 
-			LEFT JOIN SL_CATEGORY C ON A.category_code = C.category_code 
+			LEFT JOIN SL_CATEGORY C ON A.category_code = C.category_code
+			<where>
+   				<if test="locationCode != 0">
+   					A.location_code = #{ locationCode }
+   				</if>
+   				<if test="categoryCode != 0">
+   					AND A.category_code = #{ categoryCode }
+   				</if>
+   				<if test="searchWord != null and searchWord != ''">
+   					AND A.title LIKE CONCAT('%', #{ searchWord }, '%')
+   				</if>
+   			</where> 
 			ORDER BY A.soul_log_no DESC 
    			LIMIT #{startIndex}, #{pageCount}
 	</select>

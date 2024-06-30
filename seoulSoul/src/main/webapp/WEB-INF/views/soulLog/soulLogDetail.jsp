@@ -199,7 +199,6 @@ function inactivatingLike() {
 			
 			
 			<%
-    		// updateDetail을 EL에서 직접 접근하는 대신, 스크립틀릿에서 변수를 선언하여 사용
     		SoulLogDTO soulLogDetail = (SoulLogDTO) request.getAttribute("soulLogDetail");
 			%>
 				

@@ -10,22 +10,22 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
-import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
 @Repository
 public class SoulLogDAO {
 	
-	public int selectSoulLogCount(SqlSessionTemplate sqlSession) {
+	public int selectSoulLogCount(SqlSessionTemplate sqlSession, FilterDTO filterDTO) {
 		
-		return sqlSession.selectOne("soulLogMapper.selectSoulLogCount");
+		return sqlSession.selectOne("soulLogMapper.selectSoulLogCount", filterDTO);
 		
 	}
 	
-	public List<SoulLogDTO> selectSoulLogList(SqlSessionTemplate sqlSession, PageDTO pageDTO) {
+	public List<SoulLogDTO> selectSoulLogList(SqlSessionTemplate sqlSession, FilterDTO filterDTO) {
 		
-		return sqlSession.selectList("soulLogMapper.selectSoulLogList", pageDTO);
+		return sqlSession.selectList("soulLogMapper.selectSoulLogList", filterDTO);
 	
 	}
 

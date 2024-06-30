@@ -14,7 +14,7 @@ import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
-import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 
@@ -34,17 +34,17 @@ public class SoulLogServiceImpl implements SoulLogService {
 
 	
 	@Override
-	public int selectSoulLogCount() throws Exception {
+	public int selectSoulLogCount(FilterDTO filterDTO) throws Exception {
 		
-		return soulLogDAO.selectSoulLogCount(sqlSession);
+		return soulLogDAO.selectSoulLogCount(sqlSession, filterDTO);
 		
 	}
 	
 
 	@Override
-	public List<SoulLogDTO> selectSoulLogList(PageDTO pageDTO) throws Exception {
+	public List<SoulLogDTO> selectSoulLogList(FilterDTO filterDTO) throws Exception {
 		
-		return soulLogDAO.selectSoulLogList(sqlSession, pageDTO);
+		return soulLogDAO.selectSoulLogList(sqlSession, filterDTO);
 		
 	}
 

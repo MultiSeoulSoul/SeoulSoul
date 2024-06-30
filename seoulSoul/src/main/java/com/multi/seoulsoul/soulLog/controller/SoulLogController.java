@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
-import com.multi.seoulsoul.soulLog.model.dto.PageDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.ReplyWriterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
@@ -46,31 +46,36 @@ public class SoulLogController {
     
 	// 소울로그 메인 리스트 페이지로 이동
 	@RequestMapping("/soulLogMain")
-	public String soulLogMain(PageDTO pageDTO, Model model) {
+	public String soulLogMain(FilterDTO filterDTO, Model model) {
 		
-		pageDTO.setStartAndStartIndex(pageDTO.getPage());
+		filterDTO.setStartAndStartIndex(filterDTO.getPage());
 		
-		System.out.println("시작 페이지는 >>>> " + pageDTO.getStart());
+		System.out.println("검색할 locationCode는 >>>>> " + filterDTO.getLocationCode());
+		System.out.println("검색할 categoryCode는 >>>>> " + filterDTO.getCategoryCode());
+		System.out.println("검색어는 >>>>> " + filterDTO.getSearchWord());
+		System.out.println("시작 페이지는 >>>>> " + filterDTO.getStart());
 		
 		try {
 			
-			List<SoulLogDTO> soulLogList = soulLogService.selectSoulLogList(pageDTO);
+			List<SoulLogDTO> soulLogList = soulLogService.selectSoulLogList(filterDTO);
 			
 			System.out.println("가져온 리스트 >>>> " + soulLogList);
 			
 			model.addAttribute("soulLogList", soulLogList);
 			
-			int SoullogCount = soulLogService.selectSoulLogCount();
+			int SoulLogCount = soulLogService.selectSoulLogCount(filterDTO);
 			
 			// 글 수를 토대로 전체 페이지 수를 구한다.
-			// 글 수가 15의 배수면 +1을 하지 않는다.
-			int pages = SoullogCount / 15;
+			// 글 수가 10의 배수면 +1을 하지 않는다.
+			int pages = SoulLogCount / 10;
 
-			// 글 수가 15의 배수가 아니면 +1을 한다.
-			if (SoullogCount % 15 != 0) {
+			// 글 수가 10의 배수가 아니면 +1을 한다.
+			if (SoulLogCount % 10 != 0) {
 				pages += 1;
 			}
 
+			model.addAttribute("filter", filterDTO);
+			
 			model.addAttribute("pages", pages);
 			
 			return "soulLog/soulLogMain";
@@ -85,37 +90,6 @@ public class SoulLogController {
 			
 		}
 			
-	}
-	
-	
-	// 페이징 버튼 눌렀을 때 소울로그 리스트를 조회 (ajax)
-	@RequestMapping("/soulLogList")
-	public String soulLogList(PageDTO pageDTO, Model model) {
-		
-		pageDTO.setStartAndStartIndex(pageDTO.getPage());
-		
-		System.out.println("시작 페이지는 >>>> " + pageDTO.getStart());
-		
-		try {
-			
-			List<SoulLogDTO> soulLogList = soulLogService.selectSoulLogList(pageDTO);
-			
-			System.out.println("가져온 리스트 >>>> " + soulLogList);
-			
-			model.addAttribute("soulLogList", soulLogList);
-			
-			return "soulLog/soulLogList";
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			model.addAttribute("msg", "소울로그 리스트 조회 과정에서 문제가 발생했습니다.");
-			
-			return "common/errorPage";
-			
-		}
-		
 	}
 	
 	
