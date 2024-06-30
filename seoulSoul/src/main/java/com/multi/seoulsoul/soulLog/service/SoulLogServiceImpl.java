@@ -17,6 +17,7 @@ import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 
 @EnableAspectJAutoProxy
 @Transactional(rollbackFor = {Exception.class})
@@ -203,6 +204,14 @@ public class SoulLogServiceImpl implements SoulLogService {
 	public int deleteLike(LikesDTO likesDTO) throws Exception {
 		
 		return soulLogDAO.deleteLike(sqlSession, likesDTO);
+		
+	}
+
+
+	@Override
+	public List<StatsDTO> selectStats(int userNo) throws Exception {
+		
+		return soulLogDAO.selectStats(sqlSession, userNo);
 		
 	}
 	

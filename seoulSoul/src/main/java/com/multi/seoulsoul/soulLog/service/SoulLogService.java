@@ -10,6 +10,7 @@ import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 
 public interface SoulLogService {
 	
@@ -48,5 +49,7 @@ public interface SoulLogService {
 	int insertLike(LikesDTO likesDTO) throws Exception;
 
 	int deleteLike(LikesDTO likesDTO) throws Exception;
+
+	List<StatsDTO> selectStats(int userNo) throws Exception;
 	
 }

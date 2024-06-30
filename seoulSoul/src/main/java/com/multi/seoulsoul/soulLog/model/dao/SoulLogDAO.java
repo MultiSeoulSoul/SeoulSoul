@@ -13,6 +13,7 @@ import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 
 @Repository
 public class SoulLogDAO {
@@ -128,6 +129,12 @@ public class SoulLogDAO {
 	public int deleteLike(SqlSessionTemplate sqlSession, LikesDTO likesDTO) {
 		
 		return sqlSession.delete("soulLogMapper.deleteLike", likesDTO);
+		
+	}
+
+	public List<StatsDTO> selectStats(SqlSessionTemplate sqlSession, int userNo) {
+		
+		return sqlSession.selectList("soulLogMapper.selectStats", userNo);
 		
 	}
 

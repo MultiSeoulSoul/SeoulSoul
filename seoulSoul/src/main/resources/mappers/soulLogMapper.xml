@@ -87,6 +87,16 @@
 		<result property="nickname" column="reply_nickname"/>
 		
 	</resultMap>
+	
+	<resultMap type="com.multi.seoulsoul.soulLog.model.dto.StatsDTO" id="statsResultMap">
+		
+		<result property="locationCode" column="location_code"/>
+		<result property="locationName" column="location_name"/>
+		<result property="soulLogNo" column="soul_log_no"/>
+		<result property="likeCount" column="like_count"/>
+		<result property="replyCount" column="reply_count"/>
+		
+	</resultMap>
 
 	
 	<select id="selectSoulLogCount" resultType="Integer" parameterType="com.multi.seoulsoul.soulLog.model.dto.FilterDTO">
@@ -336,6 +346,22 @@
 		DELETE FROM SL_LIKE
 		WHERE user_no = #{ userNo } AND soul_log_no = #{ soulLogNo }
 	</delete>
+	
+	
+	<select id="selectStats" resultMap="statsResultMap">
+		SELECT 
+			A.location_code, 
+			COUNT(DISTINCT A.soul_log_no) AS soul_log_count,
+			SUM(IF(user_no IS NOT NULL, 1, 0)) AS like_count,
+			SUM(IF(reply_no IS NOT NULL, 1, 0)) AS reply_count, 
+			D.location_name
+		FROM SL_BOARD A
+		LEFT JOIN SL_LIKE B ON A.soul_log_no = B.soul_log_no
+		LEFT JOIN SL_REPLY C ON A.soul_log_no = C.soul_log_no
+		LEFT JOIN LOCATION D ON A.location_code = D.location_code
+		WHERE A.writer = #{ userNo }
+		GROUP BY A.location_code
+	</select>
 
 	
 
