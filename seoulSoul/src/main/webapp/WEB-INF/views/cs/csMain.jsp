@@ -110,7 +110,7 @@ a:hover {
         <!-- 챗봇 -->
         <script type="text/javascript">
             function openChatbot() {
-                window.open("${pageContext.request.contextPath}/chatbot/chatbot", "chatbotWindow", "width=450,height=600");
+                window.open("${pageContext.request.contextPath}/chatbot/chatbot", "chatbotWindow", "width=450,height=800");
             }
         </script>
     <%-- </sec:authorize> --%>
