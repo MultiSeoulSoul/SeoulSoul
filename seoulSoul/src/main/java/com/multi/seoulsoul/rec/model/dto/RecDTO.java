@@ -1,14 +1,12 @@
 	package com.multi.seoulsoul.rec.model.dto;
 
-import java.util.Date;
-
 public class RecDTO {
     private int recommendationNo;
     private String title;
     private String content;
     private int views;
     private String imagePath; // 이미지 경로 추가
-    private Date createdDate;
+    private String createdDate;
 
     // Getters and Setters
 
@@ -51,11 +49,11 @@ public class RecDTO {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 

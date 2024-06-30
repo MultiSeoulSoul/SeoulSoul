@@ -7,17 +7,42 @@
 <meta charset="UTF-8">
 <title>서울소울 SEOUL SOUL</title>
 <style type="text/css">
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .detail-container {
-	margin: 0 auto;
-	text-align: center;
+	margin: 50px auto; /* 메뉴바와의 여백을 위해 상단 여백 추가 */
+	display: flex;
+	flex-direction: column; /* 중앙 아래에 위치한 버튼을 위해 수직 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+}
+
+.content-wrapper {
+    display: flex;
+    width: 80%; /* 중앙 정렬을 위한 너비 설정 */
+    margin-bottom: 20px; /* 하단 여백 추가 */
+}
+
+.image-container {
+    flex: 0 0 35%; /* 가로 공간의 40% 차지 */
+    max-height: 400px; /* 필요에 따라 최대 높이를 설정 */
+    overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 숨김 */
+    margin-right: 20px; /* 이미지와 컨텐츠 사이의 여백 */
+    margin-left: 20px; /* 이미지와 왼쪽 사이의 여백 추가 */
 }
 
 .detail-image {
 	width: 100%;
-	max-width: 300px;
 	height: auto;
-	max-height: 400px; /* 필요에 따라 최대 높이를 설정 */
 	object-fit: contain; /* 이미지를 컨테이너에 맞추어 조정 */
+}
+
+.content-container {
+    flex: 1; /* 나머지 공간을 차지하도록 */
+    margin-right: 20px; /* 컨텐츠와 오른쪽 사이의 여백 추가 */
 }
 
 .detail-btn {
@@ -51,6 +76,21 @@
 .heart-btn {
 	font-size: 35px;
 	cursor: pointer;
+	margin: 0 auto; /* 중앙 정렬 */
+	display: block; /* 블록 요소로 설정하여 중앙 정렬 */
+}
+
+.button-container {
+    margin-top: 20px; /* 버튼들과 본문 사이의 여백 */
+    text-align: center; /* 버튼들을 중앙 정렬 */
+}
+
+#content-text {
+   font-family: 'Freesentation-6Black', sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+    text-align: left;
+     white-space: pre-wrap;
 }
 </style>
 <script
@@ -85,37 +125,53 @@
             }
         });
     }
+    function replaceNewlines(text) {
+        return text.replace(/\n/g, '<br />');
+    }
+
+    $(document).ready(function() {
+        var content = $("#content-text").html();
+        $("#content-text").html(replaceNewlines(content));
+    });
 </script>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp" />
 	<div class="detail-container">
-		<h2>${rec.title}</h2>
-		<p>
-			<strong>작성일:</strong> ${rec.createdDate}
-		</p>
-		<p>
-			<strong>조회수:</strong> ${rec.views}
-		</p>
-		<p>${rec.content}</p>
-		<c:if test="${not empty rec.imagePath}">
-			<img
-				src="${pageContext.request.contextPath}/resources/uploadFiles/${rec.imagePath}"
-				alt="Image">
-		</c:if>
-		<br> <br> <span id="heart-btn" class="heart-btn"
-			onclick="toggleHeart(userNo, ${rec.recommendationNo})">&#129654;</span>
-		<br> <br>
-		<button class="detail-btn" onclick="history.back()">뒤로가기</button>
-		<button class="detail-btn1"
-			onclick="location.href='${pageContext.request.contextPath}/rec/editRec?recommendationNo=${rec.recommendationNo}'">수정하기</button>
-		<form action="${pageContext.request.contextPath}/rec/deleteRecommend"
-			method="post" style="display: inline;"
-			onsubmit="return confirmDeletion(event)">
-			<input type="hidden" name="recommendationNo"
-				value="${rec.recommendationNo}">
-			<button type="submit" class="detail-btn1">삭제하기</button>
-		</form>
-	</div>
+        <div class="content-wrapper">
+            <div class="image-container">
+                <c:if test="${not empty rec.imagePath}">
+                    <img
+                        src="${pageContext.request.contextPath}/resources/uploadFiles/${rec.imagePath}"
+                        alt="Image" class="detail-image">
+                </c:if>
+            </div>
+            <div class="content-container">
+                <h1>${rec.title}</h1>
+                <p>
+                    <strong>작성일:</strong> ${rec.createdDate}
+                </p>
+                <p>
+                    <strong>조회수:</strong> ${rec.views}
+                </p>
+                  <p id="content-text">${rec.content}</p>
+            </div>
+        </div>
+        <div class="button-container">
+            <span id="heart-btn" class="heart-btn"
+                onclick="toggleHeart(userNo, ${rec.recommendationNo})">&#129654;</span>
+            <br><br>
+            <button class="detail-btn" onclick="history.back()">뒤로가기</button>
+            <button class="detail-btn1"
+                onclick="location.href='${pageContext.request.contextPath}/rec/editRec?recommendationNo=${rec.recommendationNo}'">수정하기</button>
+            <form action="${pageContext.request.contextPath}/rec/deleteRecommend"
+                method="post" style="display: inline;"
+                onsubmit="return confirmDeletion(event)">
+                <input type="hidden" name="recommendationNo"
+                    value="${rec.recommendationNo}">
+                <button type="submit" class="detail-btn1">삭제하기</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
