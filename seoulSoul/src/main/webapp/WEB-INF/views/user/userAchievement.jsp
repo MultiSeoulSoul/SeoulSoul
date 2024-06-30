@@ -25,7 +25,7 @@
         display: flex;
         justify-content: flex-start;
         gap: 10px;
-        flex-wrap: wrap; /* 가로방향으로 나열하고 공간이 부족할 경우 줄바꿈 */
+        flex-wrap: wrap;
     }
     .achievement-icon {
         display: inline-block;
@@ -91,8 +91,6 @@
             url: url,
             method: 'GET',
             success: function(data) {
-                console.log("data: ", data);
-                
                 const achievementContainer = $('.achievement-icons');
                 achievementContainer.empty(); // 기존 콘텐츠를 비움
                 

@@ -31,7 +31,7 @@
         padding: 0px 10px 0px 10px;
         overflow: auto;
     }
-    .chart, .board, .achievement {
+    .achievement {
         background-color: white;
         justify-content: space-between;
         padding: 20px;
@@ -39,15 +39,6 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
-    }
-    .achievement {
-        background-color: white;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        text-align: center;
     }
     .achievement h2 {
         margin-bottom: 20px;

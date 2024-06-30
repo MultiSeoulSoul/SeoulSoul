@@ -3,65 +3,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 <style>
 	div>button, input[type=submit] {
-		width: 200px;
+		width: 183px;
+		height: 45px;
+		margin-top: 10px;
+        font-size: 15px;
+        color: #3C1E1E;
+	}
+	.btn-kakao {
 		margin-top: 10px;
 	}
 </style>
 <title>Insert title here</title>
-</head>
-<body>
-	<div align="center" class="logo">
-		<a href="${pageContext.request.contextPath}"><img src="${pageContext.request.contextPath}/resources/img/SeoulSoul_logo.png" alt="SOUL Logo"></a>
-	</div>
-	<form action="${pageContext.request.contextPath}/user/login" method="post" id="loginForm">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		<table align="center">
-			<tr>
-				<td>
-					<div class="input-group mb-3 input-group-lg">
-						<div class="input-group-prepend">
-							<span class="input-group-text" style="width: 120px">아이디</span>
-						</div>
-						<input type="text" class="form-control" name="userId">
-					</div>
-				</td>
-				<td rowspan="2"></td>
-			</tr>
-			<tr>
-				<td>
-					<div class="input-group mb-3 input-group-lg">
-						<div class="input-group-prepend">
-							<span class="input-group-text" style="width: 120px">비밀번호</span>
-						</div>
-						<input type="password" class="form-control" name="userPw">
-					</div>
-				</td>
-			</tr>
-		</table>
-		<div align="center">
-			<input type="submit" value="로그인" class="btn btn-info"><br>
-		</div>
-	</form>
-	<div align="center">
-		<button class="btn btn-success" onclick="window.location.href='${pageContext.request.contextPath}/join'">회원 가입 하기</button>
-		<br>
-		<button class="btn btn-secondary">아이디 / 비밀번호 찾기</button>
-		<br><br>
-		<img src="${pageContext.request.contextPath}/resources/img/kakao_login_medium_narrow.png" alt="kakao_login" style="cursor:pointer;" onclick="kakaoLogin()">
-	</div>
-</body>
-
 <script>
 	function kakaoLogin() {
+	    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 	    $.ajax({
 	        type: "GET",
 	        url: '/seoulsoul/kakao/getKakaoApiKey',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader(csrfHeader, csrfToken);
+	        },
 	        success: function(apiKey) {
 	            Kakao.init(apiKey); // Kakao API 키 초기화
 	            Kakao.Auth.login({
@@ -75,6 +46,9 @@
 	                                url: '/seoulsoul/kakao/idDuplicateCheck', // ID중복체크(카카오회원인지 확인)
 	                                data: {"userId": kakaoid},
 	                                dataType: "json",
+	                    	        beforeSend: function(xhr) {
+	                    	            xhr.setRequestHeader(csrfHeader, csrfToken);
+	                    	        },
 	                                success: function(json) {
 	                                    if (json.idExists) {
 	                                        createHiddenLoginForm(kakaoid); // 아이디가 존재하면 HiddenLoginForm으로 kakaoid를 전달
@@ -88,6 +62,9 @@
 	                                                "email": response.kakao_account.email
 	                                            },
 	                                            dataType: "json",
+	                                	        beforeSend: function(xhr) {
+	                                	            xhr.setRequestHeader(csrfHeader, csrfToken);
+	                                	        },
 	                                            success: function(json) {
 	                                                if (json.success) { // 회원가입 성공시
 	                                                    createHiddenLoginForm(kakaoid); // HiddenLoginForm으로 kakaoid를 전달
@@ -138,9 +115,56 @@
 	    frm.appendChild(hiddenInputId); 					 // form태그에 생성한 input태그 추가
 	    frm.appendChild(hiddenInputPw); 					 // form태그에 생성한 input태그 추가
 	    
+	    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    var csrfInput = document.createElement('input');
+	    csrfInput.setAttribute('type', 'hidden');
+	    csrfInput.setAttribute('name', '_csrf');
+	    csrfInput.setAttribute('value', csrfToken); 
+	    
+	    frm.appendChild(csrfInput);
+	    
 	    document.body.appendChild(frm);						 // body에 form태그 추가
 	    frm.submit();										 // form 제출
 	}
 </script>
-
+</head>
+<body>
+	<div align="center" class="logo">
+		<a href="${pageContext.request.contextPath}"><img src="${pageContext.request.contextPath}/resources/img/SeoulSoul_logo.png" alt="SOUL Logo"></a>
+	</div>
+	<form action="${pageContext.request.contextPath}/user/login" method="post" id="loginForm">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		<table align="center">
+			<tr>
+				<td>
+					<div class="input-group mb-3 input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text" style="width: 120px">아이디</span>
+						</div>
+						<input type="text" class="form-control" name="userId">
+					</div>
+				</td>
+				<td rowspan="2"></td>
+			</tr>
+			<tr>
+				<td>
+					<div class="input-group mb-3 input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text" style="width: 120px">비밀번호</span>
+						</div>
+						<input type="password" class="form-control" name="userPw">
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div align="center">
+			<input type="submit" value="로그인" class="btn btn-info"><br>
+		</div>
+	</form>
+	<div align="center">
+		<button class="btn btn-success" onclick="window.location.href='${pageContext.request.contextPath}/join'" style="color: #3C1E1E;">회원 가입 하기</button>
+		<br>
+		<img src="${pageContext.request.contextPath}/resources/img/kakao_login_medium_narrow.png" alt="kakao_login" style="cursor:pointer;" onclick="kakaoLogin()" class="btn-kakao">
+	</div>
+</body>
 </html>

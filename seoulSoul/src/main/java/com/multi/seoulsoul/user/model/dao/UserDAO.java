@@ -2,6 +2,7 @@ package com.multi.seoulsoul.user.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
+import com.multi.seoulsoul.user.tempDTO.SoulDTO;
 
 @Repository
 public class UserDAO {
@@ -104,4 +106,8 @@ public class UserDAO {
         
         return list;
     }
+
+	public List<SoulDTO> getSoul(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectList("userMapper.getSoul", userNo);
+	}
 }

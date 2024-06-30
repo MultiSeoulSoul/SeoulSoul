@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>Board</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 <style>
 	main {
 		display: flex;
@@ -109,14 +110,12 @@
     }
 
     function showBoard(boardType, page = 1) {
-        console.log("boardType:", boardType);
-        console.log("page:", page);
-
         const url = `${pageContext.request.contextPath}/user/` + boardType + "Page?page=" + page;
-        console.log("url:", url);
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
                 const tbody = document.querySelector('.board-list tbody');
                 tbody.innerHTML = '';
 
@@ -141,10 +140,11 @@
                 const pages = data.pages || 1;
                 updatePagination(pages, boardType);
                 activateTab(boardType);
-            })
-            .catch(error => {
+            },
+            error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
-            });
+            }
+        });
     }
 
     function renderSoulLog(data, tbody) {

@@ -25,6 +25,7 @@
 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReportDTO" alias="reportDTO"></typeAlias>
 		
 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.AchievementDTO" alias="achievementDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SoulDTO" alias="soulDTO"></typeAlias>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/userMapper.xml" />

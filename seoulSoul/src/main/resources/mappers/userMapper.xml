@@ -265,18 +265,12 @@
 	        ALG.status,
 	        L.location_name AS condition_name,
 	        'loca' AS type
-	    FROM 
-	        ACH_LOCA AL
-	    LEFT JOIN 
-	        ACH_LOCA_ICONS ALI ON AL.ach_no = ALI.ach_no
-	    LEFT JOIN 
-	        ACH_LOCA_COUNT ALC ON AL.ach_no = ALC.ach_no AND ALC.user_no = #{userNo}
-	    LEFT JOIN 
-	        ACH_LOCA_GET ALG ON AL.ach_no = ALG.ach_no AND ALG.user_no = #{userNo}
-	    LEFT JOIN 
-	        LOCATION L ON AL.location_code = L.location_code
-	    WHERE 
-	        AL.ach_no IN (SELECT ach_no FROM ACH_LOCA_GET WHERE user_no = #{userNo})
+	    FROM ACH_LOCA AL
+	    LEFT JOIN ACH_LOCA_ICONS ALI ON AL.ach_no = ALI.ach_no
+	    LEFT JOIN ACH_LOCA_COUNT ALC ON AL.ach_no = ALC.ach_no AND ALC.user_no = #{userNo}
+	    LEFT JOIN ACH_LOCA_GET ALG ON AL.ach_no = ALG.ach_no AND ALG.user_no = #{userNo}
+	    LEFT JOIN LOCATION L ON AL.location_code = L.location_code
+	    WHERE AL.ach_no IN (SELECT ach_no FROM ACH_LOCA_GET WHERE user_no = #{userNo})
 	</select>
 	
 	<!-- 카테고리 업적 조회 -->
@@ -289,19 +283,21 @@
 	        ACG.status,
 	        SC.category_name AS condition_name,
 	        'cate' AS type
-	    FROM 
-	        ACH_CATE AC
-	    LEFT JOIN 
-	        ACH_CATE_ICONS ACI ON AC.ach_no = ACI.ach_no
-	    LEFT JOIN 
-	        ACH_CATE_COUNT ACC ON AC.ach_no = ACC.ach_no AND ACC.user_no = #{userNo}
-	    LEFT JOIN 
-	        ACH_CATE_GET ACG ON AC.ach_no = ACG.ach_no AND ACG.user_no = #{userNo}
-        LEFT JOIN 
-      	 	SL_CATEGORY SC ON AC.category_code = SC.category_code
-	    WHERE 
-	        AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
+	    FROM ACH_CATE AC
+	    LEFT JOIN ACH_CATE_ICONS ACI ON AC.ach_no = ACI.ach_no
+	    LEFT JOIN ACH_CATE_COUNT ACC ON AC.ach_no = ACC.ach_no AND ACC.user_no = #{userNo}
+	    LEFT JOIN ACH_CATE_GET ACG ON AC.ach_no = ACG.ach_no AND ACG.user_no = #{userNo}
+        LEFT JOIN SL_CATEGORY SC ON AC.category_code = SC.category_code
+	    WHERE AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
 	</select>
 
+	<select id="getSoul" parameterType="int" resultType="soulDTO">
+		SELECT L.location_name, COUNT(*) AS sl_count
+		FROM SL_BOARD B
+		JOIN LOCATION L ON B.location_code = L.location_code
+		WHERE B.writer = #{userNo}
+		GROUP BY L.location_name
+		ORDER BY sl_count DESC
+	</select>
 
 </mapper>

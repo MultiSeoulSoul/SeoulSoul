@@ -42,20 +42,6 @@
         padding: 0px 10px 0px 10px;
         overflow: auto;
     }
-    .chart, .board, .achievement {
-        background-color: white;
-        justify-content: space-between;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-    .chart-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
 </style>
 
 </head>
@@ -66,16 +52,7 @@
     <div class="content">
         <div class="main-content">
 			<jsp:include page="/WEB-INF/views/user/userProfile.jsp" />
-            <div class="chart">
-                <div class="chart-item">
-                    <span>양천구</span>
-                    <span>70%</span>
-                </div>
-                <div class="chart-item">
-                    <span>용산구</span>
-                    <span>20%</span>
-                </div>
-            </div>
+            <jsp:include page="/WEB-INF/views/user/userSoul.jsp" />
 			<jsp:include page="/WEB-INF/views/user/userBoard.jsp" />
             <jsp:include page="/WEB-INF/views/user/userAchievement.jsp" />
         </div>

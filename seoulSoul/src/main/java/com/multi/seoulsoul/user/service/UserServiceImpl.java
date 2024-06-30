@@ -1,6 +1,7 @@
 package com.multi.seoulsoul.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.user.model.dao.UserDAO;
@@ -18,9 +20,11 @@ import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
+import com.multi.seoulsoul.user.tempDTO.SoulDTO;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
+@EnableTransactionManagement
 public class UserServiceImpl implements UserService {
 
 	private final UserDAO userDAO;
@@ -157,5 +161,11 @@ public class UserServiceImpl implements UserService {
 	public List<AchievementDTO> getAchievement(int userNo) {
 		List<AchievementDTO> achievements = userDAO.getAchievement(sqlSession, userNo);
 		return achievements;
+	}
+
+	@Override
+	public List<SoulDTO> getSoul(int userNo) {
+		List<SoulDTO> soulList = userDAO.getSoul(sqlSession, userNo);
+		return soulList;
 	}
 }

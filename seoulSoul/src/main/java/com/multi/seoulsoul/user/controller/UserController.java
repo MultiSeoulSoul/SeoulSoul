@@ -2,7 +2,6 @@ package com.multi.seoulsoul.user.controller;
 
 import java.io.File;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import com.multi.seoulsoul.user.tempDTO.ReplyDTO;
 import com.multi.seoulsoul.user.tempDTO.ReportDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
+import com.multi.seoulsoul.user.tempDTO.SoulDTO;
 
 @Controller
 @RequestMapping("/user")
@@ -71,6 +71,10 @@ public class UserController {
 	
 	@GetMapping("/userUpdateForm")
 	public void userUpdateForm() {
+	}
+	
+	@GetMapping("/userSoulDetail")
+	public void userSoulDetail() {
 	}
 	
 	@GetMapping("/userBoardDetail")
@@ -298,13 +302,28 @@ public class UserController {
 
         List<AchievementDTO> achievements = userService.getAchievement(userDetails.getUserNo());
         
-        System.out.println("achievements: " + achievements);
-        
         return achievements;
     }
-	
-//	
-//	
+
+    @GetMapping("/soul")
+    @ResponseBody
+    public List<SoulDTO> getSoul(@AuthenticationPrincipal Principal principal) {
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+
+        List<SoulDTO> soulList = userService.getSoul(userDetails.getUserNo());
+        System.out.println("soulList: " + soulList);
+        
+        for (SoulDTO soul : soulList) {
+            int slCount = soul.getSlCount() * 10;
+            soul.setSlCount(slCount);
+        }
+        
+        return soulList;
+    }
+    
+    
+    
 //	// 소울로그 조회
 //	@GetMapping("/SLBoardPage")
 //	@ResponseBody
@@ -352,114 +371,6 @@ public class UserController {
 //	    return response;
 //	}
 //	
-//	// 이벤트 댓글 조회 이벤트제목, 댓글내용
-//	@GetMapping("/EventReplyPage")
-//	@ResponseBody
-//	public Map<String, Object> selectEventReplyPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-//
-//	    up.setUserNo(userDetails.getUserNo());
-//	    up.setStartEnd(up.getPage());
-//	    
-//	    List<SLReplyDTO> eventReply = userService.selectEventReplyPage(up);
-//	    
-//	    int count = eventReply.get(0).getTotalCount();
-//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    response.put("eventReply", eventReply);
-//	    response.put("pages", pages);
-//	    
-//	    return response;
-//	}
-//	
-//	// 소울로그 좋아요 조회 지역이름, 카테고리이름, 소울로그 제목 (날짜를 Timestamp로 정렬), 작성시간
-//	@GetMapping("/LikesPage")
-//	@ResponseBody
-//	public Map<String, Object> selectLikesPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-//
-//	    up.setUserNo(userDetails.getUserNo());
-//	    up.setStartEnd(up.getPage());
-//	    
-//	    List<SLBoardDTO> likes = userService.selectLikesPage(up);
-//	    
-//	    int count = likes.get(0).getTotalCount();
-//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    response.put("likes", likes);
-//	    response.put("pages", pages);
-//	    
-//	    return response;
-//	}
-//	
-//	// 이벤트 찜 조회 이벤트제목, 작성시간
-//	@GetMapping("/HeartBtnPage")
-//	@ResponseBody
-//	public Map<String, Object> selectHeartBtnPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-//
-//	    up.setUserNo(userDetails.getUserNo());
-//	    up.setStartEnd(up.getPage());
-//	    
-//	    List<SLBoardDTO> heartBtn = userService.selectHeartBtnPage(up);
-//	    
-//	    int count = heartBtn.get(0).getTotalCount();
-//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    response.put("heartBtn", heartBtn);
-//	    response.put("pages", pages);
-//	    
-//	    return response;
-//	}
-//	
-//	// 내 문의내역 조회 카테고리이름, 문의제목, 작성시간, 답변여부
-//	@GetMapping("/CsQuestionPage")
-//	@ResponseBody
-//	public Map<String, Object> selectCsQuestionPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-//
-//	    up.setUserNo(userDetails.getUserNo());
-//	    up.setStartEnd(up.getPage());
-//	    
-//	    List<SLBoardDTO> csQuestion = userService.selectCsQuestionPage(up);
-//	    
-//	    int count = csQuestion.get(0).getTotalCount();
-//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    response.put("csQuestion", csQuestion);
-//	    response.put("pages", pages);
-//	    
-//	    return response;
-//	}
-//	
-//	// 내 신고내역 조회 신고사유, 신고제목, 작성시간, 답변여부
-//	@GetMapping("/ReportPage")
-//	@ResponseBody
-//	public Map<String, Object> selectReportPage(@AuthenticationPrincipal Principal principal, UserPageDTO up) {
-//	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-//	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-//
-//	    up.setUserNo(userDetails.getUserNo());
-//	    up.setStartEnd(up.getPage());
-//	    
-//	    List<SLBoardDTO> report = userService.selectReportPage(up);
-//	    
-//	    int count = report.get(0).getTotalCount();
-//	    int pages = (count % 10 == 0) ? count / 10 : count / 10 + 1;
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    response.put("report", report);
-//	    response.put("pages", pages);
-//	    
-//	    return response;
-//	}
+
 }
 
