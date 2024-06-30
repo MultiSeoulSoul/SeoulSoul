@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
 import com.multi.seoulsoul.achieve.service.AchieveService;
 import com.multi.seoulsoul.report.model.dto.ReportDTO;
 import com.multi.seoulsoul.report.service.ReportService;
@@ -45,38 +45,68 @@ public class AchieveController {
 	
 	@GetMapping("/adminMain")
 	public String adminMainPage(Model model) throws Exception {
-		System.out.println("관리자 메인 페이지 호출 성공.");
+		try {
+			System.out.println("관리자 메인 페이지 호출 성공.");
+			
+			List<AchLocaDTO> achieveLocaList = achieveService.achieveLocaList();
+			List<AchCateDTO> achieveCateList = achieveService.achieveCateList();
+			
+			List<ReportDTO> reportList = reportService.reportList();
+			List<AdminUserListDTO> userList = achieveService.userList();
+			
+			List<UserDTO> blackList = achieveService.blackList();
+	        
+	        model.addAttribute("achieveLocaList", achieveLocaList);
+	        model.addAttribute("achieveCateList", achieveCateList);
+	        
+	        model.addAttribute("reportList", reportList);
+	        model.addAttribute("userList", userList);
+	        
+	        model.addAttribute("blackList", blackList);
+
+			List<LocationDTO> locationList = soulLogService.selectLocationList();
+
+			model.addAttribute("locationList", locationList);
+
+			return "achieve/adminMain";
+
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+			model.addAttribute("msg", "관리자 메인 페이지 호출 실패");
+
+			return "common/errorPage";
+
+		}
 		
-		List<AchLocaDTO> achieveLocaList = achieveService.achieveLocaList();
-		List<AchCateDTO> achieveCateList = achieveService.achieveCateList();
 		
-		List<ReportDTO> reportList = reportService.reportList();
-		List<UserDTO> userList = achieveService.userList();
-		
-		List<UserDTO> blackList = achieveService.blackList();
-        
-        model.addAttribute("achieveLocaList", achieveLocaList);
-        model.addAttribute("achieveCateList", achieveCateList);
-        
-        model.addAttribute("reportList", reportList);
-        model.addAttribute("userList", userList);
-        
-        model.addAttribute("blackList", blackList);
-        
-		return "achieve/adminMain";
 	}
 	
-	@PostMapping("/blacklistUser")
-	@ResponseBody
-	public String blacklistUser(int userNo) {
-		try {
-            achieveService.updateBlacklistStatus(userNo, 'Y');
-            return "success";
+	@GetMapping("/blacklistUser")
+    public String blacklistUser(int userNo, Model model) {
+        try {
+        	achieveService.updateBlacklistStatus(userNo, 'Y');
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
+            model.addAttribute("msg", "블랙리스트 추가 실패..");
+            return "/common/errorPage";
         }
-	}
+        return "redirect:/admin/adminMain";
+    }
+
+    @GetMapping("/unblacklistUser")
+    public String unblacklistUser(int userNo, Model model) {
+        try {
+        	achieveService.updateBlacklistStatus(userNo, 'N');
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "블랙리스트 해제 실패..");
+            return "/common/errorPage";
+        }
+        return "redirect:/admin/adminMain";
+    }
 	
 	@GetMapping("/achLocaInsertForm")
 	public String achLocaInsertForm(Model model) throws Exception {

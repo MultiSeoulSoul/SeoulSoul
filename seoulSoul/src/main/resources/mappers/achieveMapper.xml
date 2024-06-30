@@ -59,6 +59,56 @@
         <association property="achCate" column="ach_no" javaType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" select="selectAchCateById"/>
     </resultMap>
     
+    <resultMap id="userListResultMap" type="com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO">
+	    <id property="userNo" column="user_no"/>
+	    <result property="userId" column="user_id"/>
+	    <result property="nickname" column="nickname"/>
+	    <result property="blacklistStatus" column="blacklist_status"/>
+	    <result property="lastSoulLogDate" column="last_soul_log_date"/>
+	    <collection property="userStats" ofType="com.multi.seoulsoul.achieve.model.dto.StatsDTO">
+	        <result property="locationCode" column="location_code"/>
+	        <result property="locationName" column="location_name"/>
+	        <result property="soulLogCount" column="soul_log_count"/>
+	        <result property="likeCount" column="like_count"/>
+	        <result property="replyCount" column="reply_count"/>
+	        <result property="exp" column="exp"/>
+	    </collection>
+	</resultMap>
+	
+	<resultMap id="statsResultMap" type="com.multi.seoulsoul.achieve.model.dto.StatsDTO">
+	    <result property="locationCode" column="location_code"/>
+	    <result property="locationName" column="location_name"/>
+	    <result property="soulLogCount" column="soul_log_count"/>
+	    <result property="likeCount" column="like_count"/>
+	    <result property="replyCount" column="reply_count"/>
+	</resultMap>
+	
+	<select id="selectStats" resultMap="statsResultMap">
+	    SELECT 
+	        A.location_code, 
+	        COUNT(DISTINCT A.soul_log_no) AS soul_log_count,
+	        SUM(IF(B.user_no IS NOT NULL, 1, 0)) AS like_count,
+	        SUM(IF(C.reply_no IS NOT NULL, 1, 0)) AS reply_count, 
+	        D.location_name
+	    FROM SL_BOARD A
+	    LEFT JOIN SL_LIKE B ON A.soul_log_no = B.soul_log_no
+	    LEFT JOIN SL_REPLY C ON A.soul_log_no = C.soul_log_no
+	    LEFT JOIN LOCATION D ON A.location_code = D.location_code
+	    WHERE A.writer = #{userNo}
+	    GROUP BY A.location_code
+	</select>
+	
+	<select id="selectUserList" resultMap="userListResultMap">
+	    SELECT 
+	        u.user_no AS user_no, 
+	        u.user_id AS user_id, 
+	        u.nickname, 
+	        u.blacklist_status AS blacklist_status,
+	        (SELECT MAX(created_date) FROM SL_BOARD WHERE writer = u.user_no) AS last_soul_log_date
+	    FROM USERS u
+	    WHERE blacklist_status = 'N'
+	</select>
+    
     <select id="selectAchLocaById" resultMap="achLocaResultMap">
         SELECT ach_no, location_code, max_count, title, created_date, modified_date
         FROM ACH_LOCA
@@ -158,10 +208,6 @@
 	<delete id="deleteAchieveCate" parameterType="int">
 		delete from ACH_CATE where ach_no = #{achNo}
 	</delete>
-	
-	<select id="selectUserList" resultType="userDTO">
-    	SELECT * FROM USERS WHERE blacklist_status = 'N'
-    </select>
     
     <select id="selectBlackList" resultType="userDTO">
     	SELECT * FROM USERS WHERE blacklist_status = 'Y'
@@ -172,5 +218,7 @@
 	    SET blacklist_status = #{status}
 	    WHERE user_no = #{userNo}
     </update>
+    
+    
 	
 </mapper>

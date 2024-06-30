@@ -17,6 +17,8 @@ import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
+import com.multi.seoulsoul.achieve.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Service
@@ -137,11 +139,21 @@ public class AchieveServiceImpl implements AchieveService {
 	}
 
 	@Override
-	public List<UserDTO> userList() throws Exception {
+	public List<AdminUserListDTO> userList() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("userList AchieveServiceImpl 도착.");
 
-		List<UserDTO> userList = achieveDAO.userList(sqlSession);
+		List<AdminUserListDTO> userList = achieveDAO.userList(sqlSession);
+		
+		for (AdminUserListDTO user : userList) {
+            List<StatsDTO> userStats = achieveDAO.selectStats(sqlSession, user.getUserNo());
+            for (StatsDTO stats : userStats) {
+                int exp = stats.getSoulLogCount() * 100 + stats.getLikeCount() + stats.getReplyCount() * 3;
+                stats.setExp(exp);
+                stats.setLevel(exp/100);
+            }
+            user.setUserStats(userStats);
+        }
 		
 		return userList;
 	}

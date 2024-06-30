@@ -10,6 +10,7 @@ import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 public interface AchieveService {
@@ -30,7 +31,7 @@ public interface AchieveService {
 	
 	int deleteAchieveCate(int achNo) throws Exception ;
 
-	List<UserDTO> userList() throws Exception ;
+	List<AdminUserListDTO> userList() throws Exception ;
 	
 	List<UserDTO> blackList() throws Exception ;
 

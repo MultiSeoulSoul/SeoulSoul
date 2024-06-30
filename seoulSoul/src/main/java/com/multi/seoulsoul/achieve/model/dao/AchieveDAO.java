@@ -11,6 +11,8 @@ import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
+import com.multi.seoulsoul.achieve.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Repository
@@ -58,7 +60,7 @@ public class AchieveDAO {
 		return sqlSession.delete("achieveMapper.deleteAchieveCate", achNo);
 	}
 
-	public List<UserDTO> userList(SqlSessionTemplate sqlSession) {
+	public List<AdminUserListDTO> userList(SqlSessionTemplate sqlSession) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("achieveMapper.selectUserList");
 	}
@@ -120,6 +122,11 @@ public class AchieveDAO {
         params.put("userNo", userNo);
         params.put("status", status);
 		return sqlSession.update("achieveMapper.updateBlacklistStatus", params);
+	}
+
+	public List<StatsDTO> selectStats(SqlSessionTemplate sqlSession, int userNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("achieveMapper.selectStats", userNo);
 	}
 
 }
