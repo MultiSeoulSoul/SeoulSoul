@@ -5,6 +5,7 @@ import java.util.List;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
@@ -39,5 +40,7 @@ public interface UserService {
 	List<?> selectCsQuestionPage(UserPageDTO up);
 
 	List<?> selectReportPage(UserPageDTO up);
+
+	List<AchievementDTO> getAchievement(int userNo);
 	
 }

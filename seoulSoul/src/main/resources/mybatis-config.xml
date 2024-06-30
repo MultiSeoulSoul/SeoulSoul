@@ -23,6 +23,8 @@
 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.RecHeartBtnDTO" alias="recHeartBtnDTO"></typeAlias>
 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.CsQuestionDTO" alias="csQuestionDTO"></typeAlias>
 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReportDTO" alias="reportDTO"></typeAlias>
+		
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.AchievementDTO" alias="achievementDTO"></typeAlias>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/userMapper.xml" />

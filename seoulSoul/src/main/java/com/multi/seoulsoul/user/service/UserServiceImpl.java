@@ -15,6 +15,7 @@ import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
@@ -149,5 +150,12 @@ public class UserServiceImpl implements UserService {
         		customUserDetails.getAuthorities()
             );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	// 업적 조회
+	@Override
+	public List<AchievementDTO> getAchievement(int userNo) {
+		List<AchievementDTO> achievements = userDAO.getAchievement(sqlSession, userNo);
+		return achievements;
 	}
 }

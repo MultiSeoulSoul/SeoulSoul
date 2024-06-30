@@ -1,5 +1,6 @@
 package com.multi.seoulsoul.user.model.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
+import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
 
@@ -92,4 +94,14 @@ public class UserDAO {
 	public List<?> selectReportPage(SqlSessionTemplate sqlSession, UserPageDTO up) {
 		return sqlSession.selectList("userMapper.selectReportPage", up);
 	}
+
+    public List<AchievementDTO> getAchievement(SqlSessionTemplate sqlSession, int userNo) {
+        List<AchievementDTO> list1 = sqlSession.selectList("userMapper.getLocaAchievement", userNo);
+        List<AchievementDTO> list2 = sqlSession.selectList("userMapper.getCateAchievement", userNo);
+
+        List<AchievementDTO> list = new ArrayList<>(list1);
+        list.addAll(list2);
+        
+        return list;
+    }
 }

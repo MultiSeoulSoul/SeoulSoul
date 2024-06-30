@@ -2,6 +2,7 @@ package com.multi.seoulsoul.user.controller;
 
 import java.io.File;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.service.UserService;
+import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.CsQuestionDTO;
 import com.multi.seoulsoul.user.tempDTO.LikesDTO;
 import com.multi.seoulsoul.user.tempDTO.RecHeartBtnDTO;
@@ -69,6 +71,14 @@ public class UserController {
 	
 	@GetMapping("/userUpdateForm")
 	public void userUpdateForm() {
+	}
+	
+	@GetMapping("/userBoardDetail")
+	public void userBoardDetail() {
+	}
+	
+	@GetMapping("/userAchievementDetail")
+	public void userAchievementDetail() {
 	}
 	
 	@GetMapping("/userDelete")
@@ -220,6 +230,7 @@ public class UserController {
 	    return bCryptPasswordEncoder.matches(currentPassword, userDetails.getPassword());
 	}
 	
+	// 동적 페이지 조회
 	@GetMapping("/{boardType}Page")
 	@ResponseBody
 	public Map<String, Object> getBoardPage(@PathVariable String boardType, @AuthenticationPrincipal Principal principal, UserPageDTO up) {
@@ -239,7 +250,7 @@ public class UserController {
 	            count = ((SLBoardDTO) dataList.get(0)).getTotalCount();
 	            response.put("slBoard", dataList);
 	            break;
-	        case "soul-log-reply":
+	        case "soul-reply":
 	            dataList = userService.selectSLReplyPage(up);
 	            count = ((SLReplyDTO) dataList.get(0)).getTotalCount();
 	            response.put("slReply", dataList);
@@ -279,6 +290,19 @@ public class UserController {
 	    return response;
 	}
 
+    @GetMapping("/achievement")
+    @ResponseBody
+    public List<AchievementDTO> getAchievement(@AuthenticationPrincipal Principal principal) {
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+
+        List<AchievementDTO> achievements = userService.getAchievement(userDetails.getUserNo());
+        
+        System.out.println("achievements: " + achievements);
+        
+        return achievements;
+    }
+	
 //	
 //	
 //	// 소울로그 조회

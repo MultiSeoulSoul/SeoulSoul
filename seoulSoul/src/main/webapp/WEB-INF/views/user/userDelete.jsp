@@ -39,32 +39,6 @@ main {
 	padding: 0px 10px 0px 10px;
 	overflow: auto;
 }
-.side-menu {
-	width: 100px;
-	background-color: #e0f7fa;
-	border-right: 1px solid #ddd;
-	padding: 20px;
-}
-.side-menu ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-.side-menu ul li {
-	margin: 10px 0;
-}
-.side-menu ul li a {
-	text-decoration: none;
-	color: #333;
-	font-weight: bold;
-	display: block;
-	padding: 10px;
-	border-radius: 4px;
-	transition: background-color 0.3s;
-}
-.side-menu ul li a:hover {
-	background-color: #b2ebf2; /* 호버 시 배경 색상 */
-}
 .delete-btn {
     background-color: #ff0000;
     color: white;

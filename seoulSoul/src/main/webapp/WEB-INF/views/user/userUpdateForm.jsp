@@ -7,11 +7,19 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
+<title>Insert title here</title>
 <style>
 	div>button, input[type=submit] {
 		width: 200px;
 		margin-top: 10px;
 	}
+	h2 {
+        margin-bottom: 20px;
+    }
+    p {
+        margin-bottom: 20px;
+        color: #666;
+    }
 	.input-group {
 		display: flex;
 	    width: 100%;
@@ -39,36 +47,11 @@
 		padding: 0px 10px 0px 10px;
 		overflow: auto;
 	}
-	.side-menu {
-		width: 100px;
-		background-color: #e0f7fa;
-		border-right: 1px solid #ddd;
-		padding: 20px;
-	}
-	.side-menu ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-	.side-menu ul li {
-		margin: 10px 0;
-	}
-	.side-menu ul li a {
-		text-decoration: none;
-		color: #333;
-		font-weight: bold;
-		display: block;
-		padding: 10px;
-		border-radius: 4px;
-		transition: background-color 0.3s;
-	}
-	.side-menu ul li a:hover {
-		background-color: #b2ebf2; /* 호버 시 배경 색상 */
-	}
 	.update-form {
 	    flex: 1;
 	    justify-content: space-between;
 	    align-items: center;
+	    text-align: center;
 	    background-color: white;
 	    padding: 20px;
 	    border: 1px solid #ddd;
@@ -80,6 +63,7 @@
 	    flex: 1;
 	    justify-content: space-between;
 	    align-items: center;
+	    text-align: center;
 	    background-color: white;
 	    padding: 20px;
 	    border: 1px solid #ddd;
@@ -88,106 +72,6 @@
 	    margin-bottom: 20px;
 }
 </style>
-<title>Insert title here</title>
-</head>
-<body>
-<jsp:include page="/WEB-INF/views/common/menubar.jsp" />
-<main>
-	<jsp:include page="/WEB-INF/views/user/sideMenu.jsp" />
-	<div class="content">
-		<div class="main-content">
-			<div class="update-form">
-			<form action="${pageContext.request.contextPath}/user/userUpdate" method="post" id="userUpdateForm">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-				<table align="center">
-					<tr>
-						<td>
-							<div class="input-group mb-3 input-group-lg">
-								<div class="input-group-prepend">
-									<span class="input-group-text">닉네임</span>
-								</div>
-								<input type="text" class="form-control" name="nickname" id="nickname" value="<sec:authentication property="principal.nickname"/>">
-								<div class="input-group-append">
-									<button type="button" class="btn btn-info" onclick="checkDuplicateNickname()" disabled>중복체크</button>
-								</div>
-							</div>
-							<div id="nicknameCheckMessage" style="color: red; display: none;">중복된 닉네임입니다.</div>
-							<div id="nicknameCheckSuccessMessage" style="color: green; display: none;">사용 가능한 닉네임입니다.</div>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<div class="input-group mb-3 input-group-lg">
-								<div class="input-group-prepend">
-									<span class="input-group-text">전화번호</span>
-								</div>
-								<input type="text" class="form-control" name="phone" value="<sec:authentication property="principal.phone"/>">
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<div class="input-group mb-3 input-group-lg">
-								<div class="input-group-prepend">
-									<span class="input-group-text">이메일</span>
-								</div>
-								<input type="email" class="form-control" name="email" value="<sec:authentication property="principal.email"/>">
-							</div>
-						</td>
-					</tr>
-				</table>
-				<div align="right">
-					<input type="submit" value="회원정보 변경하기" class="btn btn-info"><br>
-				</div>
-			</form>
-			</div>
-			
-			<div class="update-form-userPw">
-				<form action="${pageContext.request.contextPath}/user/userPwUpdate" method="post" id="userPwUpdateForm">
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					<table align="center">
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">현재 비밀번호</span>
-									</div>
-									<input type="password" class="form-control" name="userPw">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">새 비밀번호</span>
-									</div>
-									<input type="password" class="form-control" name="newUserPw">
-								</div>
-								<div id="passwordCurrentMessage" style="color: red; display: none;">현재 비밀번호와 같습니다.</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">새 비밀번호 확인</span>
-									</div>
-									<input type="password" class="form-control" name="newConfirmPw">
-								</div>
-								<div id="passwordMatchMessage" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</div>
-							</td>
-						</tr>
-					</table>
-					<div align="right">
-						<input type="submit" value="비밀번호 변경하기" class="btn btn-info"><br>
-					</div>
-				</form>
-				
-			</div>
-		</div>
-	</div>
-</main>
 <script>
 	var isUserNicknameValid = false;	
 	var isPasswordMatch = false;
@@ -301,5 +185,107 @@
 	    });
 	});
 </script>
+</head>
+<body>
+<jsp:include page="/WEB-INF/views/common/menubar.jsp" />
+<main>
+	<jsp:include page="/WEB-INF/views/user/sideMenu.jsp" />
+	<div class="content">
+		<div class="main-content">
+			<div class="update-form">
+			<h2>회원정보 변경</h2>
+       		<p>닉네임, 전화번호, 이메일을 변경할 수 있습니다</p>
+			<form action="${pageContext.request.contextPath}/user/userUpdate" method="post" id="userUpdateForm">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<table align="center">
+					<tr>
+						<td>
+							<div class="input-group mb-3 input-group-lg">
+								<div class="input-group-prepend">
+									<span class="input-group-text">닉네임</span>
+								</div>
+								<input type="text" class="form-control" name="nickname" id="nickname" value="<sec:authentication property="principal.nickname"/>">
+								<div class="input-group-append">
+									<button type="button" class="btn btn-info" onclick="checkDuplicateNickname()" disabled>중복체크</button>
+								</div>
+							</div>
+							<div id="nicknameCheckMessage" style="color: red; display: none;">중복된 닉네임입니다.</div>
+							<div id="nicknameCheckSuccessMessage" style="color: green; display: none;">사용 가능한 닉네임입니다.</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="input-group mb-3 input-group-lg">
+								<div class="input-group-prepend">
+									<span class="input-group-text">전화번호</span>
+								</div>
+								<input type="text" class="form-control" name="phone" value="<sec:authentication property="principal.phone"/>">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="input-group mb-3 input-group-lg">
+								<div class="input-group-prepend">
+									<span class="input-group-text">이메일</span>
+								</div>
+								<input type="email" class="form-control" name="email" value="<sec:authentication property="principal.email"/>">
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div align="right">
+					<input type="submit" value="회원정보 변경하기" class="btn btn-info"><br>
+				</div>
+			</form>
+			</div>
+			
+			<div class="update-form-userPw">
+			<p>비밀번호를 변경할 수 있습니다</p>
+				<form action="${pageContext.request.contextPath}/user/userPwUpdate" method="post" id="userPwUpdateForm">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<table align="center">
+						<tr>
+							<td colspan="2">
+								<div class="input-group mb-3 input-group-lg">
+									<div class="input-group-prepend">
+										<span class="input-group-text">현재 비밀번호</span>
+									</div>
+									<input type="password" class="form-control" name="userPw">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="input-group mb-3 input-group-lg">
+									<div class="input-group-prepend">
+										<span class="input-group-text">새 비밀번호</span>
+									</div>
+									<input type="password" class="form-control" name="newUserPw">
+								</div>
+								<div id="passwordCurrentMessage" style="color: red; display: none;">현재 비밀번호와 같습니다.</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="input-group mb-3 input-group-lg">
+									<div class="input-group-prepend">
+										<span class="input-group-text">새 비밀번호 확인</span>
+									</div>
+									<input type="password" class="form-control" name="newConfirmPw">
+								</div>
+								<div id="passwordMatchMessage" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</div>
+							</td>
+						</tr>
+					</table>
+					<div align="right">
+						<input type="submit" value="비밀번호 변경하기" class="btn btn-info"><br>
+					</div>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</main>
 </body>
 </html>

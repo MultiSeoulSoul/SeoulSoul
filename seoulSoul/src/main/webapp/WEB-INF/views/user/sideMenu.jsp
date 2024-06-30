@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <style>
 .side-menu {
-        width: 200px;
+        width: 150px;
         background-color: #e0f7fa;
         border-right: 1px solid #ddd;
         padding: 20px;
@@ -39,11 +39,8 @@
 	    <ul>
 	        <li><a href="${pageContext.request.contextPath}/user/userUpdateForm">회원정보 수정</a></li>
 	        <li><a href="#">소울 보기</a></li>
-	        <li><a href="#">업적 보기</a></li>
-	        <li><a href="#">소울로그 보기</a></li>
-	        <li><a href="#">댓글 보기</a></li>
-	        <li><a href="#">좋아요 보기</a></li>
-	        <li><a href="#">문의내역 보기</a></li>
+	        <li><a href="${pageContext.request.contextPath}/user/userBoardDetail">나의 활동</a></li>	        
+	        <li><a href="${pageContext.request.contextPath}/user/userAchievementDetail">나의 업적</a></li>
 	        <li><a href="${pageContext.request.contextPath}/user/userDelete" style="color: red;">회원 탈퇴</a></li>
 	    </ul>
 	</div>
