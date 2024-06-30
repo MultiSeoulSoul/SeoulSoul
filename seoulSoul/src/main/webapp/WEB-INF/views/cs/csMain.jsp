@@ -91,8 +91,8 @@ a:hover {
 				            <h3><a href="${pageContext.request.contextPath}/cs/qnaAllUser">내가 쓴 문의글 보기</a></h3>
 				        </td>
 				        <td>
-				            <h3><a href="#" onclick="openChatbot()">챗봇</a></h3>
-				        </td>
+						    <h3><a href="" onclick="openChatbot()">챗봇</a></h3>
+						</td>
 				    </tr>
 				</table>
 			</div>
@@ -110,7 +110,7 @@ a:hover {
         <!-- 챗봇 -->
         <script type="text/javascript">
             function openChatbot() {
-                window.open("${pageContext.request.contextPath}/chatbot/chatbot", "chatbotWindow", "width=400,height=600");
+                window.open("${pageContext.request.contextPath}/chatbot/chatbot", "chatbotWindow", "width=450,height=600");
             }
         </script>
     <%-- </sec:authorize> --%>
