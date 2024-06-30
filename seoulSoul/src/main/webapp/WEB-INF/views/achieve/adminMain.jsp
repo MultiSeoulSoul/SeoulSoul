@@ -131,7 +131,7 @@
                 <h2>신고 현황</h2>
                 <div id="report" class="report-content active">
                     <c:forEach items="${reportList}" var="bag">
-                        <a href="${pageContext.request.contextPath}/report/reportDetail?reportNo=${bag.reportNo}">
+                        <a href="${pageContext.request.contextPath}/reportReply/reportDetail?reportNo=${bag.reportNo}">
                             No.${bag.reportNo} | 신고제목 : ${bag.title} | 신고자 : ${bag.reporter.nickname} | 게시글 : ${bag.reportedSoulLog.title}
                         </a>
                         <hr>

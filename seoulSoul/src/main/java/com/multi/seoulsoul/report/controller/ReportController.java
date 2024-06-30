@@ -79,12 +79,5 @@ public class ReportController {
 		
 	}
 	
-	@GetMapping("/reportDetail")
-	public String reportDetail(@RequestParam("reportNo") int reportNo, Model model) {
-        ReportDTO report = reportService.getReportById(reportNo);
-        model.addAttribute("report", report);
-        return "/report/reportDetail";
-    }
-	
 	
 }

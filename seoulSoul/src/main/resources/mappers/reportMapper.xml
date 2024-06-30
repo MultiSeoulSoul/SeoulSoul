@@ -82,6 +82,15 @@
         INSERT INTO SL_REPORT (title, reason, reporter, reported_soul_log)
         VALUES (#{title}, #{reason}, #{reporter.userNo}, #{reportedSoulLog.soulLogNo})
     </insert>
+    
+    <insert id="insertReportReply" parameterType="com.multi.seoulsoul.report.model.dto.ReportReplyDTO">
+    	INSERT INTO AD_REPORT_REPLY (report_no, content)
+    	VALUES (#{reportNo}, #{content})
+    </insert>
+    
+    <select id="selectReportReply" parameterType="int" resultType="com.multi.seoulsoul.report.model.dto.ReportReplyDTO">
+    	SELECT * FROM AD_REPORT_REPLY WHERE report_no = #{reportNo}
+    </select>
 
 </mapper>
 

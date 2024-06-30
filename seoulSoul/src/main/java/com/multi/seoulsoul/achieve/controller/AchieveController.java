@@ -140,8 +140,8 @@ public class AchieveController {
             
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("message", "업적 생성 실패: " + e.getMessage());
-            return "redirect:/admin/adminMain";
+            model.addAttribute("msg", "업적 생성 실패: " + e.getMessage());
+            return "/common/errorPage";
         }
         
         return "redirect:/admin/adminMain";
@@ -204,8 +204,8 @@ public class AchieveController {
             
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("message", "업적 생성 실패: " + e.getMessage());
-            return "redirect:/admin/adminMain";
+            model.addAttribute("msg", "업적 생성 실패: " + e.getMessage());
+            return "/common/errorPage";
         }
         
         return "redirect:/admin/adminMain";
@@ -251,8 +251,8 @@ public class AchieveController {
             return "redirect:/admin/adminMain";
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("message", "업적 수정 실패");
-            return "error";
+            model.addAttribute("msg", "업적 수정 실패");
+            return "/common/errorPage";
         }
     }
 	

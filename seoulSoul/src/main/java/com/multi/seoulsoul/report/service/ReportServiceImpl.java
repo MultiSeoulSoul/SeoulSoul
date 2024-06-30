@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.report.model.dao.ReportDAO;
 import com.multi.seoulsoul.report.model.dto.ReportDTO;
+import com.multi.seoulsoul.report.model.dto.ReportReplyDTO;
 import com.multi.seoulsoul.report.model.dto.ReportedSoulLogDTO;
 
 @Service
@@ -44,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
 
 
 	@Override
-	public List<ReportDTO> reportList() {
+	public List<ReportDTO> reportList() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("reportList ReportServiceImpl 도착.");
 
@@ -54,9 +54,23 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	@Override
-    public ReportDTO getReportById(int reportNo) {
+    public ReportDTO getReportById(int reportNo) throws Exception {
         return reportDAO.selectReportById(sqlSession, reportNo);
     }
+
+
+	@Override
+	public int insertReportReply(ReportReplyDTO reportReplyDTO) throws Exception {
+		// TODO Auto-generated method stub
+		return reportDAO.insertReportReply(sqlSession, reportReplyDTO);
+	}
+
+
+	@Override
+	public List<ReportReplyDTO> selectReportReply(int reportNo) throws Exception {
+		// TODO Auto-generated method stub
+		return reportDAO.selectReportReply(sqlSession, reportNo);
+	}
 	
 
 }

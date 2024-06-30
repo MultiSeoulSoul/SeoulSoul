@@ -72,9 +72,27 @@
             <div><strong>신고 작성자:</strong> <c:out value="${report.reporter.nickname}" /></div>
             <div><strong>신고글 제목:</strong> <c:out value="${report.title}" /></div>
             <div class="full-width"><strong>신고 내용:</strong><br><c:out value="${report.reason}" /></div>
-            <div class="full-width"><strong>신고에 대한 답변:</strong><br>
-                <c:forEach items="${report.reportReply}" var="reply">
-                    <p><c:out value="${reply.content}" /></p>
+            <div class="full-width">
+	            <form action="insertReportReply" method="post">
+					<table>
+						<tr>
+							<td style="width: 130px; height: 40px;">
+								관리자
+							</td>
+							<td>
+								<input type="hidden" name="reportNo" value="${report.reportNo}">
+								<input type="hidden" name="userNo" value="2">
+								<input id="content" name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 답변 입력 " maxlength="100" required>
+							</td>
+							<td>
+								<button type="submit" style="width: 110px; height: 35px; margin-left: 30px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">답변 작성</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<br><strong>신고에 대한 답변:</strong><br>
+                <c:forEach items="${reportReply}" var="reportReply">
+                    <p><c:out value="${reportReply.content}" /></p>
                     <hr>
                 </c:forEach>
             </div>
