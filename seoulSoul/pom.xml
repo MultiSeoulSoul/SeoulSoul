@@ -136,7 +136,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<!-- ?ㅽ봽留??몃옖??뀡 愿???ㅼ젙 -->
+		<!-- 스프링 트랜잭션 관련 설정 -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-tx</artifactId>
@@ -165,7 +165,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<!-- ?쒗걧由ы떚 ?쒓렇 ?쇱씠釉뚮윭由?-->
+		<!-- 시큐리티 태그 라이브러리 -->
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-taglibs</artifactId>
@@ -176,7 +176,7 @@
 
 
 
-		<!-- 荑쇰━濡쒓렇異붽? ?쇱씠釉뚮윭由?-->
+		<!-- 쿼리로그추가 라이브러리 -->
 		<dependency>
 			<groupId>org.lazyluke</groupId>
 			<artifactId>log4jdbc-remix</artifactId>
@@ -190,7 +190,7 @@
 
 
 
-		<!-- ?뚯씪?낅줈??愿???쇱씠釉뚮윭由?-->
+		<!-- 파일업로드 관련 라이브러리 -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -209,7 +209,7 @@
 		</dependency>
 
 
-		<!-- json 愿???뷀렂?섏떆 -->
+		<!-- json 관련 디펜던시 -->
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
@@ -241,7 +241,7 @@
 
 
 
-		<!-- 梨꾪똿 -->
+		<!-- 채팅 -->
 		<!-- websocket -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>

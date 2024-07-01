@@ -78,6 +78,8 @@ header nav ul li a {
 }
 
 .user-menu a {
+	display: flex;
+    align-items: center;
     text-decoration: none;
     color: #333;
     font-weight: bold;
