@@ -115,11 +115,7 @@ public class CsServiceImpl implements CsService {
     
     //문의글 답변 작성
     @Override
-    public void insertAnswer(int questionNo, String content, int writer) throws Exception {
-        CsAnswerDTO answer = new CsAnswerDTO();
-        answer.setQuestionNo(questionNo);
-        answer.setContent(content);
-        answer.setWriter(writer);
+    public void insertAnswer(int questionNo, CsAnswerDTO answer) throws Exception {
         csDAO.insertAnswer(sqlSession, answer);
         csDAO.updateQuestionToAnswered(sqlSession, questionNo);
     }

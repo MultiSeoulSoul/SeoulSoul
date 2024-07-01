@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
+import com.multi.seoulsoul.cs.model.dto.CsAnswerDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionDTO;
 import com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO;
 import com.multi.seoulsoul.cs.service.CsService;
@@ -45,8 +51,10 @@ public class CsController {
 	
 	//문의글 전체 조회: 페이징 처리된 전체 문의글
 	@GetMapping("/qnaAll")
-    public String qnaAll(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        int totalQuestions;
+    public String qnaAll(@RequestParam(value = "page", defaultValue = "1") int page, 
+    					 Model model) {
+        		
+		int totalQuestions;
         
 		try {
 			totalQuestions = csService.getTotalQuestions();
@@ -70,11 +78,13 @@ public class CsController {
     }
 	//문의글 전체 조회: 페이징 처리 된 사용자별 문의글
 	@RequestMapping("/qnaAllUser")
-    public String getQnaAllUser(@RequestParam(value = "page", defaultValue = "1") int page, Model model/*, HttpSession session*/) {
+    public String getQnaAllUser(@RequestParam(value = "page", defaultValue = "1") int page, 
+    							Model model, @AuthenticationPrincipal Principal principal) {
         
-		//int userNo = (int) session.getAttribute("userNo"); // 로그인한 사용자의 번호를 세션에서 가져옴
-        
-		int userNo = 3; //테스트용
+		//로그인 유저 정보의 userNo 가져오기
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+	    int userNo = userDetails.getUserNo();
 		
         int totalQuestions;
 		try {
@@ -99,6 +109,7 @@ public class CsController {
 	//문의글 상세 조회: 전체 문의글
 	@GetMapping("/qnaOne")
     public String getQuestionById(@RequestParam("id") int questionNo, Model model) {
+		
 		try {
 			csService.increaseViewCount(questionNo);
 			CsQuestionDTO question = csService.getQuestionById(questionNo);
@@ -116,7 +127,9 @@ public class CsController {
     }
     // 문의글 상세 조회: 사용자별 문의글
     @GetMapping("/qnaOneUser")
-    public String getQuestionByUserId(@RequestParam("id") int questionNo, Model model) {
+    public String getQuestionByUserId(@RequestParam("id") int questionNo, 
+    								  Model model) {
+    	
         try {
             csService.increaseViewCount(questionNo);
             CsQuestionDTO question = csService.getQuestionById(questionNo);
@@ -138,6 +151,7 @@ public class CsController {
 				             HttpServletRequest request, 
 				             HttpServletResponse response, 
 				             Model model) {
+    	
         CsQuestionDTO question;
 		try {
 			question = csService.getQuestionById(questionNo);
@@ -203,6 +217,7 @@ public class CsController {
 	//문의글 삭제
 	@GetMapping("/qnaDelete")
     public String qnaDelete(@RequestParam("id") Integer questionNo, Model model) {
+		
         try {
 			csService.deleteQuestion(questionNo);
 		} catch (Exception e) {
@@ -238,13 +253,19 @@ public class CsController {
                             @RequestParam("category_code") int categoryCode,
                             @RequestParam("writer") int writer,
                             @RequestParam("multiFiles") MultipartFile[] multiFiles,
-                            HttpServletRequest request, Model model) {
+                            HttpServletRequest request, 
+                            Model model, @AuthenticationPrincipal Principal principal) {
         
+		//로그인 유저 정보의 userNo 가져오기
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+	    int userNo = userDetails.getUserNo();
+    	
         CsQuestionDTO question = new CsQuestionDTO();
         question.setTitle(title);
         question.setContent(content);
         question.setCategoryCode(categoryCode);
-        question.setWriter(writer); //작성자 (user_no)
+        question.setWriter(userNo); //로그인 유저 정보의 userNo
         
         //첨부파일 저장 경로 설정
         String root = request.getSession().getServletContext().getRealPath("resources");
@@ -346,14 +367,20 @@ public class CsController {
 				            @RequestParam("writer") int writer,
                             @RequestParam(name = "deleteFiles", required = false) List<Integer> deleteFiles,
                             @RequestParam("multiFiles") MultipartFile[] multiFiles,
-                            HttpServletRequest request, Model model) throws Exception {
+                            HttpServletRequest request, 
+                            Model model, @AuthenticationPrincipal Principal principal) throws Exception {
 
+		//로그인 유저 정보의 userNo 가져오기
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+	    int userNo = userDetails.getUserNo();
+    	
         CsQuestionDTO question = new CsQuestionDTO();
         question.setQuestionNo(questionNo);
         question.setTitle(title);
         question.setContent(content);
         question.setCategoryCode(categoryCode);
-        question.setWriter(writer); // 작성자 (user_no)
+        question.setWriter(userNo); //로그인 유저 정보의 userNo
 
     	
         //기존 첨부파일 삭제
@@ -454,12 +481,21 @@ public class CsController {
     //문의글 답변 작성
     @PostMapping("/answerInsert")
     public String insertAnswer(@RequestParam("qnaId") int questionNo,
-                               @RequestParam("content") String content, Model model) {
+                               @RequestParam("content") String content, 
+                               Model model, @AuthenticationPrincipal Principal principal) {
         
-        int writer = 1; //테스트용: 관리자 writer(user_no)를 하드코딩된 값 1로 설정
+		//로그인 유저 정보의 userNo 가져오기
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+	    int userNo = userDetails.getUserNo();
+    	
+        CsAnswerDTO answer = new CsAnswerDTO();
+        answer.setQuestionNo(questionNo);
+        answer.setContent(content);
+        answer.setWriter(userNo); //로그인 유저 정보의 userNo
         
         try {
-			csService.insertAnswer(questionNo, content, writer);
+			csService.insertAnswer(questionNo, answer);
 		} catch (Exception e) {
 			e.printStackTrace();
 			

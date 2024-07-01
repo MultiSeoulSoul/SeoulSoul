@@ -41,11 +41,17 @@ a:hover {
 	color: black;
 	text-decoration: underline;
 }
+.footer {
+	margin-top: 200px;
+    text-align: right;
+    font-size: small;
+}
 </style>
 
 </head>
 <body>
 
+	<!-- 택 1: -->
 	<!-- [관리자]로 로그인한 경우: qnaAll.jsp로 포워드 -->
     <%-- <sec:authorize access="hasRole('ROLE_ADMIN')">
         <jsp:forward page="/cs/qnaAll.jsp"/>
@@ -96,15 +102,14 @@ a:hover {
 				    </tr>
 				</table>
 			</div>
-   
-            <br><br>  
-            <br><br>
-            <br><br>
-            <br><br>
-            <br><br>
-            <!-- 아이콘 이미지 출처: 푸터로 옮기기? -->
-		    <div><a href="https://www.flaticon.com/kr/free-icons/-" title="문의 양식 아이콘">문의 양식 아이콘 제작자: rukanicon - Flaticon</a></div>
-		    <div><a href="https://www.flaticon.com/kr/free-icons/" title="챗봇 아이콘">챗봇 아이콘 제작자: rukanicon - Flaticon</a></div> 
+
+        </div>
+        
+        <!-- 아이콘 이미지 출처 명시 -->
+        <div class="footer">
+        	<hr>
+            <div><a href="https://www.flaticon.com/kr/free-icons/-" title="문의 양식 아이콘">문의 양식 아이콘 제작자: rukanicon - Flaticon</a></div>
+            <div><a href="https://www.flaticon.com/kr/free-icons/" title="챗봇 아이콘">챗봇 아이콘 제작자: rukanicon - Flaticon</a></div>
         </div>
         
         <!-- 챗봇 -->
