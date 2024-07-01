@@ -72,15 +72,15 @@ public class SoulLogDAO {
 		
 	}
 
-	public int deleteSoulLog(SqlSessionTemplate sqlSession, int soulLogNo) {
+	public int deleteSoulLog(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
 		
-		return sqlSession.delete("soulLogMapper.deleteSoulLog", soulLogNo);
+		return sqlSession.delete("soulLogMapper.deleteSoulLog", soulLogDTO);
 		
 	}
 
-	public int deleteSoulLogReply(SqlSessionTemplate sqlSession, int replyNo) {
+	public int deleteSoulLogReply(SqlSessionTemplate sqlSession, RepliesDTO repliesDTO) {
 		
-		return sqlSession.delete("soulLogMapper.deleteSoulLogReply", replyNo);
+		return sqlSession.delete("soulLogMapper.deleteSoulLogReply", repliesDTO);
 		
 	}
 

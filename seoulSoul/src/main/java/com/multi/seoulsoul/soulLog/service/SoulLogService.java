@@ -30,9 +30,9 @@ public interface SoulLogService {
 
 	int insertSoulLogReply(RepliesDTO repliesDTO) throws Exception;
 
-	int deleteSoulLog(int soulLogNo) throws Exception;
+	int deleteSoulLog(SoulLogDTO soulLogDTO) throws Exception;
 
-	int deleteSoulLogReply(int replyNo) throws Exception;
+	int deleteSoulLogReply(RepliesDTO repliesDTO) throws Exception;
 
 	SoulLogDTO updateDetail(int soulLogNo) throws Exception;
 

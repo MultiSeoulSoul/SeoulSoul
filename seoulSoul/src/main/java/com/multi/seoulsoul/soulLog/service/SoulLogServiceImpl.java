@@ -129,18 +129,18 @@ public class SoulLogServiceImpl implements SoulLogService {
 
 
 	@Override
-	public int deleteSoulLog(int soulLogNo) throws Exception {
+	public int deleteSoulLog(SoulLogDTO soulLogDTO) throws Exception {
 		
-		return soulLogDAO.deleteSoulLog(sqlSession, soulLogNo);
+		return soulLogDAO.deleteSoulLog(sqlSession, soulLogDTO);
 		
 	}
 
 
 	@Override
 	@Transactional(rollbackFor = {Exception.class})
-	public int deleteSoulLogReply(int replyNo) throws Exception {
+	public int deleteSoulLogReply(RepliesDTO repliesDTO) throws Exception {
 		
-		return soulLogDAO.deleteSoulLogReply(sqlSession, replyNo);
+		return soulLogDAO.deleteSoulLogReply(sqlSession, repliesDTO);
 		
 	}
 

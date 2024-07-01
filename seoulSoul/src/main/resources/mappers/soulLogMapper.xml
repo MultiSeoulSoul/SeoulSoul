@@ -242,15 +242,21 @@
 	</insert>
 	
 	
-	<delete id="deleteSoulLog" parameterType="int">
+	<delete id="deleteSoulLog" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
 		DELETE FROM SL_BOARD
 		WHERE soul_log_no = #{ soulLogNo }
+		<if test="writer.userNo != 1">
+   			AND writer = #{ writer.userNo }
+   		</if>
 	</delete>
 	
 	
-	<delete id="deleteSoulLogReply" parameterType="int">
+	<delete id="deleteSoulLogReply" parameterType="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO">
 		DELETE FROM SL_REPLY
 		WHERE reply_no = #{ replyNo }
+		<if test="writer.userNo != 1">
+   			AND writer = #{ writer.userNo }
+   		</if>
 	</delete>
 	
 	
@@ -295,7 +301,7 @@
 			category_code = #{ category.categoryCode }, 
 			content = #{ content },
 			modified_date = NOW()
-		WHERE soul_log_no = #{ soulLogNo }
+		WHERE soul_log_no = #{ soulLogNo } AND writer = #{ writer.userNo }
 	</update>
 	
 	
@@ -328,7 +334,7 @@
 	<update id="updateSoulLogReply" parameterType="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO">
 		UPDATE SL_REPLY
 		SET content = #{ content }
-		WHERE reply_no = #{ replyNo }
+		WHERE reply_no = #{ replyNo } AND writer = #{ writer.userNo }
 	</update>
 	
 	

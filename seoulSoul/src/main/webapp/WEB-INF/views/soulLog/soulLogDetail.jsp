@@ -82,6 +82,8 @@ function inactivatingLike() {
 </head>
 <body>
 
+<sec:authentication property="principal" var="principal"/>
+
 <jsp:include page="../common/menubar.jsp"/>
 
 <div class="content" style="margin: 30px;">
@@ -103,12 +105,16 @@ function inactivatingLike() {
 			<a href="${pageContext.servletContext.contextPath}/report/soulLogReportForm?soulLogNo=${soulLogDetail.soulLogNo}">
 				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 신고</button>
 			</a>
-			<a href="soulLogUpdateForm?soulLogNo=${soulLogDetail.soulLogNo}">
-				<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 수정</button>
-			</a>
+			<c:if test="${soulLogDetail.writer.userNo == principal.userNo}">
+				<a href="soulLogUpdateForm?soulLogNo=${soulLogDetail.soulLogNo}">
+					<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 수정</button>
+				</a>
+			</c:if>
+			<c:if test="${soulLogDetail.writer.userNo == principal.userNo || principal.userNo == 1}">
 			<a href="deleteSoulLog?soulLogNo=${soulLogDetail.soulLogNo}" onclick="return confirmDelete();">
 				<button class="btns" style="width: 110px; height: 35px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 삭제</button>
 			</a>
+			</c:if>
 		</div>
 		
 		<br>
@@ -202,8 +208,12 @@ function inactivatingLike() {
 			for(int i = 0; i < replies.size(); i++) {
 				int replyNo = replies.get(i).getReplyNo();
 				int soulLogNo = replies.get(i).getSoulLogNo();
+				int replyWriterNo = replies.get(i).getWriter().getUserNo();
 				String replyWriter = replies.get(i).getWriter().getNickname();
 				String replyContent = replies.get(i).getContent();
+		
+				pageContext.setAttribute("replyWriterNo", replyWriterNo);
+				
 			%>
 					
 			<form action="updateSoulLogReply" method="post">
@@ -222,18 +232,22 @@ function inactivatingLike() {
 								<input name="content" style="width: 900px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="<%= replyContent %>" maxlength="100" required>
 							</div>
 						</td>
-						<td style="width: 5px; border-bottom: 1px solid #ccc;">
-							<div id="replyUpdateBtn<%= (i+1) %>">
-								<button type="button" style="width: 40px; height: 25px; background: #A0A0A0; color: white; border: 1px solid #c0c0c0; cursor: pointer;" onclick="updateReply(<%= (i+1) %>)">수정</button>
-							</div>
+						<td style="width: 50px; border-bottom: 1px solid #ccc;">
+							<c:if test="${replyWriterNo == principal.userNo}">
+								<div id="replyUpdateBtn<%= (i+1) %>">
+									<button type="button" style="width: 40px; height: 25px; background: #A0A0A0; color: white; border: 1px solid #c0c0c0; cursor: pointer;" onclick="updateReply(<%= (i+1) %>)">수정</button>
+								</div>
+							</c:if>
 							<div id="replyUpdateFormBtn<%= (i+1) %>" style="display: none">
 								<button type="submit" style="width: 40px; height: 25px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">완료</button>
 							</div>
 						</td>
-						<td style="width: 50px; border-bottom: 1px solid #ccc;">	
-							<a href="deleteSoulLogReply?replyNo=<%= replyNo %>&soulLogNo=<%= soulLogNo %>" onclick="return confirmDelete();">
-								<button type="button" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
-							</a>
+						<td style="width: 50px; border-bottom: 1px solid #ccc;">
+							<c:if test="${replyWriterNo == principal.userNo || principal.userNo == 1}">
+								<a href="deleteSoulLogReply?replyNo=<%= replyNo %>&soulLogNo=<%= soulLogNo %>" onclick="return confirmDelete();">
+									<button type="button" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
+								</a>
+							</c:if>
 						</td>
 					</tr>
 				</table>

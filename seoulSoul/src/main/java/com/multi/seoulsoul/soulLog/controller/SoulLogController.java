@@ -102,7 +102,7 @@ public class SoulLogController {
 	public void soulLogInsertForm() {
 	
 	}
-	
+
 	
 	// 자치구 리스트를 조회 (json, ajax)
 	@RequestMapping("/locationList")
@@ -321,13 +321,23 @@ public class SoulLogController {
 	
 	
 	@RequestMapping("/deleteSoulLog")
-	public String deleteSoulLog(int soulLogNo, Model model) {
+	public String deleteSoulLog(@AuthenticationPrincipal Principal principal, SoulLogDTO soulLogDTO, Model model) {
 		
-		System.out.println("삭제할 로그 no는 >>>>> " + soulLogNo);
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	WriterDTO writerDTO = new WriterDTO();
+    	writerDTO.setUserNo(userNo);
+    	
+    	soulLogDTO.setWriter(writerDTO);
+		
+		System.out.println("삭제할 로그 no는 >>>>> " + soulLogDTO.getSoulLogNo());
 		
 		try {
 			
-			soulLogService.deleteSoulLog(soulLogNo);
+			soulLogService.deleteSoulLog(soulLogDTO);
 			
 			return "redirect:/soulLog/soulLogMain?page=1";
 			
@@ -345,18 +355,27 @@ public class SoulLogController {
 	
 	
 	@RequestMapping("/deleteSoulLogReply")
-	public String deleteSoulLogReply(RepliesDTO repliesDTO, Model model) {
+	public String deleteSoulLogReply(@AuthenticationPrincipal Principal principal, RepliesDTO repliesDTO, Model model) {
 		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	ReplyWriterDTO replyWriterDTO = new ReplyWriterDTO();
+    	replyWriterDTO.setUserNo(userNo);
+    	
 		int replyNo = repliesDTO.getReplyNo();
 		int soulLogNo = repliesDTO.getSoulLogNo();
 		
 		System.out.println("삭제할 댓글 no는 >>>>> " + replyNo);
 		System.out.println("댓글 달린 로그 no는 >>>>> " + soulLogNo);
 		
+		repliesDTO.setWriter(replyWriterDTO);
 		
 		try {
 			
-			soulLogService.deleteSoulLogReply(replyNo);
+			soulLogService.deleteSoulLogReply(repliesDTO);
 			
 			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
 			
@@ -401,7 +420,15 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/updateSoulLog")
-	public String updateSoulLog(LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, @RequestParam("status[]") int[] status, @RequestParam("fileNo[]") int[] fileNo, Model model) {
+	public String updateSoulLog(@AuthenticationPrincipal Principal principal, LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, @RequestParam("status[]") int[] status, @RequestParam("fileNo[]") int[] fileNo, Model model) {
+		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	WriterDTO writeDTO = new WriterDTO();
+    	writeDTO.setUserNo(userNo);
 		
 		int soulLogNo = soulLogDTO.getSoulLogNo();
 		
@@ -410,6 +437,7 @@ public class SoulLogController {
 		
 		soulLogDTO.setLocation(locationDTO);
 		soulLogDTO.setCategory(categoryDTO);
+		soulLogDTO.setWriter(writeDTO);
 		
 		// location, category, 제목, 내용 수정에 대한 데이터들
 		System.out.println("soulLogDTO는 >>>>> " + soulLogDTO);
@@ -556,9 +584,19 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/updateSoulLogReply")
-	public String updateSoulLogReply(RepliesDTO repliesDTO, Model model) {
+	public String updateSoulLogReply(@AuthenticationPrincipal Principal principal, RepliesDTO repliesDTO, Model model) {
+		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	ReplyWriterDTO replyWriteDTO = new ReplyWriterDTO();
+    	replyWriteDTO.setUserNo(userNo);
 		
 		int soulLogNo = repliesDTO.getSoulLogNo();
+		
+		repliesDTO.setWriter(replyWriteDTO);
 		
 		try {
 			
