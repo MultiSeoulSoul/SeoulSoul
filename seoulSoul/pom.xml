@@ -15,6 +15,8 @@
 		<org.aspectj-version>1.9.6</org.aspectj-version>
 		<org.slf4j-version>1.7.30</org.slf4j-version>
 	</properties>
+
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -97,6 +99,8 @@
 		</dependency>
 
 
+
+
 		<!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -131,11 +135,12 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+
 		<!-- 스프링 트랜잭션 관련 설정 -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${org.springframework-version}</version>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-tx</artifactId>
+		    <version>${org.springframework-version}</version>
 		</dependency>
 
 
@@ -160,15 +165,16 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-
-
-
 		<!-- 시큐리티 태그 라이브러리 -->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>5.3.10.RELEASE</version>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		    <version>5.3.10.RELEASE</version>
 		</dependency>
+
+
+
+
 
 		<!-- 쿼리로그추가 라이브러리 -->
 		<dependency>
@@ -260,6 +266,7 @@
 			<artifactId>spring-messaging</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+
 
 	</dependencies>
 
