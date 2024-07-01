@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="achieveMapper">
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" id="achLocaResultMap">
+        <id property="achNo" column="ach_no"/>
+        <result property="locationCode" column="location_code"/>
+        <result property="maxCount" column="max_count"/>
+        <result property="title" column="title"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+    </resultMap>
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchLocaGetDTO" id="achLocaGetResultMap">
+        <id property="userNo" column="user_no"/>
+        <result property="status" column="status"/>
+        <association property="achLoca" column="ach_no" javaType="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" select="selectAchLocaById"/>
+    </resultMap>
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO" id="achLocaIconsResultMap">
+        <id property="iconNo" column="icon_no"/>
+        <result property="originalName" column="original_name"/>
+        <result property="savedName" column="saved_name"/>
+        <association property="achLoca" column="ach_no" javaType="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" select="selectAchLocaById"/>
+    </resultMap>
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" id="achCateResultMap">
+        <id property="achNo" column="ach_no"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="maxCount" column="max_count"/>
+        <result property="title" column="title"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+    </resultMap>
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchCateGetDTO" id="achCateGetResultMap">
+        <id property="userNo" column="user_no"/>
+        <result property="status" column="status"/>
+        <association property="achCate" column="ach_no" javaType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" select="selectAchCateById"/>
+    </resultMap>
+
+    <resultMap type="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO" id="achCateIconsResultMap">
+        <id property="iconNo" column="icon_no"/>
+        <result property="originalName" column="original_name"/>
+        <result property="savedName" column="saved_name"/>
+        <association property="achCate" column="ach_no" javaType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" select="selectAchCateById"/>
+    </resultMap>
+    
+    <resultMap id="userListResultMap" type="com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO">
+	    <id property="userNo" column="user_no"/>
+	    <result property="userId" column="user_id"/>
+	    <result property="nickname" column="nickname"/>
+	    <result property="blacklistStatus" column="blacklist_status"/>
+	    <result property="lastSoulLogDate" column="last_soul_log_date"/>
+	    <collection property="userStats" ofType="com.multi.seoulsoul.achieve.model.dto.StatsDTO">
+	        <result property="locationCode" column="location_code"/>
+	        <result property="locationName" column="location_name"/>
+	        <result property="soulLogCount" column="soul_log_count"/>
+	        <result property="likeCount" column="like_count"/>
+	        <result property="replyCount" column="reply_count"/>
+	        <result property="exp" column="exp"/>
+	    </collection>
+	</resultMap>
+	
+	<resultMap id="statsResultMap" type="com.multi.seoulsoul.achieve.model.dto.StatsDTO">
+	    <result property="locationCode" column="location_code"/>
+	    <result property="locationName" column="location_name"/>
+	    <result property="soulLogCount" column="soul_log_count"/>
+	    <result property="likeCount" column="like_count"/>
+	    <result property="replyCount" column="reply_count"/>
+	</resultMap>
+	
+	<resultMap id="achLocaCountResultMap" type="com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="locationCode" column="location_code"/>
+        <result property="curCount" column="cur_count"/>
+    </resultMap>
+    
+    <resultMap id="achCateCountResultMap" type="com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="curCount" column="cur_count"/>
+    </resultMap>
+	
+	<select id="selectStats" resultMap="statsResultMap">
+	    SELECT 
+	        A.location_code, 
+	        COUNT(DISTINCT A.soul_log_no) AS soul_log_count,
+	        SUM(IF(B.user_no IS NOT NULL, 1, 0)) AS like_count,
+	        SUM(IF(C.reply_no IS NOT NULL, 1, 0)) AS reply_count, 
+	        D.location_name
+	    FROM SL_BOARD A
+	    LEFT JOIN SL_LIKE B ON A.soul_log_no = B.soul_log_no
+	    LEFT JOIN SL_REPLY C ON A.soul_log_no = C.soul_log_no
+	    LEFT JOIN LOCATION D ON A.location_code = D.location_code
+	    WHERE A.writer = #{userNo}
+	    GROUP BY A.location_code
+	</select>
+	
+	<select id="selectUserList" resultMap="userListResultMap">
+	    SELECT 
+	        u.user_no AS user_no, 
+	        u.user_id AS user_id, 
+	        u.nickname, 
+	        u.blacklist_status AS blacklist_status,
+	        (SELECT MAX(created_date) FROM SL_BOARD WHERE writer = u.user_no) AS last_soul_log_date
+	    FROM USERS u
+	    WHERE blacklist_status = 'N'
+	</select>
+    
+    <select id="selectAchLocaById" resultMap="achLocaResultMap">
+        SELECT ach_no, location_code, max_count, title, created_date, modified_date
+        FROM ACH_LOCA
+        WHERE ach_no = #{achNo}
+    </select>
+
+    <select id="selectAchCateById" resultMap="achCateResultMap">
+        SELECT ach_no, category_code, max_count, title, created_date, modified_date
+        FROM ACH_CATE
+        WHERE ach_no = #{achNo}
+    </select>
+	
+	<insert id="insertAchieveLoca" parameterType="achLocaDTO" useGeneratedKeys="true" keyProperty="achNo">
+		insert into ACH_LOCA (location_code, max_count, title)
+		values (#{locationCode}, #{maxCount}, #{title})
+	</insert>
+	
+	<insert id="insertAchieveCate" parameterType="achCateDTO" useGeneratedKeys="true" keyProperty="achNo">
+		insert into ACH_CATE (category_code, max_count, title)
+		values (#{categoryCode}, #{maxCount}, #{title})
+	</insert>
+	
+	<insert id="insertLocaIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+		insert into ACH_LOCA_ICONS
+		values (null, #{achLoca.achNo}, #{originalName}, #{savedName})
+	</insert>
+	
+	<insert id="insertCateIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+		insert into ACH_CATE_ICONS
+		values (null, #{achCate.achNo}, #{originalName}, #{savedName})
+	</insert>
+	
+	<select id="selectAchieveLoca" resultType="achLocaDTO">
+		select * from ACH_LOCA
+	</select>
+	
+	<select id="selectAchieveCate" resultType="achCateDTO">
+		select * from ACH_CATE
+	</select>
+    
+    <select id="selectAchLocaIconsByAchNo" resultType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+        SELECT * FROM ACH_LOCA_ICONS WHERE ach_no = #{achNo}
+    </select>
+    
+    <select id="selectAchCateIconsByAchNo" resultType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+        SELECT * FROM ACH_CATE_ICONS WHERE ach_no = #{achNo}
+    </select>
+	
+	<select id="findAllAchLoca" resultType="achLocaDTO">
+        select * from ACH_LOCA
+        order by ach_no
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <select id="findAllAchCate" resultType="achCateDTO">
+        select * from ACH_CATE
+        order by ach_no
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+    
+    <update id="updateAchLoca" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO">
+        UPDATE ACH_LOCA
+        SET location_code = #{locationCode},
+            max_count = #{maxCount},
+            title = #{title},
+            modified_date = CURRENT_TIMESTAMP
+        WHERE ach_no = #{achNo}
+    </update>
+
+    <update id="updateLocaIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO">
+        UPDATE ACH_LOCA_ICONS
+        SET original_name = #{originalName},
+            saved_name = #{savedName}
+        WHERE ach_no = #{achLoca.achNo}
+    </update>
+    
+    <update id="updateAchCate" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO">
+        UPDATE ACH_CATE
+        SET category_code = #{categoryCode},
+            max_count = #{maxCount},
+            title = #{title},
+            modified_date = CURRENT_TIMESTAMP
+        WHERE ach_no = #{achNo}
+    </update>
+
+    <update id="updateCateIcons" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO">
+        UPDATE ACH_CATE_ICONS
+        SET original_name = #{originalName},
+            saved_name = #{savedName}
+        WHERE ach_no = #{achCate.achNo}
+    </update>
+	
+	<delete id="deleteAchieveLoca" parameterType="int">
+		delete from ACH_LOCA where ach_no = #{achNo}
+	</delete>
+	
+	<delete id="deleteAchieveCate" parameterType="int">
+		delete from ACH_CATE where ach_no = #{achNo}
+	</delete>
+    
+    <select id="selectBlackList" resultType="userDTO">
+    	SELECT * FROM USERS WHERE blacklist_status = 'Y'
+    </select>
+    
+    <update id="updateBlacklistStatus" parameterType="map">
+    	UPDATE USERS
+	    SET blacklist_status = #{status}
+	    WHERE user_no = #{userNo}
+    </update>
+    
+    <update id="updateAchLocaCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
+    	UPDATE ACH_LOCA_COUNT
+    	SET cur_count = cur_count + 1
+    	WHERE user_no = #{writer.userNo} AND location_code = #{location.locationCode}
+    </update>
+    
+    <update id="updateAchCateCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
+    	UPDATE ACH_CATE_COUNT
+    	SET cur_count = cur_count + 1
+    	WHERE user_no = #{writer.userNo} AND category_code = #{category.categoryCode}
+    </update>
+	
+</mapper>

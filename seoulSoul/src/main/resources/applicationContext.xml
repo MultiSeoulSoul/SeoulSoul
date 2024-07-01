@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- applicationContext.xml -->
-<context:property-placeholder location="classpath:application.properties" />

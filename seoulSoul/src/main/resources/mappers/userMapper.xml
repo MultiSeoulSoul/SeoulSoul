@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+
+	<!-- 회원 가입 -->
+	<insert id="joinUser" parameterType="userDTO" useGeneratedKeys="true" keyProperty="userNo">
+	    INSERT INTO users (user_id, user_pw, nickname, phone, email)
+	    VALUES (#{userId}, #{userPw}, #{nickname}, #{phone}, #{email})
+	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 1 -->
+	<select id="selectLastInsertId" resultType="int">
+		<!-- LAST_INSERT_ID(): MySQL에서 마지막으로 AUTO_INCREMENT된 값을 반환하는 함수 -->
+	    SELECT LAST_INSERT_ID()
+	</select>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 2 -->
+	<insert id="insertUserRole" parameterType="int">
+	    INSERT INTO user_role (user_no)
+	    VALUES (#{userNo})
+	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 3 -->
+	<insert id="insertUserProfile" parameterType="int">
+	    INSERT INTO USER_PROFILE (user_no, profile_content, profile_pic_name)
+	    VALUES (#{userNo}, '', 'defaultProfile.jpg')
+	</insert>
+
+	<!-- 회원정보 업데이트 -->
+	<update id="userUpdate" parameterType="userDTO">
+		UPDATE USERS
+		SET
+			nickname = #{nickname},
+			phone = #{phone},
+			email = #{email}
+	    WHERE user_no = #{userNo}
+	</update>
+
+	<!-- 비밀번호 업데이트 -->
+	<update id="userPwUpdate" parameterType="userDTO">
+		UPDATE USERS
+		SET user_pw = #{userPw}
+	    WHERE user_no = #{userNo}
+	</update>
+
+	<!-- 프로필 업데이트 -->
+    <update id="updateProfile" parameterType="userProfileDTO">
+	    UPDATE USER_PROFILE up
+	    SET 
+	        up.profile_content = #{profileContent},
+	        up.profile_pic_name = CASE WHEN #{profilePicName} IS NOT NULL THEN #{profilePicName} ELSE up.profile_pic_name END
+	    WHERE up.user_no = #{userNo};
+	</update>
+
+	<!-- 회원 탈퇴 -->
+	<delete id="userDelete" parameterType="int">
+		DELETE FROM USERS
+		WHERE user_no = #{userNo};
+	</delete>
+
+	<!-- 아이디 중복조회 -->
+	<select id="findByUserId" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE user_id = #{userId}
+	</select>
+	
+	<!-- 닉네임 중복조회 -->
+	<select id="findByNickname" parameterType="String" resultType="boolean">
+		SELECT COUNT(1) > 0 
+	    FROM users 
+	    WHERE nickname = #{nickname}
+	</select>
+
+    <!-- 시큐리티 사용자 객체 받아오기 -->
+    <select id="findUserByUsername" parameterType="String" resultType="userDTO">
+        SELECT 
+	        u.user_no,
+	        u.user_id,
+	        u.user_pw,
+	        u.nickname,
+	        u.phone,
+	        u.email,
+	        u.blacklist_status,
+	        u.created_date,
+	        up.profile_content,
+	        up.profile_pic_name
+	    FROM 
+	        USERS u
+	    LEFT JOIN 
+	        USER_PROFILE up ON u.user_no = up.user_no
+	    WHERE 
+	        u.user_id = #{userId}
+    </select>
+    
+    <!-- 시큐리티 사용자 권한 받아오기 -->
+    <select id="findAuthoritiesByUserNo" parameterType="int" resultType="String">
+        SELECT ua.authority_name
+        FROM USER_ROLE ur
+        JOIN USER_AUTHORITY ua ON ur.authority_code = ua.authority_code
+        WHERE ur.user_no = #{userNo}
+    </select>
+    
+    
+	<!-- 소울로그 조회 -->
+	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
+        SELECT
+            l.location_name,
+            c.category_name,
+            b2.title,
+            (SELECT COUNT(*) FROM SL_REPLY r WHERE r.soul_log_no = b2.soul_log_no) AS replyCount,
+            b2.created_date,
+            b2.views,
+            b2.total_count
+        FROM (
+            SELECT 
+                b.*,
+                COUNT(*) OVER() AS total_count,
+                ROW_NUMBER() OVER (ORDER BY b.soul_log_no DESC) AS rownum
+            FROM SL_BOARD b
+            WHERE b.writer = #{userNo}
+        ) b2
+        JOIN LOCATION l ON b2.location_code = l.location_code
+        JOIN SL_CATEGORY c ON b2.category_code = c.category_code
+        WHERE b2.rownum BETWEEN #{start} AND #{end}
+    </select>
+    
+    
+    <!-- 소울로그 댓글 조회 -->
+	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="slReplyDTO">
+	    SELECT
+	        b2.title,
+	        b2.content,
+	        b2.created_date,
+	        b2.total_count
+	    FROM (
+	        SELECT 
+	            r.*,
+	            sb.title,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.reply_no DESC) AS rownum
+	        FROM SL_REPLY r
+	        JOIN SL_BOARD sb ON r.soul_log_no = sb.soul_log_no
+	        WHERE r.writer = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 이벤트 댓글 조회 -->
+	<select id="selectEventReplyPage" parameterType="userPageDTO" resultType="replyDTO">
+	    SELECT
+	        e.title,
+	        b2.content,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            r.*,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.reply_no DESC) AS rownum
+	        FROM EVENT_REPLY r
+	        WHERE r.user_no = #{userNo}
+	    ) b2
+	    JOIN EVENT e ON b2.event_no = e.event_no
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 소울로그 좋아요 조회 -->
+	<select id="selectLikesPage" parameterType="userPageDTO" resultType="likesDTO">
+	    SELECT
+	        b2.location_name,
+	        b2.category_name,
+	        b2.title,
+	        b2.liked_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            l.soul_log_no,
+	            loc.location_name,
+	            c.category_name,
+	            b.title,
+	            l.liked_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY l.liked_date DESC) AS rownum
+	        FROM SL_LIKE l
+	        JOIN SL_BOARD b ON l.soul_log_no = b.soul_log_no
+	        JOIN LOCATION loc ON b.location_code = loc.location_code
+	        JOIN SL_CATEGORY c ON b.category_code = c.category_code
+	        WHERE l.user_no = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 이벤트 찜 조회 -->
+	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="recHeartBtnDTO">
+	    SELECT
+	        b2.title,
+	        b2.created_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            e.event_no,
+	            e.title,
+	            e.created_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY e.created_date DESC) AS rownum
+	        FROM EVENT e
+	        JOIN EVENT_REPLY er ON e.event_no = er.event_no
+	        WHERE er.user_no = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 문의내역 조회 -->
+	<select id="selectCsQuestionPage" parameterType="userPageDTO" resultType="csQuestionDTO">
+	    SELECT
+	        b2.category_name,
+	        b2.title,
+	        b2.created_date,
+	        b2.is_answered,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            q.question_no,
+	            c.category_name,
+	            q.title,
+	            q.created_date,
+	            q.is_answered,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY q.created_date DESC) AS rownum
+	        FROM CS_QUESTION q
+	        JOIN CS_CATEGORY c ON q.category_code = c.category_code
+	        WHERE q.writer = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 신고내역 조회 -->
+	<select id="selectReportPage" parameterType="userPageDTO" resultType="reportDTO">
+	    SELECT
+	        b2.reason,
+	        b2.title,
+	        b2.created_date,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            r.report_no,
+	            r.reason,
+	            r.title,
+	            r.created_date,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY r.created_date DESC) AS rownum
+	        FROM SL_REPORT r
+	        WHERE r.reporter = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 지역 업적 조회 -->
+	<select id="getLocaAchievement" parameterType="int" resultType="AchievementDTO">
+        SELECT 
+            ALI.saved_name,
+            AL.title,
+            AL.max_count,
+            ALC.cur_count,
+            ALG.status,
+            L.location_name AS condition_name,
+            'loca' AS type
+        FROM ACH_LOCA AL
+        LEFT JOIN ACH_LOCA_ICONS ALI ON AL.ach_no = ALI.ach_no
+        <!-- ACH_LOCA_COUNT 테이블에서 ach_no 대신 location_code를 사용하여 JOIN -->
+        LEFT JOIN ACH_LOCA_COUNT ALC ON AL.location_code = ALC.location_code AND ALC.user_no = #{userNo}
+        LEFT JOIN ACH_LOCA_GET ALG ON AL.ach_no = ALG.ach_no AND ALG.user_no = #{userNo}
+        LEFT JOIN LOCATION L ON AL.location_code = L.location_code
+        WHERE AL.ach_no IN (SELECT ach_no FROM ACH_LOCA_GET WHERE user_no = #{userNo})
+	</select>
+	
+	<!-- 카테고리 업적 조회 -->
+	<select id="getCateAchievement" parameterType="int" resultType="AchievementDTO">    
+	    SELECT 
+        SELECT 
+            ACI.saved_name,
+            AC.title,
+            AC.max_count,
+            ACC.cur_count,
+            ACG.status,
+            SC.category_name AS condition_name,
+            'cate' AS type
+        FROM ACH_CATE AC
+        LEFT JOIN ACH_CATE_ICONS ACI ON AC.ach_no = ACI.ach_no
+        <!-- ACH_CATE_COUNT 테이블에서 ach_no 대신 category_code를 사용하여 JOIN -->
+        LEFT JOIN ACH_CATE_COUNT ACC ON AC.category_code = ACC.category_code AND ACC.user_no = #{userNo}
+        LEFT JOIN ACH_CATE_GET ACG ON AC.ach_no = ACG.ach_no AND ACG.user_no = #{userNo}
+        LEFT JOIN SL_CATEGORY SC ON AC.category_code = SC.category_code
+        WHERE AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
+	</select>
+
+	<select id="getSoul" parameterType="int" resultType="soulDTO">
+		SELECT L.location_name, COUNT(*) AS sl_count
+		FROM SL_BOARD B
+		JOIN LOCATION L ON B.location_code = L.location_code
+		WHERE B.writer = #{userNo}
+		GROUP BY L.location_name
+		ORDER BY sl_count DESC
+	</select>
+
+</mapper>
