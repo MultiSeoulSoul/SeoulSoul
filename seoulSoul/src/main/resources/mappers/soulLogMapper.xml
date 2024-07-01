@@ -293,7 +293,8 @@
 		SET title = #{ title }, 
 			location_code = #{ location.locationCode }, 
 			category_code = #{ category.categoryCode }, 
-			content = #{ content }
+			content = #{ content },
+			modified_date = NOW()
 		WHERE soul_log_no = #{ soulLogNo }
 	</update>
 	

@@ -4,6 +4,7 @@
 <%@ page import="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" %>
 <%@ page import="com.multi.seoulsoul.soulLog.model.dto.RepliesDTO" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +60,7 @@ function inactivatingLike() {
 	document.getElementById('inactiveLike').style.display = 'inline';
     document.getElementById('activeLike').style.display = 'none';
     
-    var userNo = 2; // 로그인된 유저의 No로 수정 필요!
+    var userNo = 2; // var userNo = <sec:authentication property="principal.userNo"/>;
     var soulLogNo = parseInt("${soulLogDetail.soulLogNo}", 10);
     var likesCount = parseInt("${soulLogDetail.likesCount}", 10);
     
@@ -181,7 +182,7 @@ function inactivatingLike() {
 				<table>
 					<tr>
 						<td style="width: 130px; height: 40px;">
-							홍길동 <!-- 로그인된 유저 nickname으로 바꿔야 함. 역시 단순 보여주기 용. -->
+							홍길동 <!-- <sec:authentication property="principal.nickname"/> -->
 						</td>
 						<td>
 							<input type="hidden" name="soulLogNo" value="${soulLogDetail.soulLogNo}">

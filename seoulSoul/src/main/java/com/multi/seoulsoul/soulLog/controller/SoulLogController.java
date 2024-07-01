@@ -130,11 +130,21 @@ public class SoulLogController {
 	
 	// 소울로그 작성
 	@PostMapping("/insertSoulLog")
-	public String insertSoulLog(LocationDTO locationDTO, CategoryDTO categoryDTO, WriterDTO writerDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, Model model) {
+	public String insertSoulLog(/*@AuthenticationPrincipal Principal principal,*/ LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, Model model) {
+		
+		/* 
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+		*/
+		
+		WriterDTO writerDTO = new WriterDTO();
+		writerDTO.setUserNo(1);
+		// writerDTO.setUserNo(userNo);
 		
 		System.out.println("locationDTO는 >>>>> " + locationDTO);
 		System.out.println("categoryDTO는 >>>>> " + categoryDTO);
-		System.out.println("writerDTO는 >>>>> " + writerDTO);
 		
 		soulLogDTO.setLocation(locationDTO);
 		soulLogDTO.setCategory(categoryDTO);
@@ -573,10 +583,19 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/insertLike")
-	public ResponseEntity<Void> insertLike(LikesDTO likesDTO) {
+	public ResponseEntity<Void> insertLike(/*@AuthenticationPrincipal Principal principal,*/ LikesDTO likesDTO) {
+		
+		/* 
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+		*/
+		
+		likesDTO.setUserNo(1);
+		// likesDTO.setUserNo(userNo);
 		
 		System.out.println("좋아요 추가할 로그 No는 >>>>> " + likesDTO.getSoulLogNo());
-		System.out.println("좋아요하는 유저 No는 >>>>> " + likesDTO.getUserNo());
 		
 		try {
 			
