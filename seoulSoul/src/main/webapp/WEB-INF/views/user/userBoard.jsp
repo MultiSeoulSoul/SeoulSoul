@@ -94,6 +94,9 @@
 
     function showBoard(boardType, page = 1) {
         const url = `${pageContext.request.contextPath}/user/` + boardType + "Page?page=" + page;
+        
+        console.log("url:", url);
+        
         $.ajax({
             url: url,
             method: 'GET',
