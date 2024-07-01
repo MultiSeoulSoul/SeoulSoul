@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 별명을 지어서 사용 -->
+
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 
+			조회결과 snake_case -> camelCase 변환 -->
+	</settings>
+
+	<typeAliases>
+		<!-- 재식-->
+		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserDTO" alias="userDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserPageDTO" alias="userPageDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserProfileDTO" alias="userProfileDTO"></typeAlias>
+		
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SLBoardDTO" alias="slBoardDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SLReplyDTO" alias="slReplyDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReplyDTO" alias="replyDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.LikesDTO" alias="likesDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.RecHeartBtnDTO" alias="recHeartBtnDTO"></typeAlias>
+<!-- 		<typeAlias type="com.multi.seoulsoul.user.tempDTO.CsQuestionDTO" alias="csQuestionDTO"></typeAlias> -->
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.ReportDTO" alias="reportDTO"></typeAlias>
+		
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.AchievementDTO" alias="achievementDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.user.tempDTO.SoulDTO" alias="soulDTO"></typeAlias>
+
+		<!-- CS DTO -->
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsAnswerDTO" alias="csAnswerDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsCategoryDTO" alias="csCategoryDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsQuestionDTO" alias="csQuestionDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.cs.model.dto.CsQuestionFileDTO" alias="csQuestionFileDTO"></typeAlias>
+
+		<!--정해님-->
+		<typeAlias type="com.multi.seoulsoul.rec.model.dto.RecDTO"
+			alias="recDTO"></typeAlias>
+		<typeAlias type="com.multi.seoulsoul.event.model.dto.EventDTO"
+			alias="eventDTO"></typeAlias>
+
+		<!--희철님-->
+		<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO" alias="achLocaDTO"></typeAlias>
+     	<typeAlias type="com.multi.seoulsoul.achieve.model.dto.AchCateDTO" alias="achCateDTO"></typeAlias>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mappers/userMapper.xml" />
+		<mapper resource="mappers/soulLogMapper.xml" />
+		<mapper resource="mappers/reportMapper.xml" />
+		<mapper resource="mappers/csMapper.xml" />
+		<mapper resource="mappers/recMapper.xml" />
+		<mapper resource="mappers/eventMapper.xml" />
+    	<mapper resource="mappers/userMapper.xml" />
+      	<mapper resource="mappers/soulLogMapper.xml" />
+      	<mapper resource="mappers/reportMapper.xml" />
+      	<mapper resource="mappers/achieveMapper.xml" />
+	</mappers>
+</configuration>
