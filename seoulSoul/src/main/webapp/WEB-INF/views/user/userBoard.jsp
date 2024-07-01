@@ -96,7 +96,7 @@
         const url = `${pageContext.request.contextPath}/user/` + boardType + "Page?page=" + page;
         
         console.log("url:", url);
-
+        
         $.ajax({
             url: url,
             method: 'GET',
