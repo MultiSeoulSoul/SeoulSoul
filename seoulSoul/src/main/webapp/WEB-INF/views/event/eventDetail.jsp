@@ -276,6 +276,10 @@ body {
                             '<div class="comment-actions">' +
                             '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
                             '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
+                            <!--'<sec:authorize access="hasRole('USER') and #comment.userNo == principal.userNo">' +
+                            '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
+                            '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
+                        '</sec:authorize>' + -->
                             '</div>' +
                             '<div class="comment-edit-container">' +
                             '<input type="text" class="comment-edit-input" id="editContent-' + comment.replyNo + '" value="' + comment.content + '">' +
@@ -417,6 +421,10 @@ body {
         <div class="comment-container">
             <input type="text" id="commentContent" class="comment-input" placeholder="댓글을 입력해 주세요." />
             <button class="comment-submit" onclick="submitComment()">등록</button>
+            <!-- <sec:authorize access="hasRole('USER')">
+                <input type="text" id="commentContent" class="comment-input" placeholder="댓글을 입력해 주세요." />
+                <button class="comment-submit" onclick="submitComment()">등록</button>
+            </sec:authorize> -->
         </div>
         <div id="commentList" class="comment-list">
             <c:forEach var="comment" items="${comments}">
@@ -439,6 +447,13 @@ body {
             <form action="${pageContext.request.contextPath}/event/deleteEvent" method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
                 <input type="hidden" name="eventNo" value="${event.eventNo}">
                 <button type="submit" class="detail-btn1">삭제하기</button>
+                <!--<sec:authorize access="hasRole('ADMIN')">
+                <button class="detail-btn1" onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
+                <form action="${pageContext.request.contextPath}/event/deleteEvent" method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
+                    <input type="hidden" name="eventNo" value="${event.eventNo}">
+                    <button type="submit" class="detail-btn1">삭제하기</button>
+                </form>
+            </sec:authorize>  -->
             </form>
         </div>
     </div>

@@ -112,6 +112,10 @@
     </p>
     <button class="write-btn" onclick="location.href='eventInsertForm'">글쓰기</button>
     <br>
+    <!-- 
+    <sec:authorize access="hasRole('ADMIN')">
+        <button class="write-btn" onclick="location.href='eventInsertForm'">글쓰기</button>
+    </sec:authorize> -->
 
 <div class="event-container">
     <c:forEach items="${eventList}" var="event">

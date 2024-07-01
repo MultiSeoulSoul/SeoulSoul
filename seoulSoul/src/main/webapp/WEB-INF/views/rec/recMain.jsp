@@ -129,6 +129,10 @@
 	<p class="body-text">
 		서울의 다채로운 문화생활을 즐겨보세요!<br>새로운 장소를 발견하고 소중한 추억을 만들어 볼까요?
 	</p>
+	<!-- <sec:authorize access="hasRole('ADMIN')">
+        <button class="write-btn"
+            onclick="location.href='${pageContext.request.contextPath}/rec/recInsertForm'">글쓰기</button>
+    </sec:authorize> -->
 	<button class="write-btn"
 		onclick="location.href='${pageContext.request.contextPath}/rec/recInsertForm'">글쓰기</button>
 	<br>

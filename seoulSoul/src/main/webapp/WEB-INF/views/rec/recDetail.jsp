@@ -169,6 +169,20 @@ var userNo = 1; // 하드코딩된 사용자 ID
                         &#129654;
                     </c:otherwise>
 				</c:choose>
+				 <!--  <sec:authorize access="hasRole('USER')">
+                <span id="heart-btn" class="heart-btn"
+                    onclick="toggleHeart(userNo, ${rec.recommendationNo})">
+                    <c:choose>
+                        <c:when test="${isHearted}">
+                            &#128153;
+                        </c:when>
+                        <c:otherwise>
+                            &#129654;
+                        </c:otherwise>
+                    </c:choose>
+                </span>
+            </sec:authorize> -->  
+				
 			</span> <br>
 			<br>
 			<button class="detail-btn" onclick="history.back()">뒤로가기</button>
@@ -181,6 +195,17 @@ var userNo = 1; // 하드코딩된 사용자 ID
 					value="${rec.recommendationNo}">
 				<button type="submit" class="detail-btn1">삭제하기</button>
 			</form>
+			<!-- <sec:authorize access="hasRole('ADMIN')">
+                <button class="detail-btn1"
+                    onclick="location.href='${pageContext.request.contextPath}/rec/editRec?recommendationNo=${rec.recommendationNo}'">수정하기</button>
+                <form action="${pageContext.request.contextPath}/rec/deleteRecommend"
+                    method="post" style="display: inline;"
+                    onsubmit="return confirmDeletion(event)">
+                    <input type="hidden" name="recommendationNo"
+                        value="${rec.recommendationNo}">
+                    <button type="submit" class="detail-btn1">삭제하기</button>
+                </form>
+            </sec:authorize> -->
 		</div>
 	</div>
 </body>
