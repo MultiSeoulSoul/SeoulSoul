@@ -2,19 +2,16 @@ package com.multi.seoulsoul.rec.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.multi.seoulsoul.rec.model.dto.RecDTO;
 import com.multi.seoulsoul.rec.service.RecService;
-import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 
 @Controller
 @RequestMapping("/rec")
@@ -63,7 +59,7 @@ public class RecController {
 	public String recInsertForm() {
 		return "rec/recInsertForm";
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PostMapping("recInsertForm")
 	public ModelAndView insertRecommendation(@RequestParam("title") String title,
 			@RequestParam("content") String content, @RequestParam("file") MultipartFile file,
@@ -156,14 +152,14 @@ public class RecController {
 		redirectAttributes.addFlashAttribute("message", "File upload failed");
 		return "redirect:/recMain";
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@GetMapping("/editRec")
 	public String editRec(@RequestParam("recommendationNo") int recommendationNo, Model model) throws Exception {
 		RecDTO rec = recService.selectRecommendationById(recommendationNo);
 		model.addAttribute("rec", rec);
 		return "rec/editRec";
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PostMapping("/updateRecommend")
 	public String updateRecommend(HttpServletRequest request, @RequestParam("recommendationNo") int recommendationNo,
 			@RequestParam("title") String title, @RequestParam("content") String content,
@@ -192,7 +188,7 @@ public class RecController {
 		redirectAttributes.addFlashAttribute("message", "추천이 수정되었습니다.");
 		return "redirect:/rec/recDetail?recommendationNo=" + recommendationNo;
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PostMapping("/deleteRecommend")
 	public String deleteRecommend(@RequestParam("recommendationNo") int recommendationNo,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -203,11 +199,10 @@ public class RecController {
 
 	@PostMapping("/toggleHeart")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> toggleHeart(@AuthenticationPrincipal Principal principal,
+	public ResponseEntity<Map<String, Object>> toggleHeart(@RequestParam("userNo") int userNo,
 			@RequestParam("recommendationNo") int recommendationNo) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			int userNo = getUserNo(principal);
 			boolean isHearted = recService.toggleHeart(userNo, recommendationNo);
 			response.put("success", true);
 			response.put("isHearted", isHearted);
@@ -216,11 +211,5 @@ public class RecController {
 			response.put("error", e.getMessage());
 		}
 		return ResponseEntity.ok(response);
-	}
-	
-	private int getUserNo(Principal principal) {
-		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-		CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-		return userDetails.getUserNo();
 	}
 }

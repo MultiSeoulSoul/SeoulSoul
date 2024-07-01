@@ -1,7 +1,6 @@
 package com.multi.seoulsoul.event.controller;
 
 import java.io.File;
-import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -38,7 +34,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.multi.seoulsoul.event.model.dto.EventDTO;
 import com.multi.seoulsoul.event.model.dto.ReplyDTO;
 import com.multi.seoulsoul.event.service.EventService;
-import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 
 @Controller
 @RequestMapping("event")
@@ -78,12 +73,12 @@ public class EventController {
         }
         return "event/eventMain";
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("eventInsertForm")
     public String eventInsertForm() {
         return "event/eventInsertForm";
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping("/eventInsertForm")
     public ModelAndView insertEvent(
             HttpServletRequest request,
@@ -168,7 +163,6 @@ public class EventController {
         
         return "redirect:/eventDetail";
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/updateEvent")
     public String updateEvent(
             HttpServletRequest request,
@@ -231,7 +225,7 @@ public class EventController {
         }
     }
  
-    @PreAuthorize("hasRole('ADMIN')")
+    
     @GetMapping("/editEvent")
     public String editEvent(@RequestParam("eventNo") int eventNo, Model model) {
         try {
@@ -246,7 +240,6 @@ public class EventController {
         }
         return "event/editEvent";
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/deleteEvent")
     @Transactional
     public String deleteEvent(@RequestParam("eventNo") int eventNo, RedirectAttributes redirectAttributes) {
@@ -264,12 +257,8 @@ public class EventController {
 
     @PostMapping("/addComment")
     @ResponseBody
-    public String addComment(@AuthenticationPrincipal Principal principal, @RequestBody ReplyDTO comment) {
-    	int userNo = getUserNo(principal);
-        comment.setUserNo(userNo);
-        
-        System.out.println("Adding comment: " + comment.toString());
-    	eventService.addComment(comment);
+    public String addComment(@RequestBody ReplyDTO comment) {
+        eventService.addComment(comment);
         return "success";
     }
 
@@ -280,31 +269,15 @@ public class EventController {
     }
     @PostMapping("/updateComment")
     @ResponseBody
-    public String updateComment(@AuthenticationPrincipal Principal principal, @RequestBody ReplyDTO comment) {
-    	int userNo = getUserNo(principal);
-        if (comment.getUserNo() == userNo) {
-            eventService.updateComment(comment);
-            return "success";
-        } else {
-            return "fail";
-        }
+    public String updateComment(@RequestBody ReplyDTO comment) {
+        eventService.updateComment(comment);
+        return "success";
     }
 
     @PostMapping("/deleteComment")
     @ResponseBody
-    public String deleteComment(@AuthenticationPrincipal Principal principal, @RequestBody Map<String, Integer> params) {
-    	int userNo = getUserNo(principal);
-        if (params.get("userNo") == userNo) {
-            eventService.deleteComment(params.get("replyNo"), userNo);
-            return "success";
-        } else {
-            return "fail";
-        }
+    public String deleteComment(@RequestBody Map<String, Integer> params) {
+        eventService.deleteComment(params.get("replyNo"), params.get("userNo"));
+        return "success";
     }
-        private int getUserNo(Principal principal) {
-            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
-            CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-            return userDetails.getUserNo();
-        }
-    
-    }
+}
