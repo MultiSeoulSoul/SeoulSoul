@@ -118,7 +118,7 @@
 			<span style="margin-left:20px">제목</span>
 			<input type="text" id="title" name="title" style="margin-top: 10px; margin-left: 15px; width: 400px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" maxlength="20" required>
 			<span style="margin-left:50px">작성자</span>
-			<input type="text" style="margin-top: 10px; margin-left: 15px; width: 150px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="홍길동" disabled> <!-- value="<sec:authentication property="principal.nickname"/>" -->
+			<input type="text" style="margin-top: 10px; margin-left: 15px; width: 150px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" value="<sec:authentication property="principal.nickname"/>" disabled>
 			<span style="margin-left:50px">자치구</span>
 			<select name="locationCode" style="margin-left: 15px; width: 140px; height: 30px; background-color: #f0f0f0; border: 1px solid #c0c0c0;">
 			</select>

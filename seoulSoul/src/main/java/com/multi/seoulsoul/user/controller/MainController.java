@@ -39,9 +39,12 @@ public class MainController {
 	}
 	
 	@GetMapping("/main")
-    public String mainPage(Model model) {
+    public String mainPage(@AuthenticationPrincipal Principal principal, Model model) {
 		
-		int userNo = 1; // 로그인된 유저의 no로 바꿔야 함
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
 		
 		try {
 			

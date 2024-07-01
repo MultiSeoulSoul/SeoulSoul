@@ -1,5 +1,9 @@
 package com.multi.seoulsoul.report.controller;
 
+import java.security.Principal;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +13,7 @@ import com.multi.seoulsoul.report.model.dto.ReportDTO;
 import com.multi.seoulsoul.report.model.dto.ReportedSoulLogDTO;
 import com.multi.seoulsoul.report.model.dto.ReporterDTO;
 import com.multi.seoulsoul.report.service.ReportService;
+import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 
 @Controller
 @RequestMapping("/report")
@@ -49,11 +54,18 @@ public class ReportController {
 	
 	
 	@PostMapping("/insertSoulLogReport")
-	public String insertSoulLogReport(ReportDTO reportDTO, ReportedSoulLogDTO reportedSoulLogDTO, ReporterDTO reporterDTO, Model model) {
+	public String insertSoulLogReport(@AuthenticationPrincipal Principal principal, ReportDTO reportDTO, ReportedSoulLogDTO reportedSoulLogDTO, Model model) {
+		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	ReporterDTO reporterDTO = new ReporterDTO();
+    	reporterDTO.setUserNo(userNo);
 		
 		System.out.println("reportDTO는 >>>>> " + reportDTO);
 		System.out.println("reportedSoulLogDTO는 >>>>> " + reportedSoulLogDTO);
-		System.out.println("reporterDTO는 >>>>> " + reporterDTO);
 		
 		reportDTO.setReportedSoulLog(reportedSoulLogDTO);
 		reportDTO.setReporter(reporterDTO);

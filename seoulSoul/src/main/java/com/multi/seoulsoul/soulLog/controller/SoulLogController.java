@@ -1,6 +1,7 @@
 package com.multi.seoulsoul.soulLog.controller;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,7 @@ import com.multi.seoulsoul.soulLog.model.dto.ReplyWriterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 import com.multi.seoulsoul.soulLog.model.dto.WriterDTO;
 import com.multi.seoulsoul.soulLog.service.SoulLogService;
+import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 
 
 @Controller
@@ -130,18 +134,15 @@ public class SoulLogController {
 	
 	// 소울로그 작성
 	@PostMapping("/insertSoulLog")
-	public String insertSoulLog(/*@AuthenticationPrincipal Principal principal,*/ LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, Model model) {
+	public String insertSoulLog(@AuthenticationPrincipal Principal principal, LocationDTO locationDTO, CategoryDTO categoryDTO, SoulLogDTO soulLogDTO, HttpServletRequest request, MultipartFile[] imgList, Model model) {
 		
-		/* 
 		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
     	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
     	
     	int userNo = userDetails.getUserNo();
-		*/
 		
 		WriterDTO writerDTO = new WriterDTO();
-		writerDTO.setUserNo(1);
-		// writerDTO.setUserNo(userNo);
+		writerDTO.setUserNo(userNo);
 		
 		System.out.println("locationDTO는 >>>>> " + locationDTO);
 		System.out.println("categoryDTO는 >>>>> " + categoryDTO);
@@ -244,25 +245,14 @@ public class SoulLogController {
 	
 	// 소울로그 상세 조회
 	@RequestMapping("/soulLogDetail")
-	public String soulLogDetail(DetailRequestDTO detailRequestDTO, Model model) {
+	public String soulLogDetail(@AuthenticationPrincipal Principal principal, DetailRequestDTO detailRequestDTO, Model model) {
 		
-		/* 만약 맞다면... login된 유저의 userNo를 가져오는 코드
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
 		
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        int userNo = userDetails.getUserNo();
-			
-			
-			그런 다음 detailRequestDTO.setLoginUserNo(userNo); 하면 깔-끔
-			
-			+ detailRequestDTO.setLoginUserNo(userNo)
-			
-		
-		}
-		
-		 */
-		
-		detailRequestDTO.setLoginUserNo(2); // 로그인한 유저의 no로 바꿔야 함!!!!!
+		detailRequestDTO.setLoginUserNo(userNo);
 		
 		
 		System.out.println("조회할 소울로그 No는 >>>> " + detailRequestDTO.getSoulLogNo());
@@ -294,10 +284,17 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/insertSoulLogReply")
-	public String insertSoulLogReply(RepliesDTO repliesDTO, ReplyWriterDTO replyWriterDTO, Model model) {
+	public String insertSoulLogReply(@AuthenticationPrincipal Principal principal, RepliesDTO repliesDTO, Model model) {
+		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+    	
+    	ReplyWriterDTO replyWriterDTO = new ReplyWriterDTO();
+    	replyWriterDTO.setUserNo(userNo);
 		
 		System.out.println("repliesDTO는 >>>>> " + repliesDTO);
-		System.out.println("replyWriterDTO는 >>>>> " + replyWriterDTO);
 		
 		int soulLogNo = repliesDTO.getSoulLogNo();
 		
@@ -307,7 +304,7 @@ public class SoulLogController {
 			
 			soulLogService.insertSoulLogReply(repliesDTO);
 			
-			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo; // 지금은 loginUserNo를 안 보내지만, 만약 디테일 메서드에서 로그인 유저의 no를 가져올 수 있다면 여기선 로그 no만 보내도 됨.
+			return "redirect:/soulLog/soulLogDetail?soulLogNo="+soulLogNo;
 			
 		} catch (Exception e) {
 		
@@ -583,17 +580,14 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/insertLike")
-	public ResponseEntity<Void> insertLike(/*@AuthenticationPrincipal Principal principal,*/ LikesDTO likesDTO) {
-		
-		/* 
+	public ResponseEntity<Void> insertLike(@AuthenticationPrincipal Principal principal, LikesDTO likesDTO) {
+	
 		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
     	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
     	
     	int userNo = userDetails.getUserNo();
-		*/
 		
-		likesDTO.setUserNo(1);
-		// likesDTO.setUserNo(userNo);
+		likesDTO.setUserNo(userNo);
 		
 		System.out.println("좋아요 추가할 로그 No는 >>>>> " + likesDTO.getSoulLogNo());
 		
@@ -614,10 +608,16 @@ public class SoulLogController {
 	
 	
 	@PostMapping("/deleteLike")
-	public ResponseEntity<Void> deleteLike(LikesDTO likesDTO) {
+	public ResponseEntity<Void> deleteLike(@AuthenticationPrincipal Principal principal, LikesDTO likesDTO) {
+		
+		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	
+    	int userNo = userDetails.getUserNo();
+		
+		likesDTO.setUserNo(userNo);
 		
 		System.out.println("좋아요 취소할 로그 No는 >>>>> " + likesDTO.getSoulLogNo());
-		System.out.println("좋아요 취소하는 유저 No는 >>>>> " + likesDTO.getUserNo());
 		
 		try {
 			

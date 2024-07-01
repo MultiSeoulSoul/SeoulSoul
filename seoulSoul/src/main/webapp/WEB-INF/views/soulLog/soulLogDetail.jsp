@@ -34,15 +34,12 @@ function activatingLike() {
     document.getElementById('inactiveLike').style.display = 'none';
     document.getElementById('activeLike').style.display = 'inline';
     
-    var userNo = 2; // 로그인된 유저의 No로 수정 필요!
     var soulLogNo = parseInt("${soulLogDetail.soulLogNo}", 10);
-    var likesCount = parseInt("${soulLogDetail.likesCount}", 10);
     
     $.ajax({
     	url: "${pageContext.servletContext.contextPath}/soulLog/insertLike", 
     	type: 'POST', 
     	data: {
-    		userNo: userNo,
     		soulLogNo: soulLogNo
     	},
     	success: function(response) {
@@ -60,15 +57,12 @@ function inactivatingLike() {
 	document.getElementById('inactiveLike').style.display = 'inline';
     document.getElementById('activeLike').style.display = 'none';
     
-    var userNo = 2; // var userNo = <sec:authentication property="principal.userNo"/>;
     var soulLogNo = parseInt("${soulLogDetail.soulLogNo}", 10);
-    var likesCount = parseInt("${soulLogDetail.likesCount}", 10);
-    
+   
     $.ajax({
     	url: "${pageContext.servletContext.contextPath}/soulLog/deleteLike", 
     	type: 'POST', 
     	data: {
-    		userNo: userNo,
     		soulLogNo: soulLogNo
     	},
     	success: function(response) {
@@ -182,11 +176,10 @@ function inactivatingLike() {
 				<table>
 					<tr>
 						<td style="width: 130px; height: 40px;">
-							홍길동 <!-- <sec:authentication property="principal.nickname"/> -->
+							<sec:authentication property="principal.nickname"/>
 						</td>
 						<td>
 							<input type="hidden" name="soulLogNo" value="${soulLogDetail.soulLogNo}">
-							<input type="hidden" name="userNo" value="2"> <!-- 로그인된 유저no로 바꿔야 함. post라 컨트롤러에서 안 받아도 될지도.. -->
 							<input id="content" name="content" style="width: 917px; height: 25px; background-color: #f0f0f0; border: 1px solid #c0c0c0;" placeholder=" 댓글 입력..." maxlength="100" required>
 						</td>
 						<td>
