@@ -12,7 +12,8 @@
 	<bean id="BCryptPasswordEncoder" name="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
     <security:http auto-config="true">
-<!--     <security:csrf disabled="true"/> -->
+     	<security:csrf disabled="true"/>
+     	
         <security:intercept-url pattern="/img/**" access="permitAll" />
         <security:intercept-url pattern="/css/**" access="permitAll" />
         <security:intercept-url pattern="/js/**" access="permitAll" />

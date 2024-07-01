@@ -127,9 +127,11 @@
 	        data: formData,
 	        processData: false,
 	        contentType: false,
-			beforeSend: function(xhr) {
+	        
+/* 			beforeSend: function(xhr) {
 	            xhr.setRequestHeader(csrfHeader, csrfToken);
-	        },
+	        }, */
+	        
 	        success: function(data) {
 	            // 새로운 값으로 화면 업데이트
 	            document.getElementById('content-display').textContent = data.ProfileContent;

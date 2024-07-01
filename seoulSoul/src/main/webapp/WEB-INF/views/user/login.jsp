@@ -30,9 +30,11 @@
 	    $.ajax({
 	        type: "GET",
 	        url: '/seoulsoul/kakao/getKakaoApiKey',
-	        beforeSend: function(xhr) {
+	        
+/* 	        beforeSend: function(xhr) {
 	            xhr.setRequestHeader(csrfHeader, csrfToken);
-	        },
+	        }, */
+	        
 	        success: function(apiKey) {
 	            Kakao.init(apiKey); // Kakao API 키 초기화
 	            Kakao.Auth.login({
@@ -46,9 +48,11 @@
 	                                url: '/seoulsoul/kakao/idDuplicateCheck', // ID중복체크(카카오회원인지 확인)
 	                                data: {"userId": kakaoid},
 	                                dataType: "json",
-	                    	        beforeSend: function(xhr) {
+	                                
+/* 	                    	        beforeSend: function(xhr) {
 	                    	            xhr.setRequestHeader(csrfHeader, csrfToken);
-	                    	        },
+	                    	        }, */
+	                    	        
 	                                success: function(json) {
 	                                    if (json.idExists) {
 	                                        createHiddenLoginForm(kakaoid); // 아이디가 존재하면 HiddenLoginForm으로 kakaoid를 전달
@@ -62,9 +66,11 @@
 	                                                "email": response.kakao_account.email
 	                                            },
 	                                            dataType: "json",
-	                                	        beforeSend: function(xhr) {
+	                                            
+/* 	                                	        beforeSend: function(xhr) {
 	                                	            xhr.setRequestHeader(csrfHeader, csrfToken);
-	                                	        },
+	                                	        }, */
+	                                	        
 	                                            success: function(json) {
 	                                                if (json.success) { // 회원가입 성공시
 	                                                    createHiddenLoginForm(kakaoid); // HiddenLoginForm으로 kakaoid를 전달

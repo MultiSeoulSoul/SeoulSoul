@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
@@ -72,39 +74,73 @@
 	    margin-bottom: 20px;
 }
 </style>
-<script>
-	var isUserNicknameValid = false;	
+<script> // 닉네임 중복확인 및 제출
+var isUserNicknameValid = false;
+var isNicknameChanged = false;
+
+function checkDuplicateNickname() {
+    var nickname = $("#nickname").val();
+    if (!nickname) {
+        alert("닉네임을 입력해주세요.");
+        return;
+    }
+    $.ajax({
+        url: '${pageContext.request.contextPath}/checkDuplicateNickname',
+        type: 'GET',
+        data: { nickname: nickname },
+        success: function(data) {
+            if (data) {
+                $("#nicknameCheckMessage").hide();
+                $("#nicknameCheckSuccessMessage").show();
+                isUserNicknameValid = true;
+            } else {
+                $("#nicknameCheckMessage").show();
+                $("#nicknameCheckSuccessMessage").hide();
+                isUserNicknameValid = false;
+            }
+        },
+        error: function() {
+            alert("중복 확인 중 오류가 발생했습니다.");
+        }
+    });
+}
+
+$(document).ready(function() {
+    var currentNickname = $("<div>").html("<sec:authentication property='principal.nickname'/>").text();
+    
+    $("#nickname").on("input", function() {
+        var enteredNickname = $(this).val();
+        if (currentNickname === enteredNickname) {
+            $(".input-group-append .btn").prop("disabled", true);
+            $("#nicknameCheckMessage").hide();
+            $("#nicknameCheckSuccessMessage").hide();
+            isUserNicknameValid = true;
+            isNicknameChanged = false;
+        } else {
+            $(".input-group-append .btn").prop("disabled", false);
+            isUserNicknameValid = false;
+            isNicknameChanged = true;
+        }
+    });
+    
+    // 회원정보 수정 버튼 이벤트
+    $("#userUpdateForm input[type=submit]").click(function(e) {
+        var enteredNickname = $("#nickname").val();
+        if (isNicknameChanged && !isUserNicknameValid) {
+            alert("닉네임 중복 체크를 해주세요.");
+            e.preventDefault();
+            return false;
+        }
+        $("#userUpdateForm").submit();
+    });
+});
+
+</script>
+<script> // 비밀번호 검증 및 제출
 	var isPasswordMatch = false;
+	var isCurrentPasswordValid = false;
+	var isNewPasswordDifferent = false;
 	
-	// 닉네임 중복확인 펑션
-	function checkDuplicateNickname() {
-		var nickname = $("#nickname").val();
-		if (!nickname) {
-			alert("닉네임을 입력해주세요.");
-			return;
-			}
-		$.ajax({
-			url : '${pageContext.request.contextPath}/checkDuplicateNickname',
-			type : 'GET',
-			data : {nickname : nickname},
-			success : function(data) {
-			    if (data) {
-			        $("#nicknameCheckMessage").hide();
-			        $("#nicknameCheckSuccessMessage").show();
-			        isUserNicknameValid = true;
-			    } else {
-			        $("#nicknameCheckMessage").show();
-			        $("#nicknameCheckSuccessMessage").hide();
-			        isUserNicknameValid = false;
-			    }
-			},
-			error : function() {
-				alert("중복 확인 중 오류가 발생했습니다.");
-				}
-			});
-		}
-	
-	// 비밀번호 중복확인 펑션
 	function validatePasswordMatch() {
 	    var password = $("input[name='newUserPw']").val();
 	    var confirmPassword = $("input[name='newConfirmPw']").val();
@@ -117,7 +153,6 @@
 	    }
 	}
 	
-	// 현재 비밀번호 확인 펑션
 	function checkCurrentPassword(callback) {
 	    var currentPassword = $("input[name='userPw']").val();
 	    if (!currentPassword) {
@@ -127,60 +162,64 @@
 	    $.ajax({
 	        url: '${pageContext.request.contextPath}/checkCurrentPassword',
 	        type: 'POST',
-	        data: {currentPassword: currentPassword},
+	        data: { currentPassword: currentPassword },
+	        
+/* 	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader(csrfHeader, csrfToken);
+	        }, */
+	        
 	        success: function(isValid) {
+	        	console.log("isValid:", isValid);
+	        	
+	            if (isValid) {
+	                isCurrentPasswordValid = true;
+	                $("#passwordCurrentMessage").hide();
+	            } else {
+	                isCurrentPasswordValid = false;
+	                $("#passwordCurrentMessage").show();
+	                alert("현재 비밀번호가 잘못되었습니다.");
+	            }
 	            callback(isValid);
 	        },
 	        error: function() {
 	            alert("비밀번호 검증 중 오류가 발생했습니다.");
+	            callback(false);
 	        }
 	    });
 	}
 	
-	$(document).ready(function() {
-		var currentNickname = $("<div>").html("<sec:authentication property='principal.nickname'/>").text();
-    	var enteredNickname = $("#nickname").val();
-
-    	$("#nickname").on("input", function() {
-            var enteredNickname = $(this).val();
-            // 입력된 닉네임이 현재 닉네임과 같으면 중복 체크 버튼 비활성화
-            if (currentNickname === enteredNickname) {
-                $(".input-group-append .btn").prop("disabled", true);
-                $("#nicknameCheckMessage").hide();
-                $("#nicknameCheckSuccessMessage").hide();
-                isUserNicknameValid = true;
-            } else {
-                $(".input-group-append .btn").prop("disabled", false);
-                isUserNicknameValid = false;
-            }
-        });
-	    // 회원정보 수정 버튼 이벤트
-	    $("#userUpdateForm input[type=submit]").click(function(e) {
-	        if (currentNickname !== enteredNickname && !isUserNicknameValid) {
-	            alert("닉네임 중복 체크를 해주세요.");
-	            e.preventDefault();
-	            return false;
-	        }
-	        $("#userUpdateForm").submit();
-	    });
+	function validateNewPasswordDifferent() {
+	    var currentPassword = $("input[name='userPw']").val();
+	    var newPassword = $("input[name='newUserPw']").val();
+	    if (currentPassword !== newPassword) {
+	        $("#passwordCurrentMessage").hide();
+	        isNewPasswordDifferent = true;
+	    } else {
+	        $("#passwordCurrentMessage").show();
+	        isNewPasswordDifferent = false;
+	    }
+	}
 	
-	    
+	$(document).ready(function() {
 	    $("input[name='newUserPw'], input[name='newConfirmPw']").on("keyup", validatePasswordMatch);
+	    $("input[name='newUserPw']").on("blur", validateNewPasswordDifferent);
+	
 	    // 비밀번호 수정 버튼 이벤트
 	    $("#userPwUpdateForm input[type=submit]").click(function(e) {
-	        if (!isPasswordMatch) {
-	            alert("비밀번호가 일치하지 않습니다.");
-	            e.preventDefault();
-	            return false;
-	        }
+	        e.preventDefault(); // 기본 폼 제출 동작 중지
 	        checkCurrentPassword(function(isValid) {
-	            if (isValid) {
-	            	$("#passwordCurrentMessage").hide();
-	                $("#userPwUpdateForm").submit();
-	            } else {
-	                $("#passwordCurrentMessage").show();
-	                e.preventDefault();
+	            if (!isValid) {
+	                return false;
 	            }
+	            if (!isPasswordMatch) {
+	                alert("새 비밀번호가 일치하지 않습니다.");
+	                return false;
+	            }
+	            if (!isNewPasswordDifferent) {
+	                alert("현재 비밀번호와 새 비밀번호가 동일합니다.");
+	                return false;
+	            }
+	            $("#userPwUpdateForm").submit(); // 모든 검증 통과 시 폼 제출
 	        });
 	    });
 	});
@@ -241,48 +280,47 @@
 			</div>
 			
 			<div class="update-form-userPw">
-			<p>비밀번호를 변경할 수 있습니다</p>
-				<form action="${pageContext.request.contextPath}/user/userPwUpdate" method="post" id="userPwUpdateForm">
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					<table align="center">
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">현재 비밀번호</span>
-									</div>
-									<input type="password" class="form-control" name="userPw">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">새 비밀번호</span>
-									</div>
-									<input type="password" class="form-control" name="newUserPw">
-								</div>
-								<div id="passwordCurrentMessage" style="color: red; display: none;">현재 비밀번호와 같습니다.</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="input-group mb-3 input-group-lg">
-									<div class="input-group-prepend">
-										<span class="input-group-text">새 비밀번호 확인</span>
-									</div>
-									<input type="password" class="form-control" name="newConfirmPw">
-								</div>
-								<div id="passwordMatchMessage" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</div>
-							</td>
-						</tr>
-					</table>
-					<div align="right">
-						<input type="submit" value="비밀번호 변경하기" class="btn btn-info"><br>
-					</div>
-				</form>
-				
+			    <p>비밀번호를 변경할 수 있습니다</p>
+			    <form action="${pageContext.request.contextPath}/user/userPwUpdate" method="post" id="userPwUpdateForm">
+			        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			        <table align="center">
+			            <tr>
+			                <td colspan="2">
+			                    <div class="input-group mb-3 input-group-lg">
+			                        <div class="input-group-prepend">
+			                            <span class="input-group-text">현재 비밀번호</span>
+			                        </div>
+			                        <input type="password" class="form-control" name="userPw">
+			                    </div>
+			                    <div id="passwordCurrentMessage" style="color: red; display: none;">현재 비밀번호와 새 비밀번호가 동일합니다.</div>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td colspan="2">
+			                    <div class="input-group mb-3 input-group-lg">
+			                        <div class="input-group-prepend">
+			                            <span class="input-group-text">새 비밀번호</span>
+			                        </div>
+			                        <input type="password" class="form-control" name="newUserPw">
+			                    </div>
+			                </td>
+			            </tr>
+			            <tr>
+			                <td colspan="2">
+			                    <div class="input-group mb-3 input-group-lg">
+			                        <div class="input-group-prepend">
+			                            <span class="input-group-text">새 비밀번호 확인</span>
+			                        </div>
+			                        <input type="password" class="form-control" name="newConfirmPw">
+			                    </div>
+			                    <div id="passwordMatchMessage" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</div>
+			                </td>
+			            </tr>
+			        </table>
+			        <div align="right">
+			            <input type="submit" value="비밀번호 변경하기" class="btn btn-info"><br>
+			        </div>
+			    </form>
 			</div>
 		</div>
 	</div>

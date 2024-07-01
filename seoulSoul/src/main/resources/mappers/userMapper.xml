@@ -257,38 +257,41 @@
 	
 	<!-- 지역 업적 조회 -->
 	<select id="getLocaAchievement" parameterType="int" resultType="AchievementDTO">
-	    SELECT 
-	        ALI.saved_name,
-	        AL.title,
-	        AL.max_count,
-	        ALC.cur_count,
-	        ALG.status,
-	        L.location_name AS condition_name,
-	        'loca' AS type
-	    FROM ACH_LOCA AL
-	    LEFT JOIN ACH_LOCA_ICONS ALI ON AL.ach_no = ALI.ach_no
-	    LEFT JOIN ACH_LOCA_COUNT ALC ON AL.ach_no = ALC.ach_no AND ALC.user_no = #{userNo}
-	    LEFT JOIN ACH_LOCA_GET ALG ON AL.ach_no = ALG.ach_no AND ALG.user_no = #{userNo}
-	    LEFT JOIN LOCATION L ON AL.location_code = L.location_code
-	    WHERE AL.ach_no IN (SELECT ach_no FROM ACH_LOCA_GET WHERE user_no = #{userNo})
+        SELECT 
+            ALI.saved_name,
+            AL.title,
+            AL.max_count,
+            ALC.cur_count,
+            ALG.status,
+            L.location_name AS condition_name,
+            'loca' AS type
+        FROM ACH_LOCA AL
+        LEFT JOIN ACH_LOCA_ICONS ALI ON AL.ach_no = ALI.ach_no
+        <!-- ACH_LOCA_COUNT 테이블에서 ach_no 대신 location_code를 사용하여 JOIN -->
+        LEFT JOIN ACH_LOCA_COUNT ALC ON AL.location_code = ALC.location_code AND ALC.user_no = #{userNo}
+        LEFT JOIN ACH_LOCA_GET ALG ON AL.ach_no = ALG.ach_no AND ALG.user_no = #{userNo}
+        LEFT JOIN LOCATION L ON AL.location_code = L.location_code
+        WHERE AL.ach_no IN (SELECT ach_no FROM ACH_LOCA_GET WHERE user_no = #{userNo})
 	</select>
 	
 	<!-- 카테고리 업적 조회 -->
 	<select id="getCateAchievement" parameterType="int" resultType="AchievementDTO">    
 	    SELECT 
-	        ACI.saved_name,
-	        AC.title,
-	        AC.max_count,
-	        ACC.cur_count,
-	        ACG.status,
-	        SC.category_name AS condition_name,
-	        'cate' AS type
-	    FROM ACH_CATE AC
-	    LEFT JOIN ACH_CATE_ICONS ACI ON AC.ach_no = ACI.ach_no
-	    LEFT JOIN ACH_CATE_COUNT ACC ON AC.ach_no = ACC.ach_no AND ACC.user_no = #{userNo}
-	    LEFT JOIN ACH_CATE_GET ACG ON AC.ach_no = ACG.ach_no AND ACG.user_no = #{userNo}
+        SELECT 
+            ACI.saved_name,
+            AC.title,
+            AC.max_count,
+            ACC.cur_count,
+            ACG.status,
+            SC.category_name AS condition_name,
+            'cate' AS type
+        FROM ACH_CATE AC
+        LEFT JOIN ACH_CATE_ICONS ACI ON AC.ach_no = ACI.ach_no
+        <!-- ACH_CATE_COUNT 테이블에서 ach_no 대신 category_code를 사용하여 JOIN -->
+        LEFT JOIN ACH_CATE_COUNT ACC ON AC.category_code = ACC.category_code AND ACC.user_no = #{userNo}
+        LEFT JOIN ACH_CATE_GET ACG ON AC.ach_no = ACG.ach_no AND ACG.user_no = #{userNo}
         LEFT JOIN SL_CATEGORY SC ON AC.category_code = SC.category_code
-	    WHERE AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
+        WHERE AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
 	</select>
 
 	<select id="getSoul" parameterType="int" resultType="soulDTO">

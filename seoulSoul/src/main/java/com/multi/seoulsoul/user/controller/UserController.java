@@ -105,11 +105,12 @@ public class UserController {
 	
 	// 비밀번호 업데이트
 	@PostMapping("/userPwUpdate")
-	public String userPwUpdate(@AuthenticationPrincipal Principal principal, UserDTO u, Model model) {
+	public String userPwUpdate(@AuthenticationPrincipal Principal principal, UserDTO u, String newUserPw, Model model) {
 		UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
 	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 		
 		u.setUserNo(userDetails.getUserNo());
+		u.setUserPw(newUserPw);
 		
 		try {
 			userService.userPwUpdate(u);
@@ -202,7 +203,7 @@ public class UserController {
 			return "common/errorPage";
 		}
 		
-		return "redirect:/user/login";
+		return "redirect:/";
 	}
 	
 	// 동적 페이지 조회

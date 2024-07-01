@@ -94,7 +94,7 @@
 	            	var exp = item.slCount;
 	            	var level = Math.floor(exp / 100);
 	            	var expBarWidth = exp % 100;
-	            	var iconSize = Math.min(level * 10, 100);
+	            	var iconSize = Math.min(level * 20, 100);
 
 	                var content = '<div class="soul-info">';
 	                content += '<h2>' + item.locationName + '</h2>';
