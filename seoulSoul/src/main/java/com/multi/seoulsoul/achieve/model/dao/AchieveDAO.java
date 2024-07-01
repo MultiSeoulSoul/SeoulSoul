@@ -7,12 +7,14 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
 import com.multi.seoulsoul.achieve.model.dto.StatsDTO;
+import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 
 @Repository
@@ -127,6 +129,14 @@ public class AchieveDAO {
 	public List<StatsDTO> selectStats(SqlSessionTemplate sqlSession, int userNo) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("achieveMapper.selectStats", userNo);
+	}
+	
+	public int updateAchLocaCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.update("achieveMapper.updateAchLocaCount", soulLogDTO);
+	}
+	
+	public int updateAchCateCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.update("achieveMapper.updateAchCateCount", soulLogDTO);
 	}
 
 }

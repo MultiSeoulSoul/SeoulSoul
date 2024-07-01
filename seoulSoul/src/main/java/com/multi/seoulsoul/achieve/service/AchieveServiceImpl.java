@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;

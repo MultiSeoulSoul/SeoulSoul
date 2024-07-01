@@ -87,8 +87,8 @@
     <main class="grid-container">
         <section class="left-column">
             <h2>전체 회원 리스트</h2>
-            <input type="text" placeholder="검색어를 입력하세요">
-            <button>검색</button>
+            <!-- <input type="text" placeholder="검색어를 입력하세요">
+            <button>검색</button> -->
             <br><hr>
             <c:forEach items="${userList}" var="bag">
                 No.${bag.userNo} | name : ${bag.nickname} | 

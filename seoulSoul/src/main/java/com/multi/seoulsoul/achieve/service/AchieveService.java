@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
@@ -50,5 +52,4 @@ public interface AchieveService {
 			HttpServletRequest request) throws Exception ;
 
 	void updateBlacklistStatus(int userNo, char status) throws Exception ;
-	
 }

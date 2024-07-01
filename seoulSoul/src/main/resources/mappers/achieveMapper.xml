@@ -83,6 +83,18 @@
 	    <result property="replyCount" column="reply_count"/>
 	</resultMap>
 	
+	<resultMap id="achLocaCountResultMap" type="com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="locationCode" column="location_code"/>
+        <result property="curCount" column="cur_count"/>
+    </resultMap>
+    
+    <resultMap id="achCateCountResultMap" type="com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO">
+        <id property="userNo" column="user_no"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="curCount" column="cur_count"/>
+    </resultMap>
+	
 	<select id="selectStats" resultMap="statsResultMap">
 	    SELECT 
 	        A.location_code, 
@@ -219,6 +231,16 @@
 	    WHERE user_no = #{userNo}
     </update>
     
+    <update id="updateAchLocaCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
+    	UPDATE ACH_LOCA_COUNT
+    	SET cur_count = cur_count + 1
+    	WHERE user_no = #{writer.userNo} AND location_code = #{location.locationCode}
+    </update>
     
+    <update id="updateAchCateCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO">
+    	UPDATE ACH_CATE_COUNT
+    	SET cur_count = cur_count + 1
+    	WHERE user_no = #{writer.userNo} AND category_code = #{category.categoryCode}
+    </update>
 	
 </mapper>
