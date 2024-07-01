@@ -1,0 +1,28 @@
+diff a/seoulSoul/src/main/resources/mybatis-config.xml b/seoulSoul/src/main/resources/mybatis-config.xml	(rejected hunks)
+@@ -3,13 +3,18 @@
+   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+-<!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 
+-     별명을 지어서 사용 -->
+-     
+-   <settings>
+-		<setting name="jdbcTypeForNull" value="NULL"/>
+-        <setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 조회결과 snake_case -> camelCase 변환 -->
++	<!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 별명을 지어서 사용 -->
++
++	<settings>
++		<setting name="jdbcTypeForNull" value="NULL" />
++		<setting name="mapUnderscoreToCamelCase" value="true" /><!-- DB 
++			조회결과 snake_case -> camelCase 변환 -->
+ 	</settings>
+-	
+-   
++
++	<typeAliases>
++		<typeAlias type="com.multi.seoulsoul.user.model.dto.UserDTO" alias="userDTO"></typeAlias>
++	</typeAliases>
++	<mappers>
++		<mapper resource="mappers/userMapper.xml" />
++	</mappers>
+ </configuration>
