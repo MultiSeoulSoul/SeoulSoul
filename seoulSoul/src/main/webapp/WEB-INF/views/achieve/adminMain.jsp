@@ -87,8 +87,6 @@
     <main class="grid-container">
         <section class="left-column">
             <h2>전체 회원 리스트</h2>
-            <!-- <input type="text" placeholder="검색어를 입력하세요">
-            <button>검색</button> -->
             <br><hr>
             <c:forEach items="${userList}" var="bag">
                 No.${bag.userNo} | name : ${bag.nickname} | 
@@ -158,7 +156,7 @@
             </div>
             <div id="loca" class="tab-content active">
                 <c:forEach items="${achieveLocaList}" var="bag">
-                    No.${bag.achNo} | 자치구 : ${bag.locationCode} | 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
+                    No.${bag.achNo} | 자치구 : ${bag.locationCode} | 필요 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
                     <div class="button-group">
                         <a href="${pageContext.request.contextPath}/admin/achLocaUpdateForm?achNo=${bag.achNo}"><button>수정</button></a>
                         <form action="${pageContext.request.contextPath}/admin/deleteLoca" method="get" style="display:inline;">
@@ -173,7 +171,7 @@
             </div>
             <div id="cate" class="tab-content">
                 <c:forEach items="${achieveCateList}" var="bag">
-                    No.${bag.achNo} | 카테고리 : ${bag.categoryCode} | 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
+                    No.${bag.achNo} | 카테고리 : ${bag.categoryCode} | 필요 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
                     <div class="button-group">
                         <a href="${pageContext.request.contextPath}/admin/achCateUpdateForm?achNo=${bag.achNo}"><button>수정</button></a>
                         <form action="${pageContext.request.contextPath}/admin/deleteCate" method="get" style="display:inline;">
