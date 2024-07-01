@@ -4,16 +4,19 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.multi.seoulsoul.event.model.dao.EventDAO">
 
-    <!-- 기존 코드 생략 -->
+	<!-- 기존 코드 생략 -->
 
 	<!-- 이벤트 삽입 -->
 	<insert id="insertEvent"
 		parameterType="com.multi.seoulsoul.event.model.dto.EventDTO"
 		useGeneratedKeys="true" keyProperty="eventNo">
-		INSERT INTO EVENT (title, content, start_date, end_date, views,
+		INSERT INTO EVENT (title, content,
+		start_date, end_date, views,
 		created_date, address)
-		VALUES (#{title}, #{content}, #{startDate}, #{endDate}, #{views},
-		CURRENT_TIMESTAMP, #{address})
+		VALUES (#{title},
+		#{content}, #{startDate}, #{endDate}, #{views},
+		CURRENT_TIMESTAMP,
+		#{address})
 	</insert>
 
 	<select id="selectAllEvents"
@@ -61,43 +64,51 @@
 		UPDATE EVENT_FILES
 		SET original_name = #{originalName},
 		saved_name = #{savedName}
-		WHERE event_no = #{eventNo}
+		WHERE
+		event_no = #{eventNo}
 	</update>
 
 	<delete id="deleteEvent" parameterType="int">
-		DELETE FROM EVENT WHERE event_no = #{eventNo}
+		DELETE FROM EVENT WHERE
+		event_no = #{eventNo}
 	</delete>
 
 	<delete id="deleteEventFiles" parameterType="int">
-		DELETE FROM EVENT_FILES WHERE event_no = #{eventNo}
+		DELETE FROM
+		EVENT_FILES WHERE event_no = #{eventNo}
 	</delete>
 
 	<!-- 댓글 삽입 -->
-	<insert id="insertComment" parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
-		INSERT INTO EVENT_REPLY (user_no, event_no, content)
-		VALUES (#{userNo}, #{eventNo}, #{content})
+	<insert id="insertComment"
+		parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
+		INSERT INTO EVENT_REPLY (user_no, event_no, content, nickname)
+		VALUES (#{userNo}, #{eventNo}, #{content}, #{nickname})
 	</insert>
 
 	<!-- 이벤트 번호로 댓글 조회 -->
-	<select id="selectCommentsByEventNo" parameterType="int" resultType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
+	<select id="selectCommentsByEventNo" parameterType="int"
+		resultType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
 		SELECT r.*, u.nickname
 		FROM EVENT_REPLY r
-		JOIN USERS u ON r.user_no = u.user_no
+		JOIN USERS u ON
+		r.user_no = u.user_no
 		WHERE r.event_no = #{eventNo}
-		ORDER BY r.reply_no DESC
+		ORDER BY r.reply_no
+		DESC
 	</select>
-	
-	<!-- 댓글 수정 -->
-    <update id="updateComment" parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
-        UPDATE EVENT_REPLY
-        SET content = #{content}
-        WHERE reply_no = #{replyNo} AND user_no = #{userNo}
-    </update>
 
-    <!-- 댓글 삭제 -->
-    <delete id="deleteComment" parameterType="map">
-        DELETE FROM EVENT_REPLY
-        WHERE reply_no = #{replyNo} AND user_no = #{userNo}
-    </delete>
+	<!-- 댓글 수정 -->
+	<update id="updateComment"
+		parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
+		UPDATE EVENT_REPLY
+		SET content = #{content}
+		WHERE reply_no = #{replyNo} AND user_no = #{userNo}
+	</update>
+
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="map">
+		DELETE FROM EVENT_REPLY
+		WHERE reply_no = #{replyNo} AND user_no = #{userNo}
+	</delete>
 
 </mapper>

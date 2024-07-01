@@ -47,4 +47,11 @@ public class ReplyDTO {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+
+	@Override
+	public String toString() {
+		return "ReplyDTO [replyNo=" + replyNo + ", userNo=" + userNo + ", eventNo=" + eventNo + ", content=" + content
+				+ ", nickname=" + nickname + "]";
+	}
+	
 }
