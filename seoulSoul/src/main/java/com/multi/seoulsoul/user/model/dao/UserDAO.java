@@ -20,18 +20,20 @@ public class UserDAO {
 	// 회원 가입
 	public int joinUser(SqlSessionTemplate sqlSession, UserDTO u) {
 	    int result = sqlSession.insert("userMapper.joinUser", u);
-	    if (result == 1) {
+	    if (result > 0) {
 	        int userNo = sqlSession.selectOne("userMapper.selectLastInsertId");
 	        
-	        if (sqlSession.insert("userMapper.insertUserRole", userNo) != 1) return 0;
-	        if (sqlSession.insert("userMapper.insertUserProfile", userNo) != 1) return 0;
-	        if (sqlSession.insert("userMapper.insertAchLocaCount", userNo) != 1) return 0;
-	        if (sqlSession.insert("userMapper.insertAchCateCount", userNo) != 1) return 0;
-	        if (sqlSession.insert("userMapper.insertAchLocaGet", userNo) != 1) return 0;
-	        if (sqlSession.insert("userMapper.insertAchCateGet", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertUserRole", userNo) < 1) return 0;
+	        if (sqlSession.insert("userMapper.insertUserProfile", userNo) < 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchLocaCount", userNo) < 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchCateCount", userNo) < 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchLocaGet", userNo) < 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchCateGet", userNo) < 1) return 0;
 	    } else {
 	        return 0;
 	    }
+	    
+	    System.out.println("result:" + result);
 	    
 	    return result;
 	}
