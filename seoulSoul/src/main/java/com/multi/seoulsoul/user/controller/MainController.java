@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
@@ -87,6 +88,11 @@ public class MainController {
 	public String joinUser(UserDTO u) throws Exception {
 		userService.joinUser(u);
 		return "/user/login";
+	}
+	
+	@RequestMapping("/errorPage")
+	public String errorPage() {
+		return "/common/errorPage";
 	}
 	
 	// 아이디 중복조회
