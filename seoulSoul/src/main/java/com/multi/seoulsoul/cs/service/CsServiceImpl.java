@@ -74,7 +74,7 @@ public class CsServiceImpl implements CsService {
     
   	//문의글 삭제
   	@Override
-	public void deleteQuestion(Integer questionNo) throws Exception {
+	public void deleteQuestion(int questionNo) throws Exception {
 		csDAO.deleteQuestion(sqlSession, questionNo);
 	}
 	

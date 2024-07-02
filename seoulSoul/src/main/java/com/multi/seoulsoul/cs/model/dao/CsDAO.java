@@ -59,7 +59,7 @@ public class CsDAO {
     }
     
   	//문의글 삭제
-    public void deleteQuestion(SqlSessionTemplate sqlSession, Integer questionNo) {
+    public void deleteQuestion(SqlSessionTemplate sqlSession, int questionNo) {
 		sqlSession.delete("csMapper.deleteQuestion", questionNo);
 	}
 	
