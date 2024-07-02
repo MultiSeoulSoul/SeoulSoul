@@ -1,7 +1,6 @@
 package com.multi.seoulsoul.user.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dao.UserDAO;
 import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
@@ -164,8 +164,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<SoulDTO> getSoul(int userNo) {
-		List<SoulDTO> soulList = userDAO.getSoul(sqlSession, userNo);
+	public List<StatsDTO> getSoul(int userNo) {
+		List<StatsDTO> soulList = userDAO.getSoul(sqlSession, userNo);
 		return soulList;
 	}
 }

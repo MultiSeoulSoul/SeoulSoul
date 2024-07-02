@@ -4,37 +4,35 @@ import java.sql.Timestamp;
 
 public class RecHeartBtnDTO {
 
+	private String recommendationNo;
 	private String title;
 	private Timestamp createdDate;
-
-	// 재식 추가
 	private int totalCount;
-
-	public RecHeartBtnDTO() {
+	
+	public String getRecommendationNo() {
+		return recommendationNo;
 	}
-
+	public void setRecommendationNo(String recommendationNo) {
+		this.recommendationNo = recommendationNo;
+	}
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public Timestamp getCreatedDate() {
+	public Timestamp getBoardCreatedDate() {
 		return createdDate;
 	}
-
-	public void setCreatedDate(Timestamp createdDate) {
-		this.createdDate = createdDate;
+	public void setBoardCreatedDate(Timestamp boardCreatedDate) {
+		this.createdDate = boardCreatedDate;
 	}
-
 	public int getTotalCount() {
 		return totalCount;
 	}
-
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
 	}
-
+	
+	
 }
