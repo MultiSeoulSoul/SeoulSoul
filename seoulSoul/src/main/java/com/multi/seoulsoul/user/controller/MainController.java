@@ -53,8 +53,8 @@ public class MainController {
 			
 			for(int i = 0; i < userStats.size(); i++) {
 				int exp = userStats.get(i).getSoulLogCount() * 100 +
-						  userStats.get(i).getLikeCount() + 
-						  userStats.get(i).getReplyCount() * 3;
+						  userStats.get(i).getLikeCount() * 10 + 
+						  userStats.get(i).getReplyCount() * 5;
 				userStats.get(i).setExp(exp);
 			}
 			

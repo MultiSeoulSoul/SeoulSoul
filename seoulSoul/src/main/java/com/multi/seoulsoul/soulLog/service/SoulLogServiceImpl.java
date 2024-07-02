@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.soulLog.model.dao.SoulLogDAO;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
@@ -105,10 +106,15 @@ public class SoulLogServiceImpl implements SoulLogService {
 			achieveDAO.updateAchCateCount(sqlSession, soulLogDTO);
 			
 			// 쓴 글의 locationCode를 파라미터로 넣어서(soulLogDTO) 해당 업적의 ach_no와 max_count를 AchLocaDTO로 받아오는 DAO 메서드 필요
+			// AchLocaDTO achLocaDTO = achieveDAO.selectAchLoca(sqlSession, soulLogDTO);
 			
+			// int achNo = achLocaDTO.getAchNo();
+			// int maxCount = achLocaDTO.getMaxCount();
 			// 쓴 글의 userNo와 location를 파라미터로 넣어서(soulLogDTO) cur_count를 받아오는 DAO 메서드 필요
 			
-			// 그 둘을 비교하여 max_count 와 cur_count가 동일해지면 // location get 테이블에 status를 Y로 업데이트하는 메서드 필요
+			
+			
+			// 그 둘을 비교하여 max_count 와 cur_count가 동일해지면 // location get 테이블에 status를 Y로 업데이트하는 메서드 필요 GET DTO
 			
 			
 			
