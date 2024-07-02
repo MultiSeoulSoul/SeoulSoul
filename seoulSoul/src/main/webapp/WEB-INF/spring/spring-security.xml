@@ -36,7 +36,7 @@
         <security:intercept-url pattern="/cs/qnaOneUser" access="hasRole('USER')" />
         <security:intercept-url pattern="/cs/qnaAll" access="hasRole('ADMIN')" />
         <security:intercept-url pattern="/cs/qnaOne" access="hasRole('ADMIN')" />
-        <security:intercept-url pattern="/cs/qnaUpdate" access="hasRole('ADMIN')" />
+        <security:intercept-url pattern="/cs/qnaUpdate" access="hasRole('USER')" />
         <security:intercept-url pattern="/cs/**" access="isAuthenticated()" />
         
         <security:intercept-url pattern="/user/**" access="hasRole('USER')" />
