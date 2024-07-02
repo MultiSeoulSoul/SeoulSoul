@@ -6,6 +6,14 @@
 <meta charset="UTF-8">
 <title>Board</title>
 <style>
+	a {
+		text-decoration: none;
+	    color: black;
+	}
+	a:hover {
+	    text-decoration: none;
+	    color: gray;
+	}
     h2 {
         margin-bottom: 20px;
     }
@@ -144,7 +152,8 @@
 
             const title = document.createElement('td');
             const titleLink = document.createElement('a');
-            titleLink.href = "${pageContext.request.contextPath}/user/soulLogDetail?soulLogNo="${item.soulLogNo)}`;  // 링크 설정
+            const soulLogNo = item.soulLogNo;
+            titleLink.href = "${pageContext.request.contextPath}/soulLog/soulLogDetail?soulLogNo=" + soulLogNo;
             titleLink.textContent = item.title;
             title.appendChild(titleLink);
             row.appendChild(title);
@@ -169,9 +178,13 @@
         data.forEach(item => {
             const row = document.createElement('tr');
 
-            const soulLogNo = document.createElement('td');
-            soulLogNo.textContent = item.title;
-            row.appendChild(soulLogNo);
+            const title = document.createElement('td');
+            const titleLink = document.createElement('a');
+            const soulLogNo = item.soulLogNo;
+            titleLink.href = "${pageContext.request.contextPath}/soulLog/soulLogDetail?soulLogNo=" + soulLogNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
+            row.appendChild(title);
 
             const content = document.createElement('td');
             content.textContent = item.content;
@@ -190,7 +203,11 @@
             const row = document.createElement('tr');
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            const eventNo = item.eventNo;
+            titleLink.href = "${pageContext.request.contextPath}/event/eventDetail?eventNo=" + eventNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const content = document.createElement('td');
@@ -214,7 +231,11 @@
             row.appendChild(categoryName);
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            const soulLogNo = item.soulLogNo;
+            titleLink.href = "${pageContext.request.contextPath}/soulLog/soulLogDetail?soulLogNo=" + soulLogNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const likedDate = document.createElement('td');
@@ -230,7 +251,11 @@
             const row = document.createElement('tr');
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            const recommendationNo = item.recommendationNo;
+            titleLink.href = "${pageContext.request.contextPath}/rec/recDetail?recommendationNo=" + recommendationNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
@@ -250,7 +275,11 @@
             row.appendChild(categoryName);
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            const questionNo = item.questionNo;
+            titleLink.href = "${pageContext.request.contextPath}/cs/qnaOneUser?id=" + questionNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
@@ -274,7 +303,11 @@
             row.appendChild(reason);
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            const reportNo = item.reportNo;
+            titleLink.href = "${pageContext.request.contextPath}/reportReply/reportDetail?reportNo=" + reportNo;
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const createdDate = document.createElement('td');
@@ -308,7 +341,7 @@
                 headers = ['지역', '카테고리', '좋아요한 소울로그 제목', '작성시간'];
                 break;
             case 'heart-btn':
-                headers = ['찜한 이벤트 제목', '작성시간'];
+                headers = ['찜한 추천글 제목', '작성시간'];
                 break;
             case 'cs-question':
                 headers = ['카테고리', '문의 제목', '작성시간', '답변 여부'];

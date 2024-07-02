@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
@@ -279,16 +280,18 @@ public class UserController {
 
     @GetMapping("/soul")
     @ResponseBody
-    public List<SoulDTO> getSoul(@AuthenticationPrincipal Principal principal) {
+    public List<StatsDTO> getSoul(@AuthenticationPrincipal Principal principal) {
 	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
 	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
-        List<SoulDTO> soulList = userService.getSoul(userDetails.getUserNo());
+        List<StatsDTO> soulList = userService.getSoul(userDetails.getUserNo());
         System.out.println("soulList: " + soulList);
         
-        for (SoulDTO soul : soulList) {
-            int slCount = soul.getSlCount() * 10;
-            soul.setSlCount(slCount);
+        for (StatsDTO soul : soulList) {
+            int exp = soul.getSoulLogCount() * 100 +
+            				soul.getLikeCount() * 10 + 
+        					soul.getReplyCount() * 5;
+            soul.setExp(exp);
         }
         
         return soulList;
