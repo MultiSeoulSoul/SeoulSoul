@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,12 +111,9 @@
     <p class="body-text">
         관심 있는 이벤트에 댓글을 남겨주세요!<br>여러분의 참여를 기다립니다.
     </p>
-    <button class="write-btn" onclick="location.href='eventInsertForm'">글쓰기</button>
-    <br>
-    <!-- 
     <sec:authorize access="hasRole('ADMIN')">
         <button class="write-btn" onclick="location.href='eventInsertForm'">글쓰기</button>
-    </sec:authorize> -->
+    </sec:authorize>
 
 <div class="event-container">
     <c:forEach items="${eventList}" var="event">

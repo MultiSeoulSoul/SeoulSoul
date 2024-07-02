@@ -1,36 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>서울소울 SEOUL SOUL</title>
 <style type="text/css">
+/* 기존 CSS 그대로 유지 */
 body {
     margin: 0;
     padding: 0;
 }
 
 .detail-container {
-    margin: 20px auto; 
+    margin: 20px auto;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
+    flex-direction: column;
+    align-items: center;
 }
 
 .content-wrapper {
     display: flex;
-    width: 80%; 
-    margin-bottom: 20px; 
+    width: 80%;
+    margin-bottom: 20px;
 }
 
 .image-container {
-    flex: 0 0 40%; 
-    max-height: 400px; 
+    flex: 0 0 40%;
+    max-height: 400px;
     overflow: hidden;
-    margin-right: 20px; 
-    margin-left: 20px; 
+    margin-right: 20px;
+    margin-left: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,12 +41,12 @@ body {
 .detail-image {
     width: 100%;
     height: 100%;
-    object-fit: contain; 
+    object-fit: contain;
 }
 
 .content-container {
     flex: 1;
-    margin-right: 20px; 
+    margin-right: 20px;
 }
 
 .detail-btn {
@@ -78,13 +80,13 @@ body {
 .heart-btn {
     font-size: 35px;
     cursor: pointer;
-    margin: 0 auto; 
-    display: block; 
+    margin: 0 auto;
+    display: block;
 }
 
 .button-container {
-    margin-top: 20px; 
-    text-align: center; 
+    margin-top: 20px;
+    text-align: center;
 }
 
 #content-text {
@@ -92,7 +94,7 @@ body {
     font-weight: normal;
     font-size: 15px;
     text-align: left;
-    white-space: pre-wrap; /* 공백과 줄바꿈을 그대로 유지 */
+    white-space: pre-wrap;
 }
 
 #map {
@@ -105,8 +107,8 @@ body {
     text-align: center;
     font-family: 'Freesentation-9Black', sans-serif;
     font-weight: normal;
-    font-size: 13px;
-    margin-top: 10px; 
+    font-size: 16px;
+    margin-top: 10px;
 }
 
 .comment-container {
@@ -143,6 +145,9 @@ body {
     width: 90%;
     border-top: 1px solid #ccc;
     padding-top: 10px;
+    font-size: 16px;
+     font-family: 'Freesentation-7Black', sans-serif;
+    font-weight: normal;
 }
 
 .comment-item {
@@ -155,6 +160,7 @@ body {
     margin-top: 10px;
     display: flex;
     gap: 10px;
+    justify-content: flex-end;
 }
 
 .comment-edit-container {
@@ -167,7 +173,7 @@ body {
 }
 
 .comment-edit-input {
-     width: calc(100% - 70px); 
+    width: calc(100% - 140px);
     height: 50px;
     padding: 10px;
     font-size: 16px;
@@ -179,17 +185,14 @@ body {
 
 .comment-update-submit {
     width: 70px;
-    height: 40px;
+    height: 50px;
     background-color: #4382A6;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
     display: none;
-    margin-left: 20px;
-    align-self: flex-end;
-    margin-left: auto; 
-    margin-top: 10px;
+    margin-left: 10px;
 }
 
 .comment-update-submit:hover {
@@ -202,7 +205,10 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    
+}
+
+.comment-delete-submit:hover {
+    background-color: #9b1d1d;
 }
 
 .edit {
@@ -216,8 +222,13 @@ body {
 <script type="text/javascript"
     src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-    var userNo = 1; // 테스트를 위한 사용자 번호
-    var nickname = '테스트닉네임'; // 실제 구현 시 서버에서 가져온 닉네임 사용
+    function getUserInfo() {
+        // Spring Security를 이용해 현재 로그인한 사용자의 정보를 가져옵니다.
+        return {
+            userNo: <sec:authentication property="principal.userNo" />,
+            nickname: '<sec:authentication property="principal.username" />'
+        };
+    }
 
     function confirmDeletion(event) {
         if (confirm("정말로 이 이벤트를 삭제하시겠습니까? 😱")) {
@@ -230,6 +241,8 @@ body {
 
     function submitComment() {
         var content = document.getElementById('commentContent').value;
+        var userInfo = getUserInfo();
+        
         if (content.trim() === '') {
             alert('댓글을 입력해 주세요.');
             return;
@@ -251,10 +264,10 @@ body {
             }
         };
         xhr.send(JSON.stringify({
-            userNo: userNo,
+            userNo: userInfo.userNo,
             eventNo: ${event.eventNo},
             content: content,
-            nickname: nickname
+            nickname: userInfo.nickname
         }));
     }
 
@@ -273,18 +286,16 @@ body {
                         commentElement.className = 'comment-item';
                         commentElement.dataset.replyNo = comment.replyNo;
                         commentElement.innerHTML = '<p><strong>' + comment.nickname + '</strong>: <span class="comment-content">' + comment.content + '</span></p>' +
-                            '<div class="comment-actions">' +
-                            '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
-                            '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
-                            <!--'<sec:authorize access="hasRole('USER') and #comment.userNo == principal.userNo">' +
-                            '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
-                            '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
-                        '</sec:authorize>' + -->
-                            '</div>' +
-                            '<div class="comment-edit-container">' +
-                            '<input type="text" class="comment-edit-input" id="editContent-' + comment.replyNo + '" value="' + comment.content + '">' +
-                            '<button class="comment-update-submit" onclick="updateComment(' + comment.replyNo + ')">수정 완료</button>' +
-                            '</div>';
+                        '<sec:authorize access="hasRole('USER')">' +
+                        '<div class="comment-actions">' +
+                        '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
+                        '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
+                        '</div>' +
+                        '<div class="comment-edit-container">' +
+                        '<input type="text" class="comment-edit-input" id="editContent-' + comment.replyNo + '" value="' + comment.content + '">' +
+                        '<button class="comment-update-submit" onclick="updateComment(' + comment.replyNo + ')">수정 완료</button>' +
+                        '</div>' +
+                        '</sec:authorize>';
                         commentList.appendChild(commentElement);
                     });
                 } else {
@@ -312,6 +323,7 @@ body {
         var commentElement = document.querySelector('.comment-item[data-reply-no="' + replyNo + '"]');
         var editInput = commentElement.querySelector('.comment-edit-input');
         var content = editInput.value;
+        var userInfo = getUserInfo();
 
         if (content.trim() === '') {
             alert('댓글을 입력해 주세요.');
@@ -333,12 +345,14 @@ body {
         };
         xhr.send(JSON.stringify({
             replyNo: replyNo,
-            userNo: userNo,
+            userNo: userInfo.userNo,
             content: content
         }));
     }
 
     function deleteComment(replyNo) {
+        var userInfo = getUserInfo();
+
         if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
             // AJAX 요청을 통해 서버로 댓글 삭제 요청 전송
             var xhr = new XMLHttpRequest();
@@ -355,7 +369,7 @@ body {
             };
             xhr.send(JSON.stringify({
                 replyNo: replyNo,
-                userNo: userNo
+                userNo: userInfo.userNo
             }));
         }
     }
@@ -384,6 +398,7 @@ body {
                 <p id="content-text">${event.content}</p>
             </div>
         </div>
+        <br><br>
         <p class="address">
             <span id="address">장소: ${event.address}</span>
         </p>
@@ -418,43 +433,41 @@ body {
 
             geocoder.addressSearch(address, callback);
         </script>
+        <br><br><br><br>
         <div class="comment-container">
-            <input type="text" id="commentContent" class="comment-input" placeholder="댓글을 입력해 주세요." />
-            <button class="comment-submit" onclick="submitComment()">등록</button>
-            <!-- <sec:authorize access="hasRole('USER')">
+            <sec:authorize access="hasRole('USER')">
                 <input type="text" id="commentContent" class="comment-input" placeholder="댓글을 입력해 주세요." />
                 <button class="comment-submit" onclick="submitComment()">등록</button>
-            </sec:authorize> -->
+            </sec:authorize>
         </div>
-        <div id="commentList" class="comment-list">
+         <div id="commentList" class="comment-list">
             <c:forEach var="comment" items="${comments}">
                 <div class="comment-item" data-reply-no="${comment.replyNo}">
                     <p>
                         <strong>${comment.nickname}</strong>: <span class="comment-content">${comment.content}</span>
                     </p>
-                    <div class="comment-actions">
-                        <button class="edit" onclick="enableEdit(${comment.replyNo})">수정</button>
-                        <button class="comment-delete-submit" onclick="deleteComment(${comment.replyNo})">삭제</button>
-                    </div>
-                    <input type="text" class="comment-edit-input" id="editContent-${comment.replyNo}" value="${comment.content}">
-                    <button class="comment-update-submit" onclick="updateComment(${comment.replyNo})">수정 완료</button>
+                    <sec:authorize access="hasRole('USER')">
+                        <div class="comment-actions">
+                            <button class="edit" onclick="enableEdit(${comment.replyNo})">수정</button>
+                            <button class="comment-delete-submit" onclick="deleteComment(${comment.replyNo})">삭제</button>
+                        </div>
+                        <div class="comment-edit-container">
+                            <input type="text" class="comment-edit-input" id="editContent-${comment.replyNo}" value="${comment.content}">
+                            <button class="comment-update-submit" onclick="updateComment(${comment.replyNo})">수정 완료</button>
+                        </div>
+                    </sec:authorize>
                 </div>
             </c:forEach>
         </div>
         <div class="button-container">
             <button class="detail-btn" onclick="history.back()">뒤로가기</button>
-            <button class="detail-btn1" onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
-            <form action="${pageContext.request.contextPath}/event/deleteEvent" method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
-                <input type="hidden" name="eventNo" value="${event.eventNo}">
-                <button type="submit" class="detail-btn1">삭제하기</button>
-                <!--<sec:authorize access="hasRole('ADMIN')">
+            <sec:authorize access="hasRole('ADMIN')">
                 <button class="detail-btn1" onclick="location.href='${pageContext.request.contextPath}/event/editEvent?eventNo=${event.eventNo}'">수정하기</button>
                 <form action="${pageContext.request.contextPath}/event/deleteEvent" method="post" style="display: inline;" onsubmit="return confirmDeletion(event)">
                     <input type="hidden" name="eventNo" value="${event.eventNo}">
                     <button type="submit" class="detail-btn1">삭제하기</button>
                 </form>
-            </sec:authorize>  -->
-            </form>
+            </sec:authorize>
         </div>
     </div>
 </body>
