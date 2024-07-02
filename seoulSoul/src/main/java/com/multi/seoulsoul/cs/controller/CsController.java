@@ -216,7 +216,7 @@ public class CsController {
 	
 	//문의글 삭제
 	@GetMapping("/qnaDelete")
-    public String qnaDelete(@RequestParam("id") Integer questionNo, Model model) {
+    public String qnaDelete(@RequestParam("id") int questionNo, Model model) {
 		
         try {
 			csService.deleteQuestion(questionNo);
@@ -251,7 +251,6 @@ public class CsController {
     public String qnaInsert(@RequestParam("title") String title, 
                             @RequestParam("content") String content, 
                             @RequestParam("category_code") int categoryCode,
-                            @RequestParam("writer") int writer,
                             @RequestParam("multiFiles") MultipartFile[] multiFiles,
                             HttpServletRequest request, 
                             Model model, @AuthenticationPrincipal Principal principal) {
@@ -364,7 +363,6 @@ public class CsController {
 				            @RequestParam("title") String title, 
 				            @RequestParam("content") String content, 
 				            @RequestParam("category_code") int categoryCode,
-				            @RequestParam("writer") int writer,
                             @RequestParam(name = "deleteFiles", required = false) List<Integer> deleteFiles,
                             @RequestParam("multiFiles") MultipartFile[] multiFiles,
                             HttpServletRequest request, 

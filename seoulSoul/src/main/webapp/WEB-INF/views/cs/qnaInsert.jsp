@@ -38,11 +38,6 @@
 	        <!-- 회원: 문의글 작성 폼 -->
             <form action="qnaInsert" method="post" enctype="multipart/form-data">                
                 
-                <!-- 테스트용: 작성자 writer(user_no) -->    
-                <div class="form-group">
-                    <input type="text" id="writer" name="writer" placeholder="테스트용 user_no 입력" required>
-                </div>
-                
                 <!-- 카테고리 -->
                 <div class="form-group">
                 	<select id="category" name="category_code">
