@@ -9,8 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchCateGetDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
+import com.multi.seoulsoul.achieve.model.dto.AchLocaGetDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
 import com.multi.seoulsoul.achieve.model.dto.StatsDTO;
@@ -131,6 +134,10 @@ public class AchieveDAO {
 		return sqlSession.selectList("achieveMapper.selectStats", userNo);
 	}
 	
+	
+	
+	// 성현님 사용 메소드
+	
 	public int updateAchLocaCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
 		return sqlSession.update("achieveMapper.updateAchLocaCount", soulLogDTO);
 	}
@@ -138,5 +145,28 @@ public class AchieveDAO {
 	public int updateAchCateCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
 		return sqlSession.update("achieveMapper.updateAchCateCount", soulLogDTO);
 	}
+	
+	public AchLocaDTO selectAchLoca(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.selectOne("achieveMapper.selectAchLoca", soulLogDTO);
+	}
+	
+	public AchCateDTO selectAchCate(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.selectOne("achieveMapper.selectAchCate", soulLogDTO);
+	}
+	
+	public AchLocaCountDTO selectLocaCurCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.selectOne("achieveMapper.selectLocaCurCount", soulLogDTO);
+	}
+	
+	public AchCateCountDTO selectCateCurCount(SqlSessionTemplate sqlSession, SoulLogDTO soulLogDTO) {
+		return sqlSession.selectOne("achieveMapper.selectCateCurCount", soulLogDTO);
+	}
+	
+	public int updateAchLocaGet(SqlSessionTemplate sqlSession, AchLocaGetDTO achLocaGetDTO) {
+		return sqlSession.update("achieveMapper.updateAchLocaGet", achLocaGetDTO);
+	}
 
+	public int updateAchCateGet(SqlSessionTemplate sqlSession, AchCateGetDTO achCateGetDTO) {
+		return sqlSession.update("achieveMapper.updateAchCateGet", achCateGetDTO);
+	}
 }

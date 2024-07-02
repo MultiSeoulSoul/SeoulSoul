@@ -2,7 +2,7 @@ package com.multi.seoulsoul.achieve.model.dto;
 
 public class AchCateCountDTO {
 	private int userNo;
-	private AchCateDTO achCate;
+	private int categoryCode;
 	private int curCount;
 	
 	public int getUserNo() {
@@ -11,11 +11,11 @@ public class AchCateCountDTO {
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
-	public AchCateDTO getAchCate() {
-		return achCate;
+	public int getCategoryCode() {
+		return categoryCode;
 	}
-	public void setAchCate(AchCateDTO achCate) {
-		this.achCate = achCate;
+	public void setCategoryCode(int categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 	public int getCurCount() {
 		return curCount;
@@ -25,6 +25,6 @@ public class AchCateCountDTO {
 	}
 	@Override
 	public String toString() {
-		return "achLocaCountDTO [userNo=" + userNo + ", achCate=" + achCate + ", curCount=" + curCount + "]";
+		return "achLocaCountDTO [userNo=" + userNo + ", categoryCode=" + categoryCode + ", curCount=" + curCount + "]";
 	}
 }
