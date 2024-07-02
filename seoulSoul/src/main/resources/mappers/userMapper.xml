@@ -105,6 +105,7 @@
 	<!-- 소울로그 조회 -->
 	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="SelectSlBoardDTO">
         SELECT
+        	b.soulLog_no,
             l.location_name,
             c.category_name,
             b2.title,
@@ -276,7 +277,6 @@
 	
 	<!-- 카테고리 업적 조회 -->
 	<select id="getCateAchievement" parameterType="int" resultType="SelectAchievementDTO">    
-	    SELECT 
         SELECT 
             ACI.saved_name,
             AC.title,
@@ -293,7 +293,8 @@
         LEFT JOIN SL_CATEGORY SC ON AC.category_code = SC.category_code
         WHERE AC.ach_no IN (SELECT ach_no FROM ACH_CATE_GET WHERE user_no = #{userNo});
 	</select>
-
+	
+	<!-- 소울 조회 -->
 	<select id="getSoul" parameterType="int" resultType="soulDTO">
 		SELECT L.location_name, COUNT(*) AS sl_count
 		FROM SL_BOARD B

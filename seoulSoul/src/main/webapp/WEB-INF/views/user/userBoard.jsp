@@ -143,7 +143,10 @@
             row.appendChild(categoryName);
 
             const title = document.createElement('td');
-            title.textContent = item.title;
+            const titleLink = document.createElement('a');
+            titleLink.href = "${pageContext.request.contextPath}/user/soulLogDetail?soulLogNo="${item.soulLogNo)}`;  // 링크 설정
+            titleLink.textContent = item.title;
+            title.appendChild(titleLink);
             row.appendChild(title);
 
             const replyCount = document.createElement('td');
