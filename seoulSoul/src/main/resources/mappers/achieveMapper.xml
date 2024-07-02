@@ -230,5 +230,42 @@
     	SET cur_count = cur_count + 1
     	WHERE user_no = #{writer.userNo} AND category_code = #{category.categoryCode}
     </update>
+    
+    
+    
+    
+    
+    
+    <select id="selectAchLoca" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" resultType="com.multi.seoulsoul.achieve.model.dto.AchLocaDTO">
+    	SELECT * FROM ACH_LOCA
+    	WHERE location_code = #{location.locationCode}
+    </select>
+    
+    <select id="selectAchCate" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" resultType="com.multi.seoulsoul.achieve.model.dto.AchCateDTO">
+    	SELECT * FROM ACH_CATE
+    	WHERE category_code = #{category.categoryCode}
+    </select>
+    
+    <select id="selectLocaCurCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" resultType="com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO">
+    	SELECT * FROM ACH_LOCA_COUNT
+    	WHERE user_no = #{writer.userNo} AND location_code = #{location.locationCode}
+    </select>
+    
+    <select id="selectCateCurCount" parameterType="com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO" resultType="com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO">
+    	SELECT * FROM ACH_Cate_COUNT
+    	WHERE user_no = #{writer.userNo} AND category_code = #{category.categoryCode}
+    </select>
+    
+	<update id="updateAchLocaGet" parameterType="com.multi.seoulsoul.achieve.model.dto.AchLocaGetDTO">
+		UPDATE ACH_LOCA_GET
+		SET status = 'Y'
+		WHERE user_no = #{userNo} AND ach_no = #{achLoca.achNo}
+	</update>
+	
+	<update id="updateAchCateGet" parameterType="com.multi.seoulsoul.achieve.model.dto.AchCateGetDTO">
+		UPDATE ACH_CATE_GET
+		SET status = 'Y'
+		WHERE user_no = #{userNo} AND ach_no = #{achCate.achNo}
+	</update>
 	
 </mapper>
