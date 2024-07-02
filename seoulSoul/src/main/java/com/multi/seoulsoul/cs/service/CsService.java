@@ -23,7 +23,7 @@ public interface CsService {
     void increaseViewCount(int questionNo) throws Exception;
     
   	//문의글 삭제
-    void deleteQuestion(Integer questionNo) throws Exception;
+    void deleteQuestion(int questionNo) throws Exception;
     
     //문의글 작성: 1. 카테고리
     List<CsCategoryDTO> getCategories() throws Exception;
