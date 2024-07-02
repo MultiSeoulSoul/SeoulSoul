@@ -128,9 +128,22 @@ public class CsController {
     // 문의글 상세 조회: 사용자별 문의글
     @GetMapping("/qnaOneUser")
     public String getQuestionByUserId(@RequestParam("id") int questionNo, 
-    								  Model model) {
+    								  Model model, @AuthenticationPrincipal Principal principal) {
     	
         try {
+        	
+    		//로그인 유저 정보의 userNo 가져오기
+    	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+    	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+    	    int userNo = userDetails.getUserNo();
+    	    
+            // 작성자와 로그인된 사용자가 일치하지 않으면 에러 페이지로 포워드
+    	    CsQuestionDTO q = csService.getQuestionById(questionNo);
+            if (q.getWriter() != userNo) {
+                model.addAttribute("msg", "해당 문의글에 접근할 권한이 없습니다.");
+                return "common/errorPage";
+            }
+        	
             csService.increaseViewCount(questionNo);
             CsQuestionDTO question = csService.getQuestionById(questionNo);
             model.addAttribute("qna", question);
@@ -340,15 +353,27 @@ public class CsController {
     
     //문의글 수정: 1. 페이지 이동
     @GetMapping("/qnaUpdate")
-    public String qnaUpdateForm(@RequestParam("id") int questionNo, Model model) {
-        CsQuestionDTO question;
-		try {
-			question = csService.getQuestionById(questionNo);
-			
-			model.addAttribute("qna", question);
-	        model.addAttribute("categories", csService.getCategories());
-	        
-		} catch (Exception e) {
+    public String qnaUpdateForm(@RequestParam("id") int questionNo, 
+    						    Model model, @AuthenticationPrincipal Principal principal) {
+        
+    	// 로그인된 사용자 정보 가져오기
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+        int userNo = userDetails.getUserNo();
+
+        try {
+            CsQuestionDTO question = csService.getQuestionById(questionNo);
+            
+            // 작성자와 로그인된 사용자가 일치하지 않으면 에러 페이지로 포워드
+            if (question.getWriter() != userNo) {
+                model.addAttribute("msg", "해당 문의글에 접근할 권한이 없습니다.");
+                return "common/errorPage";
+            }
+            
+            model.addAttribute("qna", question);
+            model.addAttribute("categories", csService.getCategories());
+            
+            } catch (Exception e) {
 			e.printStackTrace();
 			
 			//문의글 수정 중 페이지 이동 실패 시 예외 처리: 에러 페이지 이동
