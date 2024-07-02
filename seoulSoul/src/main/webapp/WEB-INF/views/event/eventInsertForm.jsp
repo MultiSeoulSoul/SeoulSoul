@@ -210,7 +210,7 @@
 				<div class="left-pane">
 					<label for="image" class="custom-file-label">이미지 첨부</label> <input
 						type="file" id="image" name="image" accept="image/*"
-						class="custom-file-input" onchange="previewImage(event)">
+						class="custom-file-input" onchange="previewImage(event)" required>
 					<img id="image-preview" src="" alt="Image preview">
 				</div>
 				<!-- 내용 작성 -->
