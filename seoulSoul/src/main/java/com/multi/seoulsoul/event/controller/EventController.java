@@ -223,7 +223,7 @@ public class EventController {
             eventService.updateEvent(eventDTO);
 
             redirectAttributes.addFlashAttribute("successMessage", "이벤트가 성공적으로 수정되었습니다.");
-            return "redirect:/event/eventMain";
+            return "redirect:/event/eventDetail?eventNo=" + eventNo;
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "이벤트 수정에 실패했습니다.");
