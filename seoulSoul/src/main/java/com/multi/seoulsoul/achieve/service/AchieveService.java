@@ -52,4 +52,6 @@ public interface AchieveService {
 			HttpServletRequest request) throws Exception ;
 
 	void updateBlacklistStatus(int userNo, char status) throws Exception ;
+
+	int deleteUser(int userNo) throws Exception  ;
 }

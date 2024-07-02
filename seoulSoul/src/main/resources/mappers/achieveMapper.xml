@@ -231,7 +231,34 @@
     	WHERE user_no = #{writer.userNo} AND category_code = #{category.categoryCode}
     </update>
     
+    <insert id="insertAchLocaGet" parameterType="int">
+	    INSERT INTO ACH_LOCA_GET (user_no, ach_no, status)
+	    SELECT u.user_no, #{achNo}, 'N'
+	    FROM USERS u
+	    WHERE NOT EXISTS (
+	        SELECT 1
+	        FROM ACH_LOCA_GET a
+	        WHERE a.user_no = u.user_no
+	        AND a.ach_no = #{achNo}
+	    );
+	</insert>
+	
+	<insert id="insertAchCateGet" parameterType="int">
+	    INSERT INTO ACH_CATE_GET (user_no, ach_no, status)
+	    SELECT u.user_no, #{achNo}, 'N'
+	    FROM USERS u
+	    WHERE NOT EXISTS (
+	        SELECT 1
+	        FROM ACH_CATE_GET a
+	        WHERE a.user_no = u.user_no
+	        AND a.ach_no = #{achNo}
+	    );
+	</insert>
     
+    <delete id="deleteUser" parameterType="int">
+		DELETE FROM USERS
+		WHERE user_no = #{userNo};
+	</delete>
     
     
     

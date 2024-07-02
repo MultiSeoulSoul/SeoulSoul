@@ -134,6 +134,18 @@ public class AchieveDAO {
 		return sqlSession.selectList("achieveMapper.selectStats", userNo);
 	}
 	
+	public int insertAchLocaGet(SqlSessionTemplate sqlSession, int achNo) {
+		return sqlSession.insert("achieveMapper.insertAchLocaGet", achNo);
+	}
+
+	public int insertAchCateGet(SqlSessionTemplate sqlSession, int achNo) {
+		return sqlSession.insert("achieveMapper.insertAchCateGet", achNo);
+	}
+
+	public int deleteUser(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.delete("achieveMapper.deleteUser", userNo);
+	}
+	
 	
 	
 	// 성현님 사용 메소드
