@@ -2,16 +2,19 @@ package com.multi.seoulsoul.rec.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.multi.seoulsoul.rec.model.dto.RecDTO;
 import com.multi.seoulsoul.rec.service.RecService;
+import com.multi.seoulsoul.user.model.dto.CustomUserDetails;
 
 @Controller
 @RequestMapping("/rec")
@@ -54,12 +58,12 @@ public class RecController {
 		}
 		return "rec/recMain";
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("recInsertForm")
 	public String recInsertForm() {
 		return "rec/recInsertForm";
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("recInsertForm")
 	public ModelAndView insertRecommendation(@RequestParam("title") String title,
 			@RequestParam("content") String content, @RequestParam("file") MultipartFile file,
@@ -102,29 +106,37 @@ public class RecController {
 
 		return new ModelAndView("redirect:/rec/recMain");
 	}
-
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("/recDetail")
-	public String recDetail(@RequestParam("recommendationNo") int recommendationNo, Model model) {
-		try {
-			int userNo = 1; // 로그인 됐다는 가정으로 하드코딩 임의설정함.
-			// 조회수 증가
-			recService.incrementViews(recommendationNo);
+	public String recDetail(@RequestParam("recommendationNo") int recommendationNo, Model model, @AuthenticationPrincipal Principal principal) {
+	    try {
+	        int userNo = getUserNo(principal);
+	        
+	        // 조회수 증가
+	        recService.incrementViews(recommendationNo);
 
-			RecDTO recDTO = recService.selectRecommendationByNo(recommendationNo);
-			model.addAttribute("rec", recDTO);
-			boolean isHearted = recService.isHearted(userNo, recommendationNo); // 찜 상태 확인
-			model.addAttribute("isHearted", isHearted); // 모델에 찜 상태 추가
+	        // 추천 상세 정보 가져오기
+	        RecDTO recDTO = recService.selectRecommendationByNo(recommendationNo);
+	        model.addAttribute("rec", recDTO);
+	        boolean isHearted = recService.isHearted(userNo, recommendationNo); // 찜 상태 확인
+	        model.addAttribute("isHearted", isHearted); // 모델에 찜 상태 추가
 
-			// 디버깅용 로그 출력
-			System.out.println("Detail Layer RecDTO: " + recDTO);
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("errorMessage", "추천 상세 정보를 불러오는 중 오류가 발생했습니다.");
-			return "common/errorPage";
-		}
-		return "rec/recDetail";
+	        // 디버깅용 로그 출력
+	        System.out.println("Detail Layer RecDTO: " + recDTO);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        model.addAttribute("errorMessage", "추천 상세 정보를 불러오는 중 오류가 발생했습니다.");
+	        return "common/errorPage";
+	    }
+	    return "rec/recDetail";
 	}
 
+	
+	private int getUserNo(Principal principal) {
+	    UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+	    CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+	    return userDetails.getUserNo();
+	}
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes)
 			throws Exception {
@@ -152,14 +164,14 @@ public class RecController {
 		redirectAttributes.addFlashAttribute("message", "File upload failed");
 		return "redirect:/recMain";
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/editRec")
 	public String editRec(@RequestParam("recommendationNo") int recommendationNo, Model model) throws Exception {
 		RecDTO rec = recService.selectRecommendationById(recommendationNo);
 		model.addAttribute("rec", rec);
 		return "rec/editRec";
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/updateRecommend")
 	public String updateRecommend(HttpServletRequest request, @RequestParam("recommendationNo") int recommendationNo,
 			@RequestParam("title") String title, @RequestParam("content") String content,
@@ -188,7 +200,7 @@ public class RecController {
 		redirectAttributes.addFlashAttribute("message", "추천이 수정되었습니다.");
 		return "redirect:/rec/recDetail?recommendationNo=" + recommendationNo;
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/deleteRecommend")
 	public String deleteRecommend(@RequestParam("recommendationNo") int recommendationNo,
 			RedirectAttributes redirectAttributes) throws Exception {
@@ -199,6 +211,7 @@ public class RecController {
 
 	@PostMapping("/toggleHeart")
 	@ResponseBody
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Map<String, Object>> toggleHeart(@RequestParam("userNo") int userNo,
 			@RequestParam("recommendationNo") int recommendationNo) {
 		Map<String, Object> response = new HashMap<>();

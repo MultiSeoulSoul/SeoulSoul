@@ -26,14 +26,14 @@
                 <li><a href="${pageContext.request.contextPath}/soulLog/soulLogMain?page=1">소울로그</a></li>
                 <li><a href="${pageContext.request.contextPath}/rec/recMain">추천</a></li>
                 <li><a href="${pageContext.request.contextPath}/event/eventMain">이벤트</a></li>
-
+                
                 <sec:authorize access="hasRole('USER')">
-                	<li><a href="${pageContext.request.contextPath}/cs/csMain">고객센터</a></li>
+                    <li><a href="${pageContext.request.contextPath}/cs/csMain">고객센터</a></li>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ADMIN')">
-                	<li><a href="${pageContext.request.contextPath}/cs/qnaAll">고객센터</a></li>
+                    <li><a href="${pageContext.request.contextPath}/cs/qnaAll">고객센터</a></li>
                 </sec:authorize>
-
+                
                 <sec:authorize access="hasRole('ADMIN')">
                     <li><a href="${pageContext.request.contextPath}/admin/adminMain">관리자</a></li>
                 </sec:authorize>

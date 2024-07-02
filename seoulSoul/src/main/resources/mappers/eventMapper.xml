@@ -73,10 +73,10 @@
 	</delete>
 
 	<!-- 댓글 삽입 -->
-	<insert id="insertComment" parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
-		INSERT INTO EVENT_REPLY (user_no, event_no, content)
-		VALUES (#{userNo}, #{eventNo}, #{content})
-	</insert>
+    <insert id="insertComment" parameterType="com.multi.seoulsoul.event.model.dto.ReplyDTO">
+        INSERT INTO EVENT_REPLY (user_no, event_no, content)
+        VALUES (#{userNo}, #{eventNo}, #{content})
+    </insert>
 
 	<!-- 이벤트 번호로 댓글 조회 -->
 	<select id="selectCommentsByEventNo" parameterType="int" resultType="com.multi.seoulsoul.event.model.dto.ReplyDTO">

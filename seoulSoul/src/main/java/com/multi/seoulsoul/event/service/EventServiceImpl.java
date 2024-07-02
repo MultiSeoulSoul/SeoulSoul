@@ -16,7 +16,7 @@ import com.multi.seoulsoul.event.model.dto.ReplyDTO;
 public class EventServiceImpl implements EventService {
 
 	@Autowired
-	private EventDAO eventDAO;
+	private EventDAO eventDAO;	
 
 	@Override
 	public List<EventDTO> selectAllEvents() throws Exception {
