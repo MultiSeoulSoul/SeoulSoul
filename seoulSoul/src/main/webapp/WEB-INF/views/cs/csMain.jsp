@@ -29,15 +29,15 @@ table.main-table {
 .main-table img {
     width: 290px;
 }
-a:link {
+.main-table a:link {
 	color: black;
 	text-decoration: none;
 }
-a:visited  {
+.main-table a:visited  {
 	color: black;
 	text-decoration: none;
 }
-a:hover { 
+.main-table a:hover { 
 	color: black;
 	text-decoration: underline;
 }
