@@ -8,13 +8,14 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
 import com.multi.seoulsoul.soulLog.model.dao.SoulLogDAO;
 import com.multi.seoulsoul.soulLog.model.dto.CategoryDTO;
 import com.multi.seoulsoul.soulLog.model.dto.DetailRequestDTO;
 import com.multi.seoulsoul.soulLog.model.dto.FilesDTO;
+import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LikesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.LocationDTO;
-import com.multi.seoulsoul.soulLog.model.dto.FilterDTO;
 import com.multi.seoulsoul.soulLog.model.dto.RepliesDTO;
 import com.multi.seoulsoul.soulLog.model.dto.SoulLogDTO;
 import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
@@ -28,9 +29,11 @@ public class SoulLogServiceImpl implements SoulLogService {
 	private SqlSessionTemplate sqlSession;
 	
 	private final SoulLogDAO soulLogDAO;
+	private final AchieveDAO achieveDAO;
 	
-	public SoulLogServiceImpl(SoulLogDAO soulLogDAO) {
+	public SoulLogServiceImpl(SoulLogDAO soulLogDAO, AchieveDAO achieveDAO) {
 		this.soulLogDAO = soulLogDAO; 
+		this.achieveDAO = achieveDAO;
 	}
 
 	
@@ -97,6 +100,25 @@ public class SoulLogServiceImpl implements SoulLogService {
         }
 		else {
 			result = 1;
+			
+			achieveDAO.updateAchLocaCount(sqlSession, soulLogDTO);
+			achieveDAO.updateAchCateCount(sqlSession, soulLogDTO);
+			
+			// 쓴 글의 locationCode를 파라미터로 넣어서(soulLogDTO) 해당 업적의 ach_no와 max_count를 AchLocaDTO로 받아오는 DAO 메서드 필요
+			
+			// 쓴 글의 userNo와 location를 파라미터로 넣어서(soulLogDTO) cur_count를 받아오는 DAO 메서드 필요
+			
+			// 그 둘을 비교하여 max_count 와 cur_count가 동일해지면 // location get 테이블에 status를 Y로 업데이트하는 메서드 필요
+			
+			
+			
+			// 쓴 글의 categoryCode를 파라미터로 넣어서(soulLogDTO) 해당 업적의 ach_no와 max_count를 AchCateDTO로 받아오는 DAO 메서드 필요
+			
+			// 쓴 글의 userNo와 category를 파라미터로 넣어서(soulLogDTO) cur_count를 받아오는 DAO 메서드 필요
+			
+			// 그 둘을 비교하여 max_count 와 cur_count가 동일해지면 // category get 테이블에 status를 Y로 업데이트하는 메서드 필요
+						
+			
 		}
 		
         return result;
