@@ -19,17 +19,21 @@ public class UserDAO {
 	
 	// 회원 가입
 	public int joinUser(SqlSessionTemplate sqlSession, UserDTO u) {
-		int result = sqlSession.insert("userMapper.joinUser", u);
-	    int userNo = sqlSession.selectOne("userMapper.selectLastInsertId");
-	    sqlSession.insert("userMapper.insertUserRole", userNo);
-	    sqlSession.insert("userMapper.insertUserProfile", userNo);
-	 
-	    sqlSession.insert("userMapper.insertAchLocaCount", userNo);
-	    sqlSession.insert("userMapper.insertAchCateCount", userNo);
-	    sqlSession.insert("userMapper.insertAchLocaGet", userNo);
-	    sqlSession.insert("userMapper.insertAchCateGet", userNo);
+	    int result = sqlSession.insert("userMapper.joinUser", u);
+	    if (result == 1) {
+	        int userNo = sqlSession.selectOne("userMapper.selectLastInsertId");
+	        
+	        if (sqlSession.insert("userMapper.insertUserRole", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertUserProfile", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchLocaCount", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchCateCount", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchLocaGet", userNo) != 1) return 0;
+	        if (sqlSession.insert("userMapper.insertAchCateGet", userNo) != 1) return 0;
+	    } else {
+	        return 0;
+	    }
 	    
-		return result;
+	    return result;
 	}
 	
 	// 회원정보 업데이트
