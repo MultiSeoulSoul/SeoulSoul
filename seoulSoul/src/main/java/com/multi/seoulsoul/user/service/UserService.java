@@ -1,15 +1,14 @@
 package com.multi.seoulsoul.user.service;
 
 import java.util.List;
-import java.util.Map;
 
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
-import com.multi.seoulsoul.user.tempDTO.SoulDTO;
 
 public interface UserService {
 	
@@ -45,6 +44,6 @@ public interface UserService {
 
 	List<AchievementDTO> getAchievement(int userNo);
 
-	List<SoulDTO> getSoul(int userNo);
+	List<StatsDTO> getSoul(int userNo);
 	
 }

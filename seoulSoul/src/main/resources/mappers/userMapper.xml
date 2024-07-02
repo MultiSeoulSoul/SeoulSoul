@@ -26,6 +26,34 @@
 	    VALUES (#{userNo}, '', 'defaultProfile.jpg')
 	</insert>
 
+	<!-- 회원 가입시 추가 생성 쿼리 4 -->
+	<insert id="insertAchLocaCount">
+	    INSERT INTO ACH_LOCA_COUNT (user_no, location_code, cur_count)
+	    SELECT #{user_no}, location_code, 0
+	    FROM LOCATION;
+	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 5 -->
+	<insert id="insertAchCateCount">
+	    INSERT INTO ACH_CATE_COUNT (user_no, category_code, cur_count)
+	    SELECT #{user_no}, category_code, 0
+	    FROM SL_CATEGORY;
+	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 6 -->
+	<insert id="insertAchLocaGet">
+	    INSERT INTO ACH_LOCA_GET (user_no, ach_no, status)
+	    SELECT #{user_no}, ach_no, 'N'
+	    FROM ACH_LOCA;
+	</insert>
+	
+	<!-- 회원 가입시 추가 생성 쿼리 7 -->
+	<insert id="insertAchCateGet">
+	    INSERT INTO ACH_CATE_GET (user_no, ach_no, status)
+	    SELECT #{user_no}, ach_no, 'N'
+	    FROM ACH_CATE;
+	</insert>
+
 	<!-- 회원정보 업데이트 -->
 	<update id="userUpdate" parameterType="userDTO">
 		UPDATE USERS
@@ -196,7 +224,24 @@
 	
 	<!-- 이벤트 찜 조회 -->
 	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="SelectRecHeartBtnDTO">
-
+	    SELECT
+	        b2.recommendation_no,
+	        b2.board_created_date AS createdDate,
+	        b2.title,
+	        b2.total_count
+	    FROM (
+	        SELECT
+	            h.recommendation_no,
+	            h.created_date AS heartbtn_created_date,
+	            r.created_date AS board_created_date,
+	            r.title,
+	            COUNT(*) OVER() AS total_count,
+	            ROW_NUMBER() OVER (ORDER BY h.created_date DESC) AS rownum
+	        FROM REC_HEARTBTN h
+	        JOIN REC_BOARD r ON h.recommendation_no = r.recommendation_no
+	        WHERE h.user_no = #{userNo}
+	    ) b2
+	    WHERE b2.rownum BETWEEN #{start} AND #{end}
 	</select>
 	
 	<!-- 문의내역 조회 -->

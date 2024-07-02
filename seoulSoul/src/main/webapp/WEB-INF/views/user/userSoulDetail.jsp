@@ -91,8 +91,24 @@
 	        method: 'GET',
 	        success: function(data) {
 	            data.forEach(function(item) {
-	            	var exp = item.slCount;
-	            	var level = Math.floor(exp / 100);
+	            	var exp = item.exp;
+	            	var level;
+
+	                if (exp == 0) {
+	                    level = 0;
+	                } else if (exp > 0 && exp < 100) {
+	                    level = 1;
+	                } else if (exp >= 100 && exp < 200) {
+	                    level = 2;
+	                } else if (exp >= 200 && exp < 300) {
+	                    level = 3;
+	                } else if (exp >= 300 && exp < 400) {
+	                    level = 4;
+	                } else if (exp >= 400 && exp < 500) {
+	                    level = 5;
+	                } else {
+	                    level = "Max";
+	                }
 	            	var expBarWidth = exp % 100;
 	            	var iconSize = Math.min(level * 20, 100);
 

@@ -39,6 +39,7 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
+        text-align: center;
     }
     .achievement h2 {
         margin-bottom: 20px;
@@ -148,7 +149,7 @@
                     const curCount = item.curCount;
                     const maxCount = item.maxCount;
                     const conditionName = item.conditionName;
-                    const img = $('<img>').attr('src', imgPath).attr('alt', item.title).addClass('achievement-icon'); // 업적 아이콘 이미지 경로와 이름 설정
+                    const img = $('<img>').attr('src', imgPath).attr('alt', item.title).addClass('achievement-icon');
                     
                     const imgContainer = $('<div>').addClass('achievement-item');
                     imgContainer.append(img);

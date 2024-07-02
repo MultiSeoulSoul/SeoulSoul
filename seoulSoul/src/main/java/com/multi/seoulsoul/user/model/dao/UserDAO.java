@@ -2,18 +2,17 @@ package com.multi.seoulsoul.user.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.multi.seoulsoul.soulLog.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 import com.multi.seoulsoul.user.model.dto.UserPageDTO;
 import com.multi.seoulsoul.user.model.dto.UserProfileDTO;
 import com.multi.seoulsoul.user.tempDTO.AchievementDTO;
 import com.multi.seoulsoul.user.tempDTO.SLBoardDTO;
 import com.multi.seoulsoul.user.tempDTO.SLReplyDTO;
-import com.multi.seoulsoul.user.tempDTO.SoulDTO;
 
 @Repository
 public class UserDAO {
@@ -24,6 +23,12 @@ public class UserDAO {
 	    int userNo = sqlSession.selectOne("userMapper.selectLastInsertId");
 	    sqlSession.insert("userMapper.insertUserRole", userNo);
 	    sqlSession.insert("userMapper.insertUserProfile", userNo);
+	 
+	    sqlSession.insert("userMapper.insertAchLocaCount", userNo);
+	    sqlSession.insert("userMapper.insertAchCateCount", userNo);
+	    sqlSession.insert("userMapper.insertAchLocaGet", userNo);
+	    sqlSession.insert("userMapper.insertAchCateGet", userNo);
+	    
 		return result;
 	}
 	
@@ -107,7 +112,7 @@ public class UserDAO {
         return list;
     }
 
-	public List<SoulDTO> getSoul(SqlSessionTemplate sqlSession, int userNo) {
-		return sqlSession.selectList("userMapper.getSoul", userNo);
+	public List<StatsDTO> getSoul(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectList("soulLogMapper.selectStats", userNo);
 	}
 }

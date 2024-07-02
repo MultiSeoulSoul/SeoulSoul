@@ -252,8 +252,8 @@
 
             const title = document.createElement('td');
             const titleLink = document.createElement('a');
-            const eventNo = item.eventNo;
-            titleLink.href = "${pageContext.request.contextPath}/event/eventDetail?eventNo=" + eventNo;
+            const recommendationNo = item.recommendationNo;
+            titleLink.href = "${pageContext.request.contextPath}/rec/recDetail?recommendationNo=" + recommendationNo;
             titleLink.textContent = item.title;
             title.appendChild(titleLink);
             row.appendChild(title);
