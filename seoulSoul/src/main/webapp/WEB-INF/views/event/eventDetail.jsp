@@ -230,15 +230,6 @@ body {
         };
     }
 
-    function confirmDeletion(event) {
-        if (confirm("정말로 이 이벤트를 삭제하시겠습니까? 😱")) {
-            alert('이벤트가 삭제되었습니다.');
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function submitComment() {
         var content = document.getElementById('commentContent').value;
         var userInfo = getUserInfo();
@@ -272,6 +263,7 @@ body {
     }
 
     function loadComments() {
+        var userInfo = getUserInfo();
         // AJAX 요청을 통해 댓글 리스트를 가져와서 화면에 표시
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '${pageContext.request.contextPath}/event/getComments?eventNo=' + ${event.eventNo}, true);
@@ -285,17 +277,22 @@ body {
                         var commentElement = document.createElement('div');
                         commentElement.className = 'comment-item';
                         commentElement.dataset.replyNo = comment.replyNo;
-                        commentElement.innerHTML = '<p><strong>' + comment.nickname + '</strong>: <span class="comment-content">' + comment.content + '</span></p>' +
-                        '<sec:authorize access="hasRole('USER')">' +
-                        '<div class="comment-actions">' +
-                        '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
-                        '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
-                        '</div>' +
-                        '<div class="comment-edit-container">' +
-                        '<input type="text" class="comment-edit-input" id="editContent-' + comment.replyNo + '" value="' + comment.content + '">' +
-                        '<button class="comment-update-submit" onclick="updateComment(' + comment.replyNo + ')">수정 완료</button>' +
-                        '</div>' +
-                        '</sec:authorize>';
+                        commentElement.dataset.userNo = comment.userNo; // 작성자의 userNo를 추가
+                        commentElement.innerHTML = '<p><strong>' + comment.nickname + '</strong>: <span class="comment-content">' + comment.content + '</span></p>';
+                        
+                        // 로그인된 사용자와 댓글 작성자가 동일한 경우에만 수정/삭제 버튼을 표시
+                        if (comment.userNo === userInfo.userNo) {
+                            commentElement.innerHTML += 
+                            '<div class="comment-actions">' +
+                            '<button class="edit" onclick="enableEdit(' + comment.replyNo + ')">수정</button>' +
+                            '<button class="comment-delete-submit" onclick="deleteComment(' + comment.replyNo + ')">삭제</button>' +
+                            '</div>' +
+                            '<div class="comment-edit-container">' +
+                            '<input type="text" class="comment-edit-input" id="editContent-' + comment.replyNo + '" value="' + comment.content + '">' +
+                            '<button class="comment-update-submit" onclick="updateComment(' + comment.replyNo + ')">수정 완료</button>' +
+                            '</div>';
+                        }
+
                         commentList.appendChild(commentElement);
                     });
                 } else {
@@ -345,12 +342,13 @@ body {
         };
         xhr.send(JSON.stringify({
             replyNo: replyNo,
-            userNo: userInfo.userNo,
+            userNo: commentElement.dataset.userNo, // 서버 검증을 위해 댓글 작성자의 userNo 전송
             content: content
         }));
     }
 
     function deleteComment(replyNo) {
+        var commentElement = document.querySelector('.comment-item[data-reply-no="' + replyNo + '"]');
         var userInfo = getUserInfo();
 
         if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
@@ -369,7 +367,7 @@ body {
             };
             xhr.send(JSON.stringify({
                 replyNo: replyNo,
-                userNo: userInfo.userNo
+                userNo: commentElement.dataset.userNo // 서버 검증을 위해 댓글 작성자의 userNo 전송
             }));
         }
     }
