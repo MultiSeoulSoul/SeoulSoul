@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,11 +74,12 @@
             <div><strong>신고글 제목:</strong> <c:out value="${report.title}" /></div>
             <div class="full-width"><strong>신고 내용:</strong><br><c:out value="${report.reason}" /></div>
             <div class="full-width">
+            <sec:authorize access="hasRole('ADMIN')">
 	            <form action="insertReportReply" method="post">
 					<table>
 						<tr>
 							<td style="width: 130px; height: 40px;">
-								관리자
+								<sec:authentication property="principal.nickname"/>
 							</td>
 							<td>
 								<input type="hidden" name="reportNo" value="${report.reportNo}">
@@ -90,6 +92,7 @@
 						</tr>
 					</table>
 				</form>
+			</sec:authorize>
 				<br><strong>신고에 대한 답변:</strong><br>
                 <c:forEach items="${reportReply}" var="reportReply">
                     <p><c:out value="${reportReply.content}" /></p>
