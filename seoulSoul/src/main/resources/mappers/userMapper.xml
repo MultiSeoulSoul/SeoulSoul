@@ -105,7 +105,7 @@
 	<!-- 소울로그 조회 -->
 	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="SelectSlBoardDTO">
         SELECT
-        	b.soulLog_no,
+        	b2.soul_log_no,
             l.location_name,
             c.category_name,
             b2.title,
@@ -130,6 +130,7 @@
     <!-- 소울로그 댓글 조회 -->
 	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="SelectSlReplyDTO">
 	    SELECT
+	    	b2.soul_log_no,
 	        b2.title,
 	        b2.content,
 	        b2.created_date,
@@ -150,6 +151,7 @@
 	<!-- 이벤트 댓글 조회 -->
 	<select id="selectEventReplyPage" parameterType="userPageDTO" resultType="SelectReplyDTO">
 	    SELECT
+	    	e.event_no,
 	        e.title,
 	        b2.content,
 	        b2.total_count
@@ -168,6 +170,7 @@
 	<!-- 소울로그 좋아요 조회 -->
 	<select id="selectLikesPage" parameterType="userPageDTO" resultType="SelectLikesDTO">
 	    SELECT
+	    	b2.soul_log_no,
 	        b2.location_name,
 	        b2.category_name,
 	        b2.title,
@@ -193,27 +196,13 @@
 	
 	<!-- 이벤트 찜 조회 -->
 	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="SelectRecHeartBtnDTO">
-	    SELECT
-	        b2.title,
-	        b2.created_date,
-	        b2.total_count
-	    FROM (
-	        SELECT
-	            e.event_no,
-	            e.title,
-	            e.created_date,
-	            COUNT(*) OVER() AS total_count,
-	            ROW_NUMBER() OVER (ORDER BY e.created_date DESC) AS rownum
-	        FROM EVENT e
-	        JOIN EVENT_REPLY er ON e.event_no = er.event_no
-	        WHERE er.user_no = #{userNo}
-	    ) b2
-	    WHERE b2.rownum BETWEEN #{start} AND #{end}
+
 	</select>
 	
 	<!-- 문의내역 조회 -->
 	<select id="selectCsQuestionPage" parameterType="userPageDTO" resultType="SelectCsQuestionDTO">
 	    SELECT
+	    	b2.question_no,
 	        b2.category_name,
 	        b2.title,
 	        b2.created_date,
@@ -238,6 +227,7 @@
 	<!-- 신고내역 조회 -->
 	<select id="selectReportPage" parameterType="userPageDTO" resultType="SelectReportDTO">
 	    SELECT
+	    	b2.report_no,
 	        b2.reason,
 	        b2.title,
 	        b2.created_date,
