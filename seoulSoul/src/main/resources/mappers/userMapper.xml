@@ -103,7 +103,7 @@
     
     
 	<!-- 소울로그 조회 -->
-	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="slBoardDTO">
+	<select id="selectSLBoardPage" parameterType="userPageDTO" resultType="SelectSlBoardDTO">
         SELECT
             l.location_name,
             c.category_name,
@@ -127,7 +127,7 @@
     
     
     <!-- 소울로그 댓글 조회 -->
-	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="slReplyDTO">
+	<select id="selectSLReplyPage" parameterType="userPageDTO" resultType="SelectSlReplyDTO">
 	    SELECT
 	        b2.title,
 	        b2.content,
@@ -147,7 +147,7 @@
 	</select>
 	
 	<!-- 이벤트 댓글 조회 -->
-	<select id="selectEventReplyPage" parameterType="userPageDTO" resultType="replyDTO">
+	<select id="selectEventReplyPage" parameterType="userPageDTO" resultType="SelectReplyDTO">
 	    SELECT
 	        e.title,
 	        b2.content,
@@ -165,7 +165,7 @@
 	</select>
 	
 	<!-- 소울로그 좋아요 조회 -->
-	<select id="selectLikesPage" parameterType="userPageDTO" resultType="likesDTO">
+	<select id="selectLikesPage" parameterType="userPageDTO" resultType="SelectLikesDTO">
 	    SELECT
 	        b2.location_name,
 	        b2.category_name,
@@ -191,7 +191,7 @@
 	</select>
 	
 	<!-- 이벤트 찜 조회 -->
-	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="recHeartBtnDTO">
+	<select id="selectHeartBtnPage" parameterType="userPageDTO" resultType="SelectRecHeartBtnDTO">
 	    SELECT
 	        b2.title,
 	        b2.created_date,
@@ -211,7 +211,7 @@
 	</select>
 	
 	<!-- 문의내역 조회 -->
-	<select id="selectCsQuestionPage" parameterType="userPageDTO" resultType="csQuestionDTO">
+	<select id="selectCsQuestionPage" parameterType="userPageDTO" resultType="SelectCsQuestionDTO">
 	    SELECT
 	        b2.category_name,
 	        b2.title,
@@ -235,7 +235,7 @@
 	</select>
 	
 	<!-- 신고내역 조회 -->
-	<select id="selectReportPage" parameterType="userPageDTO" resultType="reportDTO">
+	<select id="selectReportPage" parameterType="userPageDTO" resultType="SelectReportDTO">
 	    SELECT
 	        b2.reason,
 	        b2.title,
@@ -256,7 +256,7 @@
 	</select>
 	
 	<!-- 지역 업적 조회 -->
-	<select id="getLocaAchievement" parameterType="int" resultType="AchievementDTO">
+	<select id="getLocaAchievement" parameterType="int" resultType="SelectAchievementDTO">
         SELECT 
             ALI.saved_name,
             AL.title,
@@ -275,7 +275,7 @@
 	</select>
 	
 	<!-- 카테고리 업적 조회 -->
-	<select id="getCateAchievement" parameterType="int" resultType="AchievementDTO">    
+	<select id="getCateAchievement" parameterType="int" resultType="SelectAchievementDTO">    
 	    SELECT 
         SELECT 
             ACI.saved_name,
