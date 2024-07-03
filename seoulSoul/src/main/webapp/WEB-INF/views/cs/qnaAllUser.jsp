@@ -106,7 +106,7 @@ text-align: left;
 		<!-- 페이징 처리-->
 		<div class="pagination">
 			<c:forEach var="i" begin="1" end="${totalPages}">
-				<a href="qnaAll?page=${i}" class="${pageParam == i ? 'active' : ''}">${i}</a>
+				<a href="qnaAllUser?page=${i}" class="${pageParam == i ? 'active' : ''}">${i}</a>
 			</c:forEach>
 		</div>				
 
