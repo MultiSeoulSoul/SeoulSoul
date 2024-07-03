@@ -32,5 +32,22 @@
 ![SeoulSoul_ERD](https://github.com/yoonjunghae/spring/assets/126676367/0f335df0-928d-437f-9590-15b063abe98c)
 <br><br>
 ## 🎯 구현 결과
+![soulmapmini](https://github.com/yoonjunghae/spring/assets/126676367/5c25453a-706f-4db0-9a7b-6cf559e8d88e)
 - [X] **메인 페이지**
 
+- [X] **상세 페이지**
+
+## ❗️ 힘들었던 점
+<br>
+<br>
+<br>
+
+## ⚠️ 트러블 슈팅
+<br>
+<br>
+<br>
+
+## 💬 회고
+<br>
+<br>
+<br>
