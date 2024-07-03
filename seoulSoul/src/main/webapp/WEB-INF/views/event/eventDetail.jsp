@@ -9,7 +9,7 @@
 <link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <title>서울소울 SEOUL SOUL</title>
 <style type="text/css">
-/* 기존 CSS 그대로 유지 */
+
 body {
     margin: 0;
     padding: 0;
@@ -229,6 +229,9 @@ body {
             userNo: <sec:authentication property="principal.userNo" />,
             nickname: '<sec:authentication property="principal.username" />'
         };
+    }
+    function confirmDeletion(event) {
+        return confirm('정말로 이 이벤트를 삭제하시겠습니까?');
     }
 
     function submitComment() {
