@@ -3,7 +3,7 @@ package com.multi.seoulsoul.report.model.dto;
 public class ReportedSoulLogDTO {
 
 	private int soulLogNo;
-	private String title;
+	private String reportedTitle;
 	
 	
 	public int getSoulLogNo() {
@@ -13,16 +13,16 @@ public class ReportedSoulLogDTO {
 		this.soulLogNo = soulLogNo;
 	}
 	public String getTitle() {
-		return title;
+		return reportedTitle;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitle(String reportedTitle) {
+		this.reportedTitle = reportedTitle;
 	}
 	
 	
 	@Override
 	public String toString() {
-		return "ReportedSoulLogDTO [soulLogNo=" + soulLogNo + ", title=" + title + "]";
+		return "ReportedSoulLogDTO [soulLogNo=" + soulLogNo + ", reportedTitle=" + reportedTitle + "]";
 	}
 	
 }

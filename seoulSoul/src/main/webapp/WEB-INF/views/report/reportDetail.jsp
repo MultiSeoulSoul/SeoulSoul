@@ -69,10 +69,10 @@
         <div class="report-details">
             <div><strong>신고 번호:</strong> <c:out value="${report.reportNo}" /></div>
             <div><strong>게시글 번호:</strong> <c:out value="${report.reportedSoulLog.soulLogNo}" /></div>
-            <div><strong>게시글 제목:</strong> <c:out value="${report.reportedSoulLog.title}" /></div>
-            <div><strong>게시글 작성자:</strong> <c:out value="${report.reporter.nickname}" /></div>
-            <div><strong>신고 작성자:</strong> <c:out value="${report.reporter.nickname}" /></div>
             <div><strong>신고글 제목:</strong> <c:out value="${report.title}" /></div>
+            <div><strong>게시글 제목:</strong> <c:out value="${report.reportedSoulLog.title}" /></div>
+            <div><strong>신고 작성자:</strong> <c:out value="${report.reporter.nickname}" /></div>
+            <div><strong>게시글 작성자:</strong> <c:out value="${report.reporter.nickname}" /></div>
             <div class="full-width"><strong>신고 내용:</strong><br><c:out value="${report.reason}" /></div>
             <div class="full-width">
             <sec:authorize access="hasRole('ADMIN')">
