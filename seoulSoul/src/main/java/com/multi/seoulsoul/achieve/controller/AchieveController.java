@@ -90,7 +90,7 @@ public class AchieveController {
         	achieveService.updateBlacklistStatus(userNo, 'Y');
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("msg", "블랙리스트 추가 실패..");
+            model.addAttribute("msg", "블랙리스트 추가 실패");
             return "/common/errorPage";
         }
         return "redirect:/admin/adminMain";
@@ -102,7 +102,7 @@ public class AchieveController {
         	achieveService.updateBlacklistStatus(userNo, 'N');
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("msg", "블랙리스트 해제 실패..");
+            model.addAttribute("msg", "블랙리스트 해제 실패");
             return "/common/errorPage";
         }
         return "redirect:/admin/adminMain";
@@ -170,7 +170,7 @@ public class AchieveController {
             
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("msg", "업적 생성 실패: " + e.getMessage());
+            model.addAttribute("msg", "업적 생성 실패");
             return "/common/errorPage";
         }
         
@@ -234,7 +234,7 @@ public class AchieveController {
             
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("msg", "업적 생성 실패: " + e.getMessage());
+            model.addAttribute("msg", "업적 생성 실패");
             return "/common/errorPage";
         }
         
@@ -287,7 +287,7 @@ public class AchieveController {
     }
 	
 	@GetMapping("/deleteLoca")
-	public String achieveDeleteLoca(AchLocaDTO achLocaDTO) throws Exception {
+	public String achieveDeleteLoca(AchLocaDTO achLocaDTO, Model model) throws Exception {
 		System.out.println("Request >> achieveDelete.");
 		System.out.println("Request >> " + achLocaDTO);
 		
@@ -297,13 +297,15 @@ public class AchieveController {
 			System.out.println("업적 삭제 성공.");
 		} else {
 			System.out.println("업적 삭제 실패.");
+			model.addAttribute("msg", "업적 삭제 실패");
+			return "/common/errorPage";
 		}
 		
 		return "redirect:/admin/adminMain";
 	}
 	
 	@GetMapping("/deleteCate")
-	public String achieveDeleteCate(AchCateDTO achCateDTO) throws Exception {
+	public String achieveDeleteCate(AchCateDTO achCateDTO, Model model) throws Exception {
 		System.out.println("Request >> achieveDelete.");
 		System.out.println("Request >> " + achCateDTO);
 		
@@ -313,9 +315,26 @@ public class AchieveController {
 			System.out.println("업적 삭제 성공.");
 		} else {
 			System.out.println("업적 삭제 실패.");
+			model.addAttribute("msg", "업적 삭제 실패");
+			return "/common/errorPage";
 		}
 		
 		return "redirect:/admin/adminMain";
+	}
+	
+	@GetMapping("/deleteUser") 
+	public String deleteUser(int userNo, Model model) throws Exception {
+		int result = achieveService.deleteUser(userNo);
+		
+		if (result > 0) {
+			System.out.println("유저 삭제 성공.");
+			return "redirect:/admin/adminMain";
+		} else {
+			System.out.println("유저 삭제 실패.");
+			model.addAttribute("msg", "업적 삭제 실패");
+			return "/common/errorPage";
+		}
+		
 	}
 
 }

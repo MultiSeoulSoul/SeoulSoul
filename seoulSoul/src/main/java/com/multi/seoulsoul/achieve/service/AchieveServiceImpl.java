@@ -8,21 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.seoulsoul.achieve.model.dao.AchieveDAO;
-import com.multi.seoulsoul.achieve.model.dto.AchCateCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchCateIconsDTO;
-import com.multi.seoulsoul.achieve.model.dto.AchLocaCountDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaDTO;
 import com.multi.seoulsoul.achieve.model.dto.AchLocaIconsDTO;
 import com.multi.seoulsoul.achieve.model.dto.AdminUserListDTO;
 import com.multi.seoulsoul.achieve.model.dto.StatsDTO;
 import com.multi.seoulsoul.user.model.dto.UserDTO;
 
+@EnableAspectJAutoProxy
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class AchieveServiceImpl implements AchieveService {
@@ -39,9 +39,13 @@ public class AchieveServiceImpl implements AchieveService {
 	@Override
     public int insertAchieveLoca(AchLocaDTO achLocaDTO) throws Exception {
         int result = achieveDAO.insertAchieveLoca(sqlSession, achLocaDTO);
+        
         if (result <= 0) {
             throw new Exception("업적 생성 실패.");
         }
+        
+        result = achieveDAO.insertAchLocaGet(sqlSession, achLocaDTO.getAchNo());
+        
         return result;
     }
 
@@ -56,12 +60,13 @@ public class AchieveServiceImpl implements AchieveService {
 
 	@Override
 	public int insertAchieveCate(AchCateDTO achCateDTO) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("insertAchieveCate AchieveServiceImpl 도착.");
-		
 		int result = achieveDAO.insertAchieveCate(sqlSession, achCateDTO);
 		
-		System.out.println("result >> " + result);
+		if (result <= 0) {
+            throw new Exception("업적 생성 실패.");
+        }
+		
+		result = achieveDAO.insertAchCateGet(sqlSession, achCateDTO.getAchNo());
 		
 		return result;
 	}
@@ -236,6 +241,12 @@ public class AchieveServiceImpl implements AchieveService {
         if (result <= 0) {
             throw new Exception("블랙리스트 상태 업데이트 실패");
         }
+	}
+
+	@Override
+	public int deleteUser(int userNo) throws Exception {
+		// TODO Auto-generated method stub
+		return achieveDAO.deleteUser(sqlSession, userNo);
 	}
 
 }
