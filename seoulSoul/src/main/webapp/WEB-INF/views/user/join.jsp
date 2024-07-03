@@ -130,7 +130,7 @@ function checkDuplicateNickname() {
 	
 
   function removeInvalidChars(input) {
-    input.value = input.value.replace(/[-.]/g, '');
+    input.value = input.value.replace(/[-.]/g, '').slice(0, 11);
   }
 
 </script>
