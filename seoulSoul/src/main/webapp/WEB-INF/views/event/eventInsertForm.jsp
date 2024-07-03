@@ -221,7 +221,7 @@
 				</div>
 			</div>
 		
-	</div>
+	
 	<button type="submit" class="submit-button" id="b1">등록</button>
 	</form>
 	</div>
