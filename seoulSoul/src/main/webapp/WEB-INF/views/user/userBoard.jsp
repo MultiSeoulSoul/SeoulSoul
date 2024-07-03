@@ -288,14 +288,18 @@
             row.appendChild(createdDate);
 
             const isAnswered = document.createElement('td');
-            isAnswered.textContent = item.isAnswered;
-            row.appendChild(isAnswered);
+	        isAnswered.textContent = item.isAnswered === 'Y' ? '답변 완료' : '답변 대기';
+	        row.appendChild(isAnswered);
 
             tbody.appendChild(row);
         });
     }
 
     function renderReport(data, tbody) {
+    	
+    	console.log("data:", data);
+    	  	
+    	
         data.forEach(item => {
             const row = document.createElement('tr');
 
@@ -315,9 +319,9 @@
             createdDate.textContent = formatDateTime(item.createdDate);
             row.appendChild(createdDate);
 
-            const reportReply = document.createElement('td');
-            reportReply.textContent = item.reportReply;
-            row.appendChild(reportReply);
+            const isAnswered = document.createElement('td');
+	        isAnswered.textContent = item.isAnswered === 'Y' ? '답변 완료' : '답변 대기';
+	        row.appendChild(isAnswered);
 
             tbody.appendChild(row);
         });

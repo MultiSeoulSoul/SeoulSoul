@@ -272,11 +272,16 @@
 	<!-- 신고내역 조회 -->
 	<select id="selectReportPage" parameterType="userPageDTO" resultType="SelectReportDTO">
 	    SELECT
-	    	b2.report_no,
+	        b2.report_no,
 	        b2.reason,
 	        b2.title,
 	        b2.created_date,
-	        b2.total_count
+	        b2.total_count,
+	        CASE 
+	            WHEN EXISTS (SELECT 1 FROM AD_REPORT_REPLY ar WHERE ar.report_no = b2.report_no) 
+	            THEN 'Y' 
+	            ELSE 'N' 
+	        END AS is_answered
 	    FROM (
 	        SELECT
 	            r.report_no,
