@@ -48,7 +48,7 @@
         	default-target-url="/main"
 			username-parameter="userId"
             password-parameter="userPw"
-            authentication-failure-url="/login.jsp?error=true" />
+            authentication-failure-url="/user/login.jsp?error=true" />
             
         <security:logout
 			logout-url="/user/logout"

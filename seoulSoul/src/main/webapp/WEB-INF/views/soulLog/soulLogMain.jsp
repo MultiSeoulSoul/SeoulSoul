@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <title>서울소울 SEOUL SOUL</title>

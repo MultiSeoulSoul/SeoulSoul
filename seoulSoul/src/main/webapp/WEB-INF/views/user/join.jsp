@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
@@ -21,6 +22,17 @@ div>button, input[type=submit] {
     margin: 0;
     width: 150px;
 }
+ /* Chrome, Safari, Edge, Opera */
+ #phoneInput::-webkit-outer-spin-button,
+ #phoneInput::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+ }
+
+ /* Firefox */
+ #phoneInput[type=number] {
+   -moz-appearance: textfield;
+ }
 </style>
 <script>
 var isUserIdValid = false;
@@ -115,8 +127,14 @@ function checkDuplicateNickname() {
 	        $("#joinForm").submit();
 	    });
 	});
+	
+
+  function removeInvalidChars(input) {
+    input.value = input.value.replace(/[-.]/g, '');
+  }
+
 </script>
-<title>Insert title here</title>
+<title>서울소울 SEOUL SOUL</title>
 </head>
 <body>
 	<div align="center" class="logo">
@@ -184,7 +202,7 @@ function checkDuplicateNickname() {
 						<div class="input-group-prepend">
 							<span class="input-group-text">전화번호</span>
 						</div>
-						<input type="text" class="form-control" name="phone">
+						<input type="number" class="form-control" name="phone" id="phoneInput" oninput="removeInvalidChars(this)">
 					</div>
 				</td>
 			</tr>

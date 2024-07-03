@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>서울소울 SEOUL SOUL</title>
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 <style>
 	/* 버튼과 입력 요소에 대한 일반 스타일 */
