@@ -50,6 +50,7 @@ public class ReportReplyController {
         	int result = reportService.insertReportReply(reportReplyDTO);
         	if (result <= 0) {
         		System.out.println("답변 달기 실패");
+        		return "/common/errorPage";
         	} else {
         		System.out.println("답변 달기 성공");
         	}

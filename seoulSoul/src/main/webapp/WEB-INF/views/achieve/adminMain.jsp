@@ -91,11 +91,9 @@
             <c:forEach items="${userList}" var="bag">
                 No.${bag.userNo} | name : ${bag.nickname} | 
                		<select>
-	                    <c:forEach items="${bag.userStats}" var="stat">
-	                        <c:forEach items="${bag.userStats}" var="stat">
-                                <option value="${stat.locationCode}">${stat.locationName} : ${stat.level}레벨</option>
-                            </c:forEach>
-	                    </c:forEach>
+                        <c:forEach items="${bag.userStats}" var="stat">
+                        	<option value="${stat.locationCode}">${stat.locationName} : ${stat.level}레벨</option>
+                        </c:forEach>
                     </select> 
                     | 마지막 소울 로그 게시일 : 
                 	<c:choose>
@@ -108,7 +106,7 @@
                     </c:choose>
                 <%-- <button onclick="location.href='${pageContext.request.contextPath}/admin/setDemote=${bag.userStats.exp}'">강등</button> --%> 
                 <button onclick="location.href='${pageContext.request.contextPath}/admin/blacklistUser?userNo=${bag.userNo}'">블랙</button>
-                <button>탈퇴</button>
+                <button onclick="location.href='${pageContext.request.contextPath}/admin/deleteUser?userNo=${bag.userNo}'">탈퇴</button>
                 <hr>
             </c:forEach>
             <div class="pagination">
