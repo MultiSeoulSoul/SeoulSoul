@@ -7,6 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/> 
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>

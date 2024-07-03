@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
@@ -21,7 +22,7 @@
 		margin-top: 10px;
 	}
 </style>
-<title>Insert title here</title>
+<title>서울소울 SEOUL SOUL</title>
 <script>
 	function kakaoLogin() {
 	    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');

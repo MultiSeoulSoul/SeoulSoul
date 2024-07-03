@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>서울소울 SEOUL SOUL</title>
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet"
     href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <style>

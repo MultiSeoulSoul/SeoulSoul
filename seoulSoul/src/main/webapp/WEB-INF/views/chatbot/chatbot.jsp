@@ -5,8 +5,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
-<title>서울소울 고객센터 챗봇</title>
+<title>서울소울 SEOUL SOUL</title>
 
 <style type="text/css">
 h1 {

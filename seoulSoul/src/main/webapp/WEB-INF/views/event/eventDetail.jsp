@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <title>서울소울 SEOUL SOUL</title>
 <style type="text/css">
 /* 기존 CSS 그대로 유지 */

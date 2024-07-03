@@ -3,7 +3,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>서울소울 SEOUL SOUL</title>
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <style>
     .soul h2 {
         margin-bottom: 20px;
@@ -71,25 +72,28 @@
 	        	
 	            data.slice(0, 6).forEach(function(item) {
 	            	var exp = item.exp;
-	                var level;
-
-	                if (exp == 0) {
-	                    level = 0;
-	                } else if (exp > 0 && exp < 100) {
-	                    level = 1;
-	                } else if (exp >= 100 && exp < 200) {
-	                    level = 2;
-	                } else if (exp >= 200 && exp < 300) {
-	                    level = 3;
-	                } else if (exp >= 300 && exp < 400) {
-	                    level = 4;
-	                } else if (exp >= 400 && exp < 500) {
-	                    level = 5;
-	                } else {
-	                    level = "Max";
-	                }
+	            	if (exp > 500) {
+	            	    exp = 500; // 경험치가 500을 넘으면 500으로 고정
+	            	}
+	            	var level;
+	            	if (exp == 0) {
+	            	    level = 0;
+	            	} else if (exp > 0 && exp < 100) {
+	            	    level = 1;
+	            	} else if (exp >= 100 && exp < 200) {
+	            	    level = 2;
+	            	} else if (exp >= 200 && exp < 300) {
+	            	    level = 3;
+	            	} else if (exp >= 300 && exp < 400) {
+	            	    level = 4;
+	            	} else if (exp >= 400 && exp <= 500) {  // 경험치가 500 이하인 경우를 처리
+	            	    level = 5;
+	            	}
 	            	var expBarWidth = exp % 100;
-	            	var iconSize = Math.min(level * 20, 100);
+	            	if (exp == 500) {
+	            		expBarWidth = 100;
+	            	}
+	            	var iconSize = Math.min(level * 10, 100);
 
 	                var content = '<div class="soul-info">';
 	                content += '<h2>' + item.locationName + '</h2>';

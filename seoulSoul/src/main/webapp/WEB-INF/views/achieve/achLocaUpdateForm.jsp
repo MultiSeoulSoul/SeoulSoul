@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/soul_icon_favicon.png"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mainDesign.css">
 <style>
     .container {
@@ -80,7 +81,7 @@
         margin: 5px 0;
     }
 </style>
-<title>Update AchLoca</title>
+<title>서울소울 SEOUL SOUL</title>
 </head>
 <body>
     <jsp:include page="../common/menubar.jsp"/>
