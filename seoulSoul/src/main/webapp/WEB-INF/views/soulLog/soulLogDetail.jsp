@@ -111,7 +111,7 @@ function inactivatingLike() {
 					<button class="btns" style="width: 110px; height: 35px; margin-right: 10px; background: #3982BC; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 수정</button>
 				</a>
 			</c:if>
-			<c:if test="${soulLogDetail.writer.userNo == principal.userNo || principal.userNo == 1}">
+			<c:if test="${soulLogDetail.writer.userNo == principal.userNo || principal.authorities == '[ROLE_ADMIN]'}">
 			<a href="deleteSoulLog?soulLogNo=${soulLogDetail.soulLogNo}" onclick="return confirmDelete();">
 				<button class="btns" style="width: 110px; height: 35px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">로그 삭제</button>
 			</a>
@@ -244,7 +244,7 @@ function inactivatingLike() {
 							</div>
 						</td>
 						<td style="width: 50px; border-bottom: 1px solid #ccc;">
-							<c:if test="${replyWriterNo == principal.userNo || principal.userNo == 1}">
+							<c:if test="${replyWriterNo == principal.userNo || principal.authorities == '[ROLE_ADMIN]'}">
 								<a href="deleteSoulLogReply?replyNo=<%= replyNo %>&soulLogNo=<%= soulLogNo %>" onclick="return confirmDelete();">
 									<button type="button" style="width: 40px; height: 25px; background: #C42A2A; color: white; border: 1px solid #c0c0c0; cursor: pointer;">삭제</button>
 								</a>
