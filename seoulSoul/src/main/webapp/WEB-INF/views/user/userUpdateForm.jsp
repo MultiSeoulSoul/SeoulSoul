@@ -174,10 +174,8 @@ $(document).ready(function() {
 	        	
 	            if (isValid) {
 	                isCurrentPasswordValid = true;
-	                $("#passwordCurrentMessage").hide();
 	            } else {
 	                isCurrentPasswordValid = false;
-	                $("#passwordCurrentMessage").show();
 	                alert("현재 비밀번호가 잘못되었습니다.");
 	            }
 	            callback(isValid);
@@ -224,6 +222,10 @@ $(document).ready(function() {
 	        });
 	    });
 	});
+	
+	function removeInvalidChars(input) {
+	  input.value = input.value.replace(/[-.]/g, '').slice(0, 11);
+	}
 </script>
 </head>
 <body>
@@ -259,7 +261,7 @@ $(document).ready(function() {
 								<div class="input-group-prepend">
 									<span class="input-group-text">전화번호</span>
 								</div>
-								<input type="text" class="form-control" name="phone" value="<sec:authentication property="principal.phone"/>">
+								<input type="text" class="form-control" name="phone" value="<sec:authentication property="principal.phone"/>" id="phoneInput" oninput="removeInvalidChars(this)">
 							</div>
 						</td>
 					</tr>
