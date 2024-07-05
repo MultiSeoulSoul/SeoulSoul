@@ -83,7 +83,6 @@
                         <c:forEach var="file" items="${qna.files}">
                             <div class="file-item">
                                 <span>${file.originalFileName}</span>
-                                <a href="${pageContext.request.contextPath}/downloadFile?fileNo=${file.fileNo}">다운로드</a>
                                 <input type="checkbox" name="deleteFiles" value="${file.fileNo}"> 삭제
                             </div>
                         </c:forEach>

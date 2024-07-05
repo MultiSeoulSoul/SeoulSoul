@@ -21,11 +21,11 @@ public class RecHeartBtnDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Timestamp getBoardCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
-	public void setBoardCreatedDate(Timestamp boardCreatedDate) {
-		this.createdDate = boardCreatedDate;
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
 	}
 	public int getTotalCount() {
 		return totalCount;

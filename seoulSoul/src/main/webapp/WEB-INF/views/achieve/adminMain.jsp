@@ -79,6 +79,33 @@
 
 <title>서울소울 SEOUL SOUL</title>
 
+	<script>
+        function confirmDeletion(userNo) {
+            if (confirm("정말로 해당 회원을 탈퇴시키겠습니까?")) {
+                location.href = '${pageContext.request.contextPath}/admin/deleteUser?userNo=' + userNo;
+            }
+        }
+
+        function confirmBlacklist(userNo) {
+            if (confirm("정말로 해당 회원을 블랙리스트에 등록하시겠습니까?")) {
+                location.href = '${pageContext.request.contextPath}/admin/blacklistUser?userNo=' + userNo;
+            }
+        }
+
+        function confirmRemoveFromBlacklist(userNo) {
+            if (confirm("정말로 해당 회원을 블랙리스트에서 해제하시겠습니까?")) {
+                location.href = '${pageContext.request.contextPath}/admin/unblacklistUser?userNo=' + userNo;
+            }
+        }
+        
+        function confirmDeleteAchLoca() {
+        	return confirm("정말로 삭제하시겠습니까?");
+        }
+        
+        function confirmDeleteAchCate() {
+        	return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
 
 </head>
 <body>
@@ -105,9 +132,8 @@
                             없음
                         </c:otherwise>
                     </c:choose>
-                <%-- <button onclick="location.href='${pageContext.request.contextPath}/admin/setDemote=${bag.userStats.exp}'">강등</button> --%> 
-                <button onclick="location.href='${pageContext.request.contextPath}/admin/blacklistUser?userNo=${bag.userNo}'">블랙</button>
-                <button onclick="location.href='${pageContext.request.contextPath}/admin/deleteUser?userNo=${bag.userNo}'">탈퇴</button>
+                <button onclick="confirmBlacklist(${bag.userNo})">블랙</button>
+            	<button onclick="confirmDeletion(${bag.userNo})">탈퇴</button>
                 <hr>
             </c:forEach>
             <div class="pagination">
@@ -137,7 +163,7 @@
                 <h2>블랙리스트</h2>
                 <c:forEach items="${blackList}" var="bag">
                     No.${bag.userNo} | name : ${bag.nickname} |
-                    <button onclick="location.href='${pageContext.request.contextPath}/admin/unblacklistUser?userNo=${bag.userNo}'">해제</button>
+                    <button onclick="confirmRemoveFromBlacklist(${bag.userNo})">해제</button>
                     <hr>
                 </c:forEach>
                 <div class="pagination">
@@ -158,7 +184,7 @@
                     No.${bag.achNo} | 자치구 : ${bag.locationCode} | 필요 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
                     <div class="button-group">
                         <a href="${pageContext.request.contextPath}/admin/achLocaUpdateForm?achNo=${bag.achNo}"><button>수정</button></a>
-                        <form action="${pageContext.request.contextPath}/admin/deleteLoca" method="get" style="display:inline;">
+                        <form action="${pageContext.request.contextPath}/admin/deleteLoca" method="get" style="display:inline;" onsubmit="return confirmDeleteAchLoca();">
                             <input type="hidden" name="achNo" value="${bag.achNo}">
                             <input type="hidden" name="locationCode" value="${bag.locationCode}">
                             <button type="submit">삭제</button>
@@ -173,7 +199,7 @@
                     No.${bag.achNo} | 카테고리 : ${bag.categoryCode} | 필요 횟수 : ${bag.maxCount} | 타이틀명 : ${bag.title}
                     <div class="button-group">
                         <a href="${pageContext.request.contextPath}/admin/achCateUpdateForm?achNo=${bag.achNo}"><button>수정</button></a>
-                        <form action="${pageContext.request.contextPath}/admin/deleteCate" method="get" style="display:inline;">
+                        <form action="${pageContext.request.contextPath}/admin/deleteCate" method="get" style="display:inline;" onsubmit="return confirmDeleteAchCate();">
                             <input type="hidden" name="achNo" value="${bag.achNo}">
                             <input type="hidden" name="categoryCode" value="${bag.categoryCode}">
                             <button type="submit">삭제</button>

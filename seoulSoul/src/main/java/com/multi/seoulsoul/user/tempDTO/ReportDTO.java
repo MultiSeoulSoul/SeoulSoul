@@ -11,7 +11,7 @@ public class ReportDTO {
 	
 	// 재식 추가
 	private int totalCount;
-	private String reportReply;
+	private String isAnswered;
 	
 	public int getReportNo() {
 		return reportNo;
@@ -37,11 +37,11 @@ public class ReportDTO {
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
-	public String getReportReply() {
-		return reportReply;
+	public String getIsAnswered() {
+		return isAnswered;
 	}
-	public void setReportReply(String reportReply) {
-		this.reportReply = reportReply;
+	public void setIsAnswered(String isAnswered) {
+		this.isAnswered = isAnswered;
 	}
 	public int getTotalCount() {
 		return totalCount;

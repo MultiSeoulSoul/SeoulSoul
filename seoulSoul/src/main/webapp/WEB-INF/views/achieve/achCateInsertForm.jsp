@@ -89,7 +89,7 @@
             <form action="${pageContext.request.contextPath}/admin/achCateInsertForm" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="singleFile"><strong>업적 아이콘 업로드 폼</strong></label>
-                    <input type="file" id="singleFile" name="singleFile" onchange="previewImage(event)">
+                    <input type="file" id="singleFile" name="singleFile" onchange="previewImage(event)" required>
                 </div>
                 <div class="preview">
                     <img id="preview" src="#" alt="이미지 미리보기" style="display: none;">
@@ -104,11 +104,11 @@
                 </div>
                 <div class="form-group">
                     <label for="maxCount"><strong>필요 횟수 입력 폼</strong></label>
-                    <input type="number" id="maxCount" name="maxCount" value="${achCate.maxCount}">
+                    <input type="number" id="maxCount" name="maxCount" value="${achCate.maxCount}" required>
                 </div>
                 <div class="form-group">
                     <label for="title"><strong>타이틀 이름 입력 폼</strong></label>
-                    <input type="text" id="title" name="title" value="${achCate.title}">
+                    <input type="text" id="title" name="title" value="${achCate.title}" required>
                 </div>
                 <div class="button-group">
                     <button type="button" class="back" onclick="history.back()">뒤로가기</button>
