@@ -97,6 +97,9 @@ seoulSoul/src/main/webapp/resources/uploadFiles/
 #Ignore the database properties file
 seoulSoul/src/main/resources/db.properties
 
+#Ignore the APIAPPKEY properties file
+seoulSoul/src/main/resources/application.properties
+
 ### Eclipse Patch ###
 # Spring Boot Tooling
 .sts4-cache/
