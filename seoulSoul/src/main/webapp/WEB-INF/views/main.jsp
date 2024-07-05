@@ -98,28 +98,28 @@
 							var stats = userStats.find(function(item){
 								return item.name === d.properties.name;
 							})
-							var colorCode = '#FFFFFF';
+							var colorCode = '#FFFFFF'; // 0레벨
 	 
 							if(stats == undefined){
 								return colorCode;
 							}
 							
 	
-							//color code 배정
+							// 경험치에 따라 color code 배정
 							if(stats.exp > 0 && stats.exp <= 100) {
-								colorCode='#CBF7FC';
+								colorCode='#CBF7FC'; // 1레벨
 							}
 							else if(stats.exp > 100 && stats.exp <= 200) {
-								colorCode='#80DEEA';
+								colorCode='#80DEEA'; // 2레벨
 							}
 							else if(stats.exp > 200 && stats.exp <= 300) {
-								colorCode='#48C5D5';
+								colorCode='#48C5D5'; // 3레벨
 							}
 							else if(stats.exp > 300 && stats.exp <= 400) {
-								colorCode='#2999A8';
+								colorCode='#2999A8'; // 4레벨
 							}
 							else if(stats.exp > 400) {
-								colorCode='#3A828B';
+								colorCode='#3A828B'; // 5레벨
 							}
 							
 							return colorCode;

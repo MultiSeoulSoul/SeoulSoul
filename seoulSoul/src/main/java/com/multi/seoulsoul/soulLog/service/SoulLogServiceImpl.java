@@ -112,17 +112,17 @@ public class SoulLogServiceImpl implements SoulLogService {
 			achieveDAO.updateAchLocaCount(sqlSession, soulLogDTO);
 			achieveDAO.updateAchCateCount(sqlSession, soulLogDTO);
 			
-			// 쓴 글의 locationCode를 파라미터로 넣어서(soulLogDTO) 해당 업적의 ach_no와 max_count를 AchLocaDTO로 받아오는 DAO 메서드 필요
+			// 쓴 글의 locationCode를 파라미터로 넣어서(soulLogDTO) 해당 업적의 ach_no와 max_count를 AchLocaDTO로 받아옴
 			AchLocaDTO achLocaDTO = achieveDAO.selectAchLoca(sqlSession, soulLogDTO);
 			
 			int locaMaxCount = achLocaDTO.getMaxCount();
 			
-			// 쓴 글의 userNo와 location를 파라미터로 넣어서(soulLogDTO) cur_count를 받아오는 DAO 메서드 필요
+			// 쓴 글의 userNo와 location를 파라미터로 넣어서(soulLogDTO) cur_count를 받아
 			AchLocaCountDTO achLocaCountDTO = achieveDAO.selectLocaCurCount(sqlSession, soulLogDTO);
 			
 			int locaCurCount = achLocaCountDTO.getCurCount();
 			
-			// 그 둘을 비교하여 max_count 와 cur_count가 동일해지면 // location get 테이블에 status를 Y로 업데이트하는 메서드 필요 GET DTO
+			// 그 둘을 비교하여 max_count 와 cur_count가 동일하면 location get 테이블에 status를 Y로 업데이트옴
 			if(locaCurCount == locaMaxCount) {
 				
 				AchLocaGetDTO achLocaGetDTO = new AchLocaGetDTO();
